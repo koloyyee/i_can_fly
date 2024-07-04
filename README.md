@@ -7,11 +7,20 @@
 ### Entities
 
 Customer: id, first_name, last_name, birthday, address, last_login, created_at
+
+
 Airline: id, name, code
+
+
 Airplane: id, manufacturer, type, max_speed, max_passengers, max_range
+
+
 Flight: id, destination_city, departure_city, airplane_id, departure_time, arrival_time, airline_id
 
+
 Route? : id, destination_city, departure_city
+
+
 Reservation: user_id, flight_id, 
 
 
