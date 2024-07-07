@@ -5,10 +5,12 @@
 import FlutterMacOS
 import Foundation
 
+import url_launcher_macos
 import flutter_secure_storage_macos
 import path_provider_foundation
 import shared_preferences_foundation
 import url_launcher_macos
+import sqflite
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FlutterSecureStoragePlugin.register(with: registry.registrar(forPlugin: "FlutterSecureStoragePlugin"))
