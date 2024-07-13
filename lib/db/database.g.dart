@@ -96,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneId` INTEGER NOT NULL, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureTime` INTEGER NOT NULL, `arrivalTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplane_id` INTEGER NOT NULL, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureTime` INTEGER NOT NULL, `arrivalTime` INTEGER NOT NULL, FOREIGN KEY (`airplane_id`) REFERENCES `Airplane` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -120,7 +120,7 @@ class _$FlightDao extends FlightDao {
             'flights',
             (Flight item) => <String, Object?>{
                   'id': item.id,
-                  'airplaneId': item.airplaneId,
+                  'airplane_id': item.airplaneId,
                   'arrivalCity': item.arrivalCity,
                   'departureCity': item.departureCity,
                   'departureTime':
@@ -133,7 +133,7 @@ class _$FlightDao extends FlightDao {
             ['id'],
             (Flight item) => <String, Object?>{
                   'id': item.id,
-                  'airplaneId': item.airplaneId,
+                  'airplane_id': item.airplaneId,
                   'arrivalCity': item.arrivalCity,
                   'departureCity': item.departureCity,
                   'departureTime':
@@ -146,7 +146,7 @@ class _$FlightDao extends FlightDao {
             ['id'],
             (Flight item) => <String, Object?>{
                   'id': item.id,
-                  'airplaneId': item.airplaneId,
+                  'airplane_id': item.airplaneId,
                   'arrivalCity': item.arrivalCity,
                   'departureCity': item.departureCity,
                   'departureTime':
@@ -171,7 +171,7 @@ class _$FlightDao extends FlightDao {
     return _queryAdapter.queryList('select * from flights',
         mapper: (Map<String, Object?> row) => Flight(
             id: row['id'] as int,
-            airplaneId: row['airplaneId'] as int,
+            airplaneId: row['airplane_id'] as int,
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
             departureTime:
@@ -184,7 +184,7 @@ class _$FlightDao extends FlightDao {
     return _queryAdapter.queryList('select * from flights where id = ?1',
         mapper: (Map<String, Object?> row) => Flight(
             id: row['id'] as int,
-            airplaneId: row['airplaneId'] as int,
+            airplaneId: row['airplane_id'] as int,
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
             departureTime:
