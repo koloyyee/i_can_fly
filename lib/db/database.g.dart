@@ -267,56 +267,35 @@ class _$AirlineDao extends AirlineDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database, changeListener),
-        _flightInsertionAdapter = InsertionAdapter(
+        _airlineInsertionAdapter = InsertionAdapter(
             database,
-            'flights',
-            (Flight item) => <String, Object?>{
+            'airlines',
+            (Airline item) => <String, Object?>{
                   'id': item.id,
-                  'airplane_id': item.airplaneId,
-                  'airline_id': item.airlineId,
-                  'airlineCode': item.airlineCode,
-                  'airplaneType': item.airplaneType,
-                  'arrivalCity': item.arrivalCity,
-                  'departureCity': item.departureCity,
-                  'departureDateTime':
-                      _dateTimeConverter.encode(item.departureDateTime),
-                  'arrivalDateTime':
-                      _dateTimeConverter.encode(item.arrivalDateTime)
-                }),
-        _flightUpdateAdapter = UpdateAdapter(
+                  'code': item.code,
+                  'companyName': item.companyName
+                },
+            changeListener),
+        _airlineUpdateAdapter = UpdateAdapter(
             database,
-            'flights',
+            'airlines',
             ['id'],
-            (Flight item) => <String, Object?>{
+            (Airline item) => <String, Object?>{
                   'id': item.id,
-                  'airplane_id': item.airplaneId,
-                  'airline_id': item.airlineId,
-                  'airlineCode': item.airlineCode,
-                  'airplaneType': item.airplaneType,
-                  'arrivalCity': item.arrivalCity,
-                  'departureCity': item.departureCity,
-                  'departureDateTime':
-                      _dateTimeConverter.encode(item.departureDateTime),
-                  'arrivalDateTime':
-                      _dateTimeConverter.encode(item.arrivalDateTime)
-                }),
-        _flightDeletionAdapter = DeletionAdapter(
+                  'code': item.code,
+                  'companyName': item.companyName
+                },
+            changeListener),
+        _airlineDeletionAdapter = DeletionAdapter(
             database,
-            'flights',
+            'airlines',
             ['id'],
-            (Flight item) => <String, Object?>{
+            (Airline item) => <String, Object?>{
                   'id': item.id,
-                  'airplane_id': item.airplaneId,
-                  'airline_id': item.airlineId,
-                  'airlineCode': item.airlineCode,
-                  'airplaneType': item.airplaneType,
-                  'arrivalCity': item.arrivalCity,
-                  'departureCity': item.departureCity,
-                  'departureDateTime':
-                      _dateTimeConverter.encode(item.departureDateTime),
-                  'arrivalDateTime':
-                      _dateTimeConverter.encode(item.arrivalDateTime)
-                });
+                  'code': item.code,
+                  'companyName': item.companyName
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -324,11 +303,11 @@ class _$AirlineDao extends AirlineDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Flight> _flightInsertionAdapter;
+  final InsertionAdapter<Airline> _airlineInsertionAdapter;
 
-  final UpdateAdapter<Flight> _flightUpdateAdapter;
+  final UpdateAdapter<Airline> _airlineUpdateAdapter;
 
-  final DeletionAdapter<Flight> _flightDeletionAdapter;
+  final DeletionAdapter<Airline> _airlineDeletionAdapter;
 
   @override
   Future<List<Airline>> findAllAirlines() async {
@@ -353,20 +332,20 @@ class _$AirlineDao extends AirlineDao {
   }
 
   @override
-  Future<void> createAirline(Flight newFlight) async {
-    await _flightInsertionAdapter.insert(
-        newFlight, OnConflictStrategy.rollback);
+  Future<void> createAirline(Airline newAirline) async {
+    await _airlineInsertionAdapter.insert(
+        newAirline, OnConflictStrategy.rollback);
   }
 
   @override
-  Future<int> updateAirline(Flight newFlight) {
-    return _flightUpdateAdapter.updateAndReturnChangedRows(
-        newFlight, OnConflictStrategy.abort);
+  Future<int> updateAirline(Airline newAirline) {
+    return _airlineUpdateAdapter.updateAndReturnChangedRows(
+        newAirline, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteAirline(Flight newFlight) {
-    return _flightDeletionAdapter.deleteAndReturnChangedRows(newFlight);
+  Future<int> deleteAirline(Airline newAirline) {
+    return _airlineDeletionAdapter.deleteAndReturnChangedRows(newAirline);
   }
 }
 

@@ -1,7 +1,6 @@
 
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/entity/Staff.dart';
-import 'package:i_can_fly/entity/Staff.dart';
 
 @dao
 abstract class StaffDao {
