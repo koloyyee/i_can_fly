@@ -1,11 +1,15 @@
-
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/entity/airline.dart';
 import 'package:i_can_fly/entity/staff.dart';
 
 /// intermediate table for airline and staff
-@Entity(tableName: "airline_staff", foreignKeys: [
-  ForeignKey(childColumns: ["airline_id"], parentColumns: ["id"], entity: Airline),
+/// creating a composite primary key with 2 foreign keys
+@Entity(tableName: "airline_staff", primaryKeys: [
+  "airline_id",
+  "staff_id"
+], foreignKeys: [
+  ForeignKey(
+      childColumns: ["airline_id"], parentColumns: ["id"], entity: Airline),
   ForeignKey(childColumns: ["staff_id"], parentColumns: ["id"], entity: Staff)
 ])
 class AirlineStaff {
@@ -15,5 +19,4 @@ class AirlineStaff {
   final int staffId;
 
   AirlineStaff({required this.airlineId, required this.staffId});
- 
 }

@@ -1,7 +1,6 @@
 
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/entity/airline.dart';
-import 'package:i_can_fly/entity/flight.dart';
 
 @dao
 abstract class AirlineDao {
@@ -17,11 +16,11 @@ where id = :id
   Stream<                     Airline?                 > findAirlineById(int id);
   
  @Insert(onConflict: OnConflictStrategy.rollback)
-  Future<void> createAirline(Flight newFlight);
+  Future<void> createAirline(Airline newAirline);
   
   @update
-  Future<int> updateAirline(Flight newFlight);
+  Future<int> updateAirline(Airline newAirline);
 
   @delete
-  Future<int> deleteAirline(Flight newFlight);
+  Future<int> deleteAirline(Airline newAirline);
 }
