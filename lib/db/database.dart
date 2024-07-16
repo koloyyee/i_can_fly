@@ -1,29 +1,25 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
+import 'package:i_can_fly/dao/airline-dao.dart';
+import 'package:i_can_fly/dao/airplane-dao.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
-import 'package:i_can_fly/model/flight.dart';
+import 'package:i_can_fly/db/datetime-converter.dart';
+import 'package:i_can_fly/entity/airline.dart';
+import 'package:i_can_fly/entity/airplane.dart';
+import 'package:i_can_fly/entity/flight.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database.g.dart';
 
-/// https://pub.dev/documentation/floor/latest/floor/TypeConverter-class.html
-class DateTimeConverter extends TypeConverter<DateTime, int> {
-  @override
-  DateTime decode(int databaseValue) {
-    return DateTime.fromMillisecondsSinceEpoch(databaseValue);
-  }
 
-  @override
-  int encode(DateTime value) {
-    return value.millisecondsSinceEpoch;
-  }
-}
 
 
 /// flutter packages pub run build_runner build
 /// flutter packages pub run build_runner watch
 @TypeConverters([DateTimeConverter])
-@Database(version: 1, entities:[Flight])
+@Database(version: 1, entities:[ Airline, Airplane, Flight, ])
 abstract class AppDatabase extends FloorDatabase {
   FlightDao get flightDao;
+  AirlineDao get airlineDao;
+  AirplaneDao get airplaneDao;
 }

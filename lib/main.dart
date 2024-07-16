@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 // import 'airplane_list_page.dart';
 
@@ -29,8 +30,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+   @override
+  void initState() {
+    super.initState();
+    $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
+      print(db.database);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+$FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
+      print(db.database);
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text("Welcome to I Can Fly"),
