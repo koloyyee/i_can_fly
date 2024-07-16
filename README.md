@@ -18,7 +18,7 @@ Reservation: user_id, flight_id,
 
 # [i_can_fly.drawio](https://algonquinlivecom-my.sharepoint.com/:u:/g/personal/ko000029_algonquinlive_com/Ef4iNMTvn1hPmvUlqWyeORoBGWVspN-6X9clWmF2lnvG-g?e=Q4j3ta)
 
-![1721095190699](image/README/1721095190699.png)
+![1721095190699](images/README/1721095190699.png)
 
 # TODO list
 
