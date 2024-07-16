@@ -1,7 +1,7 @@
 
 import 'package:floor/floor.dart';
 
-@Entity(tableName: "planes")
+@Entity(tableName: "airplanes")
 class Airplane {
 
   @PrimaryKey(autoGenerate: true)

@@ -102,9 +102,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `planes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplane_id` INTEGER NOT NULL, `airline_id` INTEGER NOT NULL, `airlineCode` TEXT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, FOREIGN KEY (`airplane_id`) REFERENCES `planes` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`airline_id`) REFERENCES `airlines` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplane_id` INTEGER NOT NULL, `airline_id` INTEGER NOT NULL, `airlineCode` TEXT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, FOREIGN KEY (`airplane_id`) REFERENCES `airplanes` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`airline_id`) REFERENCES `airlines` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -371,7 +371,7 @@ class _$AirplaneDao extends AirplaneDao {
   )   : _queryAdapter = QueryAdapter(database),
         _airplaneInsertionAdapter = InsertionAdapter(
             database,
-            'planes',
+            'airplanes',
             (Airplane item) => <String, Object?>{
                   'id': item.id,
                   'type': item.type,
@@ -382,7 +382,7 @@ class _$AirplaneDao extends AirplaneDao {
                 }),
         _airplaneUpdateAdapter = UpdateAdapter(
             database,
-            'planes',
+            'airplanes',
             ['id'],
             (Airplane item) => <String, Object?>{
                   'id': item.id,
@@ -394,7 +394,7 @@ class _$AirplaneDao extends AirplaneDao {
                 }),
         _airplaneDeletionAdapter = DeletionAdapter(
             database,
-            'planes',
+            'airplanes',
             ['id'],
             (Airplane item) => <String, Object?>{
                   'id': item.id,
