@@ -14,9 +14,11 @@ select
 from Customers   
 where id = :id
 """)
-  Stream<                     Customer?                 > findCustomerById(int id);
-  
- @Insert(onConflict: OnConflictStrategy.rollback)
+  Stream<Customer?> findCustomerById(int id);
+
+
+
+  @Insert(onConflict: OnConflictStrategy.rollback)
   Future<void> createCustomer(Customer newCustomer);
   
   @update

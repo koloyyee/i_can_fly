@@ -3,6 +3,7 @@ import 'package:floor/floor.dart';
 import 'package:i_can_fly/dao/airline-dao.dart';
 import 'package:i_can_fly/dao/airplane-dao.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
+import 'package:i_can_fly/dao/customer-dao.dart';
 import 'package:i_can_fly/db/datetime-converter.dart';
 import 'package:i_can_fly/entity/airline-staff.dart';
 import 'package:i_can_fly/entity/airline.dart';
@@ -25,4 +26,5 @@ abstract class AppDatabase extends FloorDatabase {
   FlightDao get flightDao;
   AirlineDao get airlineDao;
   AirplaneDao get airplaneDao;
+  CustomerDao get customerDao;
 }
