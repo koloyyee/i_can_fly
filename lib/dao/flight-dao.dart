@@ -1,6 +1,5 @@
 
 import 'package:floor/floor.dart';
-import 'package:i_can_fly/model/flight-details.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
 @dao

@@ -1,7 +1,5 @@
-import 'dart:ffi';
 
 import 'package:floor/floor.dart';
-import 'package:flutter/material.dart';
 import 'package:i_can_fly/entity/airline.dart';
 import 'package:i_can_fly/entity/airplane.dart';
 
