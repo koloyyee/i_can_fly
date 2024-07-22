@@ -104,13 +104,11 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplane_id` INTEGER NOT NULL, `airline_id` INTEGER NOT NULL, `airlineCode` TEXT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, FOREIGN KEY (`airplane_id`) REFERENCES `airplanes` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`airline_id`) REFERENCES `airlines` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `address` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `staffs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
-        await database.execute(
-            'CREATE TABLE IF NOT EXISTS `airline_staff` (`airline_id` INTEGER NOT NULL, `staff_id` INTEGER NOT NULL, FOREIGN KEY (`airline_id`) REFERENCES `airlines` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`staff_id`) REFERENCES `staffs` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`airline_id`, `staff_id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -144,9 +142,6 @@ class _$FlightDao extends FlightDao {
             'flights',
             (Flight item) => <String, Object?>{
                   'id': item.id,
-                  'airplane_id': item.airplaneId,
-                  'airline_id': item.airlineId,
-                  'airlineCode': item.airlineCode,
                   'airplaneType': item.airplaneType,
                   'arrivalCity': item.arrivalCity,
                   'departureCity': item.departureCity,
@@ -161,9 +156,6 @@ class _$FlightDao extends FlightDao {
             ['id'],
             (Flight item) => <String, Object?>{
                   'id': item.id,
-                  'airplane_id': item.airplaneId,
-                  'airline_id': item.airlineId,
-                  'airlineCode': item.airlineCode,
                   'airplaneType': item.airplaneType,
                   'arrivalCity': item.arrivalCity,
                   'departureCity': item.departureCity,
@@ -178,9 +170,6 @@ class _$FlightDao extends FlightDao {
             ['id'],
             (Flight item) => <String, Object?>{
                   'id': item.id,
-                  'airplane_id': item.airplaneId,
-                  'airline_id': item.airlineId,
-                  'airlineCode': item.airlineCode,
                   'airplaneType': item.airplaneType,
                   'arrivalCity': item.arrivalCity,
                   'departureCity': item.departureCity,
@@ -207,16 +196,13 @@ class _$FlightDao extends FlightDao {
     return _queryAdapter.queryList('select * from flights',
         mapper: (Map<String, Object?> row) => Flight(
             id: row['id'] as int,
-            airplaneId: row['airplane_id'] as int,
-            airlineId: row['airline_id'] as int,
+            airplaneType: row['airplaneType'] as String?,
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
             departureDateTime:
                 _dateTimeConverter.decode(row['departureDateTime'] as int),
             arrivalDateTime:
-                _dateTimeConverter.decode(row['arrivalDateTime'] as int),
-            airlineCode: row['airlineCode'] as String?,
-            airplaneType: row['airplaneType'] as String?));
+                _dateTimeConverter.decode(row['arrivalDateTime'] as int)));
   }
 
   @override
@@ -224,24 +210,27 @@ class _$FlightDao extends FlightDao {
     return _queryAdapter.query('select  * where f.id = ?1',
         mapper: (Map<String, Object?> row) => Flight(
             id: row['id'] as int,
-            airplaneId: row['airplane_id'] as int,
-            airlineId: row['airline_id'] as int,
+            airplaneType: row['airplaneType'] as String?,
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
             departureDateTime:
                 _dateTimeConverter.decode(row['departureDateTime'] as int),
             arrivalDateTime:
-                _dateTimeConverter.decode(row['arrivalDateTime'] as int),
-            airlineCode: row['airlineCode'] as String?,
-            airplaneType: row['airplaneType'] as String?),
+                _dateTimeConverter.decode(row['arrivalDateTime'] as int)),
         arguments: [id]);
+  }
+
+  @override
+  Future<List<String>> findAllAirplaneTypes() async {
+    return _queryAdapter.queryList('select type as airplaneType from airplanes',
+        mapper: (Map<String, Object?> row) => row.values.first as String);
   }
 
   @override
   Future<Flight?> findFlightDetails(int id) async {
     return _queryAdapter.query(
         'select   f.id as flight_id,   f.departure_city,   f.arrival_city,   f.departure_datetime,   f.arrival_datetime,   f.airline_id,   f.airplane_id,   al.code as airline_code,   ap.manufacturer || \' \' || ap.type) as airplane_type   from flights f   join airplanes ap on f.airplane_id = ap.id   join airlines al on f.airline_id = al.id   where f.id = ?1',
-        mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int, airplaneId: row['airplane_id'] as int, airlineId: row['airline_id'] as int, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as int), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as int), airlineCode: row['airlineCode'] as String?, airplaneType: row['airplaneType'] as String?),
+        mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int, airplaneType: row['airplaneType'] as String?, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as int), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as int)),
         arguments: [id]);
   }
 
