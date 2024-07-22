@@ -22,6 +22,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   @override
   void initState() {
     super.initState();
+    fetchFlights();
+  }
+
+  fetchFlights() {
+
     $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
       flightDao = db.flightDao;
       flightDao.findAllFlights().then((flights) {
@@ -44,7 +49,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   @override
   Widget build(BuildContext context) {
     DateFormat formatter = DateFormat('yy-mm-dd – kk:mm');
-
+    fetchFlights();
     return flights.isEmpty
         ? Center(
             child: Column(
@@ -87,8 +92,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
                             ListTile(
                               title: Text("Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
                             ),
-                            ElevatedButton(onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditFlightPage(flight: flight)));
+                            ElevatedButton(onPressed:(){
+                               Navigator.push(context, MaterialPageRoute(builder: (context) => EditFlightPage(flight: flight, flights: flights,)))
+                              .then((_) {
+                               Navigator.pop(context);
+                              });
                             }, child: const Text("Edit Flight"),)
                           ],
                         ),

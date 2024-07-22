@@ -7,7 +7,8 @@ import 'package:intl/intl.dart';
 
 class EditFlightPage extends StatefulWidget {
   Flight flight;
-  EditFlightPage({super.key, required this.flight});
+  List<Flight> flights;
+  EditFlightPage({super.key, required this.flight , required this.flights});
 
   @override
   State<EditFlightPage> createState() => _EditFlightPageState();
@@ -44,7 +45,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
       flightDao = db.flightDao;
       flightDao.findAllAirplaneTypes().then((value) {
         setState(() {
-          print(value);
           airplaneTypes = value;
         });
       });
@@ -69,7 +69,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
     );
     if (picked != null) {
       setState(() {
-        print("Departure Time: ${picked.format(context)}");
         departureTime = picked;
       });
     }
@@ -84,7 +83,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
     );
     if (picked != null) {
       setState(() {
-        print("Arrival Time: ${picked.format(context)}");
         arrivalTime = picked;
       });
     }
@@ -276,14 +274,15 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                 TextButton(
                                   onPressed: () {
                                     flightDao.deleteFlight(widget.flight);
-                                    // flightDao
-                                    //     .findAllFlights()
-                                    //     .then((flights) {
-                                    //   setState(() {
-                                    //     this.flights = flights;
-                                    //   });
-                                    // });
+                                    flightDao
+                                        .findAllFlights()
+                                        .then((flights) {
+                                      setState(() {
+                                        widget.flights = flights;
+                                      });
+                                    });
                                     Navigator.of(context).pop();
+                                    Navigator.pop(context, true);
                                   },
                                   child: const Text("Delete"),
                                 ),
