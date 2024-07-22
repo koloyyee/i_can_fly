@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/utils/theme-color.dart';
+import 'package:i_can_fly/page/flight/edit-flight-page.dart';
 import 'package:intl/intl.dart';
 
 class ViewFlightsList extends StatefulWidget {
@@ -21,6 +21,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   @override
   void initState() {
     super.initState();
+    fetchFlights();
+  }
+
+  fetchFlights() {
+
     $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
       flightDao = db.flightDao;
       flightDao.findAllFlights().then((flights) {
@@ -43,7 +48,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   @override
   Widget build(BuildContext context) {
     DateFormat formatter = DateFormat('yy-mm-dd – kk:mm');
-
+    fetchFlights();
     return flights.isEmpty
         ? Center(
             child: Column(
@@ -86,8 +91,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
                             ListTile(
                               title: Text("Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
                             ),
-                            ElevatedButton(onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditFlightPage(flight: flight)));
+                            ElevatedButton(onPressed:(){
+                               Navigator.push(context, MaterialPageRoute(builder: (context) => EditFlightPage(flight: flight, flights: flights,)))
+                              .then((_) {
+                               Navigator.pop(context);
+                              });
                             }, child: const Text("Edit Flight"),)
                           ],
                         ),
@@ -141,10 +149,8 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
           );
   }
 }
-class EditFlightPage extends StatefulWidget {
-  Flight flight;
-  EditFlightPage({super.key, required this.flight});
 
+<<<<<<< HEAD
   @override
   State<EditFlightPage> createState() => _EditFlightPageState();
 }
@@ -404,3 +410,5 @@ class _EditFlightPageState extends State<EditFlightPage> {
     );
   }
 }
+=======
+>>>>>>> 60fa1b3a6f3f2b73258d6b9b53f668533548b7a7

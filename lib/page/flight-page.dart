@@ -21,10 +21,6 @@ import 'package:i_can_fly/utils/theme-color.dart';
 
 class FlightsPage extends StatefulWidget {
   const FlightsPage({super.key});
-
-
-  
-
   @override
   State<FlightsPage> createState() => _FlightsPageState();
 }

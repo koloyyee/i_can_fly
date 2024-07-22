@@ -17,6 +17,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   @override
   void initState() {
     super.initState();
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
     // $FloorAppDatabase.databaseBuilder("app_database.db").build().then((db) {
     //   print(db.database);
     //   staffDao = db.staffDao;

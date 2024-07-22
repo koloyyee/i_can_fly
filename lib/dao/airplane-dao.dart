@@ -1,4 +1,3 @@
-
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/entity/airplane.dart';
 

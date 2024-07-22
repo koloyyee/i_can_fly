@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import 'package:i_can_fly/db/database.dart';
+>>>>>>> 60fa1b3a6f3f2b73258d6b9b53f668533548b7a7
 import 'package:i_can_fly/page/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
@@ -22,6 +26,7 @@ class MyApp extends StatelessWidget {
         // home: HomePage(),
         routes: {
           "/": (context) => const HomePage(),
+          "/flights": (context) => const FlightsPage(),
           "/admin-login": (context) => const FlightsPage(),
           "/add-flight": (context) => const AddFlightPage(),
         },

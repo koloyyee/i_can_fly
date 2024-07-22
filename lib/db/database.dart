@@ -3,7 +3,6 @@ import 'package:i_can_fly/dao/airline-dao.dart';
 import 'package:i_can_fly/dao/airplane-dao.dart';
 import 'package:i_can_fly/dao/customer-dao.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
-import 'package:i_can_fly/dao/staff-dao.dart';
 import 'package:i_can_fly/db/datetime-converter.dart';
 import 'package:i_can_fly/entity/airline.dart';
 import 'package:i_can_fly/entity/airplane.dart';
