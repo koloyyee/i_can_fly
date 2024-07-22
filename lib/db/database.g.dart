@@ -78,6 +78,8 @@ class _$AppDatabase extends AppDatabase {
 
   AirplaneDao? _airplaneDaoInstance;
 
+  AdminDao? _adminDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -100,6 +102,8 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
+            'CREATE TABLE IF NOT EXISTS `admins` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
+        await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
@@ -107,8 +111,6 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `address` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
-        await database.execute(
-            'CREATE TABLE IF NOT EXISTS `staffs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -129,6 +131,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   AirplaneDao get airplaneDao {
     return _airplaneDaoInstance ??= _$AirplaneDao(database, changeListener);
+  }
+
+  @override
+  AdminDao get adminDao {
+    return _adminDaoInstance ??= _$AdminDao(database, changeListener);
   }
 }
 
@@ -431,6 +438,102 @@ class _$AirplaneDao extends AirplaneDao {
   @override
   Future<int> deleteAirplane(Airplane newAirplane) {
     return _airplaneDeletionAdapter.deleteAndReturnChangedRows(newAirplane);
+  }
+}
+
+class _$AdminDao extends AdminDao {
+  _$AdminDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _adminInsertionAdapter = InsertionAdapter(
+            database,
+            'admins',
+            (Admin item) => <String, Object?>{
+                  'id': item.id,
+                  'email': item.email,
+                  'password': item.password,
+                  'createdAt': _dateTimeConverter.encode(item.createdAt)
+                }),
+        _adminUpdateAdapter = UpdateAdapter(
+            database,
+            'admins',
+            ['id'],
+            (Admin item) => <String, Object?>{
+                  'id': item.id,
+                  'email': item.email,
+                  'password': item.password,
+                  'createdAt': _dateTimeConverter.encode(item.createdAt)
+                }),
+        _adminDeletionAdapter = DeletionAdapter(
+            database,
+            'admins',
+            ['id'],
+            (Admin item) => <String, Object?>{
+                  'id': item.id,
+                  'email': item.email,
+                  'password': item.password,
+                  'createdAt': _dateTimeConverter.encode(item.createdAt)
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Admin> _adminInsertionAdapter;
+
+  final UpdateAdapter<Admin> _adminUpdateAdapter;
+
+  final DeletionAdapter<Admin> _adminDeletionAdapter;
+
+  @override
+  Future<List<Admin>> findAllAdmins() async {
+    return _queryAdapter.queryList('select * from Admins',
+        mapper: (Map<String, Object?> row) => Admin(
+            id: row['id'] as int,
+            email: row['email'] as String,
+            password: row['password'] as String,
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as int)));
+  }
+
+  @override
+  Future<Admin?> findAdminById(int id) async {
+    return _queryAdapter.query('select  * from Admins where id = ?1',
+        mapper: (Map<String, Object?> row) => Admin(
+            id: row['id'] as int,
+            email: row['email'] as String,
+            password: row['password'] as String,
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as int)),
+        arguments: [id]);
+  }
+
+  @override
+  Future<Admin?> findAdminByEmail(String email) async {
+    return _queryAdapter.query('select * from Admins where email = ?1',
+        mapper: (Map<String, Object?> row) => Admin(
+            id: row['id'] as int,
+            email: row['email'] as String,
+            password: row['password'] as String,
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as int)),
+        arguments: [email]);
+  }
+
+  @override
+  Future<void> createAdmin(Admin newAdmin) async {
+    await _adminInsertionAdapter.insert(newAdmin, OnConflictStrategy.rollback);
+  }
+
+  @override
+  Future<int> updateAdmin(Admin newAdmin) {
+    return _adminUpdateAdapter.updateAndReturnChangedRows(
+        newAdmin, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteAdmin(Admin newAdmin) {
+    return _adminDeletionAdapter.deleteAndReturnChangedRows(newAdmin);
   }
 }
 
