@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/staff-dao.dart';
-import 'package:i_can_fly/db/database.dart';
 
 /// for the staff to
 class AdminLoginPage extends StatefulWidget {
@@ -18,6 +17,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   @override
   void initState() {
     super.initState();
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
     // $FloorAppDatabase.databaseBuilder("app_database.db").build().then((db) {
     //   print(db.database);
     //   staffDao = db.staffDao;
@@ -33,7 +34,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       ),
       body: Center(
           child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             const SizedBox(height: 20),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/page/admin-login.dart';
 import 'package:i_can_fly/page/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => const HomePage(),
           "/admin-login": (context) => const FlightsPage(),
-          "/add-flight": (context) => AddFlightPage(),
+          "/add-flight": (context) => const AddFlightPage(),
         },
         restorationScopeId: "app",
         );

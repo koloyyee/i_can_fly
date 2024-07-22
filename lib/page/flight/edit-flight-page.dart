@@ -5,39 +5,24 @@ import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 import 'package:intl/intl.dart';
 
-/// •Your application should have a button for adding a new flight.
-/// When the user presses this button,
-/// there is a page that lets the user enter the departure
-/// and destination cities, as well as the departure and arrival times.
-/// You should check that all fields have a value before letting the user submit
-/// the new airplane type.
-///
-// /// following requirements:
-// 1.[ ] You must have a ListView that lists items that were inserted by the user.
-// 2.[ ] There must be a TextField along with a button that lets the user insert items into the ListView.
-// 3.[ ] You must use a database to store items that were inserted into the ListView to repopulate the list when the application is restarted.
-// 4.[ ] Selecting items from the ListView should show details about the item that was selected. On a phone would use the whole screen to show the details but on a Tablet or Desktop screen, it would show the details beside the ListView.
-// 5.[ ] Each activity must have at least 1 Snackbar, and 1 AlertDialog to show some kind of notification.
-// 6.[ ] Each activity must use EncryptedSharedPreferences to save something about what was typed in the EditText for use the next time the application is launched.
-// 7.[ ] Each person’s project must have an ActionBar with ActionItems that displays an AlertDialog with instructions for how to use the interface.
-// 8.[ ] There must be at least 1 other language supported by your part of the project. If you are not bilingual, then you must support both British and American English (words like colour, color, neighbour, neighbor, etc). If you know a language other than English, then you can support that language in your application and don’t need to support American English.All activities must be integrated into a single working application, on a single device or emulator. You should use GitHub for merging your code by creating pull requests.
-class AddFlightPage extends StatefulWidget {
-  const AddFlightPage({super.key});
+class EditFlightPage extends StatefulWidget {
+  Flight flight;
+  EditFlightPage({super.key, required this.flight});
 
   @override
-  State<AddFlightPage> createState() => _AddFlightPageState();
+  State<EditFlightPage> createState() => _EditFlightPageState();
 }
 
-class _AddFlightPageState extends State<AddFlightPage> {
+class _EditFlightPageState extends State<EditFlightPage> {
   late FlightDao flightDao;
 
-  late TextEditingController departureCityController;
-  DateTime? departureDate;
-  TimeOfDay? departureTime;
+  TextEditingController departureCityController = TextEditingController();
+  late DateTime? departureDate;
+  late TimeOfDay? departureTime;
 
-  late TextEditingController arrivalCityController;
-  DateTime? arrivalDate;
-  TimeOfDay? arrivalTime;
+  TextEditingController arrivalCityController = TextEditingController();
+  late DateTime? arrivalDate;
+  late TimeOfDay? arrivalTime;
 
   String airplaneType = "";
 
@@ -46,9 +31,14 @@ class _AddFlightPageState extends State<AddFlightPage> {
   @override
   void initState() {
     super.initState();
-
-    departureCityController = TextEditingController();
-    arrivalCityController = TextEditingController();
+    departureCityController.value =
+        TextEditingValue(text: widget.flight.departureCity);
+    arrivalCityController.value =
+        TextEditingValue(text: widget.flight.arrivalCity);
+    departureDate = widget.flight.departureDateTime;
+    departureTime = TimeOfDay.fromDateTime(widget.flight.departureDateTime);
+    arrivalDate = widget.flight.arrivalDateTime;
+    arrivalTime = TimeOfDay.fromDateTime(widget.flight.arrivalDateTime);
 
     $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
       flightDao = db.flightDao;
@@ -73,7 +63,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
   Future<void> _selectDepartureTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: departureTime ?? TimeOfDay.now(),
       errorInvalidText:
           departureTime != null ? null : "Please select a valid time",
     );
@@ -88,7 +78,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
   Future<void> _selectArrivalTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: arrivalTime ?? TimeOfDay.now(),
       errorInvalidText:
           arrivalTime != null ? null : "Please select a valid time",
     );
@@ -104,8 +94,8 @@ class _AddFlightPageState extends State<AddFlightPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add( const Duration(days: 365)),
-      initialDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      initialDate: departureDate ?? DateTime.now(),
       // selectableDayPredicate: (day) => day.isAfter(DateTime.now()),
     );
     if (picked != null) {
@@ -120,7 +110,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
-      initialDate: DateTime.now(),
+      initialDate: arrivalDate ?? DateTime.now(),
       // selectableDayPredicate: (day) =>
       //     day.isAfter(departureDate ?? DateTime.now()),
     );
@@ -136,7 +126,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Create a New Trip!",
+          "Update the Flight!",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
@@ -160,6 +150,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
                     decoration: const InputDecoration(
                       labelText: "Departure City",
                     ),
+                    // initialValue: widget.flight.departureCity,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter a valid city";
@@ -183,6 +174,8 @@ class _AddFlightPageState extends State<AddFlightPage> {
                     decoration: const InputDecoration(
                       labelText: "Departure City",
                     ),
+
+                    // initialValue: widget.flight.arrivalCity,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter a valid city";
@@ -203,6 +196,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
                   ),
                   DropdownButtonFormField(
                       hint: const Text("Select Airplane Type"),
+                      value: widget.flight.airplaneType,
                       validator: (value) => value == null
                           ? "Please select a valid airplane type"
                           : null,
@@ -213,63 +207,94 @@ class _AddFlightPageState extends State<AddFlightPage> {
                       onChanged: (value) => airplaneType = value.toString()),
                 ],
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
+              Expanded(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+                  children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
 
-                      setState(() {
-                        if (departureTime != null && arrivalTime != null) {
-                          DateTime deptTime = DateTime(
-                              departureDate!.year,
-                              departureDate!.month,
-                              departureDate!.day,
-                              departureTime!.hour,
-                              departureTime!.minute);
-                          DateTime arrTime = DateTime(
-                              arrivalDate!.year,
-                              arrivalDate!.month,
-                              arrivalDate!.day,
-                              arrivalTime!.hour,
-                              arrivalTime!.minute);
+                          setState(() {
+                            if (departureTime != null && arrivalTime != null) {
+                              DateTime deptTime = DateTime(
+                                  departureDate!.year,
+                                  departureDate!.month,
+                                  departureDate!.day,
+                                  departureTime!.hour,
+                                  departureTime!.minute);
+                              DateTime arrTime = DateTime(
+                                  arrivalDate!.year,
+                                  arrivalDate!.month,
+                                  arrivalDate!.day,
+                                  arrivalTime!.hour,
+                                  arrivalTime!.minute);
 
-                          flightDao
-                              .createFlight(Flight(
-                                  id: Flight.ID++,
-                                  airplaneType: airplaneType,
-                                  departureCity: departureCityController.text,
-                                  arrivalCity: arrivalCityController.text,
-                                  departureDateTime: deptTime,
-                                  arrivalDateTime: arrTime))
-                              .then((value) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('New Flight Added!')),
-                            );
+                              flightDao
+                                  .createFlight(Flight(
+                                      id: Flight.ID++,
+                                      airplaneType: airplaneType,
+                                      departureCity:
+                                          departureCityController.text,
+                                      arrivalCity: arrivalCityController.text,
+                                      departureDateTime: deptTime,
+                                      arrivalDateTime: arrTime))
+                                  .then((value) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('New Flight Added!')),
+                                );
+                              });
+                            }
                           });
                         }
-
-                        // add flight to database
-                        // print("Departure City: ${departureCityController.text}");
-                        // print("Arrival City: ${arrivalCityController.text}");
-                        // print("Departure Time: ${departureTime!.format(context)}");
-                        // print("Arrival Time: ${arrivalTime!.format(context)}");
-
-                        // print("Departure Field Valid: $departureFieldValid");
-                        // print("Departure Field Valid: $arrivalFieldValid");
-
-                        //     Navigator.pop(context);
-                        // }
-                        // });
-                      });
-                    }
-                  },
-                  child: const Text("Add New Flight"))
+                      },
+                      child: const Text("Update Flight")),
+                    
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Delete Flight"),
+                              content: Text(
+                                  "Are you sure you want to delete the flight from ${widget.flight.departureCity} to ${widget.flight.arrivalCity}?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    flightDao.deleteFlight(widget.flight);
+                                    // flightDao
+                                    //     .findAllFlights()
+                                    //     .then((flights) {
+                                    //   setState(() {
+                                    //     this.flights = flights;
+                                    //   });
+                                    // });
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Delete"),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: const Text("Delete Flight"),
+                  ),
+                ]),
+              ),
             ],
           ),
         ),

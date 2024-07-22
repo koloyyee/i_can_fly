@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:i_can_fly/page/flight/view-flights-list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
@@ -22,10 +21,6 @@ import 'package:i_can_fly/utils/theme-color.dart';
 
 class FlightsPage extends StatefulWidget {
   const FlightsPage({super.key});
-
-
-  
-
   @override
   State<FlightsPage> createState() => _FlightsPageState();
 }
@@ -38,7 +33,7 @@ class _FlightsPageState extends State<FlightsPage> {
         title: const Text("See All Your Flights Here!", style: TextStyle(color: Colors.white),),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
-      body: Center(
+      body: const Center(
         child: ViewFlightsList()
       ),
     floatingActionButton: FloatingActionButton(

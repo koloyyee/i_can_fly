@@ -1,7 +1,5 @@
 
 import 'package:floor/floor.dart';
-import 'package:i_can_fly/entity/airline.dart';
-import 'package:i_can_fly/entity/airplane.dart';
 
 /// Flight: id, arrival_city, departure_city, airplane_id, departure_time, arrival_time,
 /// enter the departure and destination cities, as well as the departure and arrival times. You should check that all fields have a value before letting the user submit the new airplane type.
