@@ -106,7 +106,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add( const Duration(days: 365)),
       initialDate: DateTime.now(),
-      selectableDayPredicate: (day) => day.isAfter(DateTime.now()),
+      // selectableDayPredicate: (day) => day.isAfter(DateTime.now()),
     );
     if (picked != null) {
       setState(() {
@@ -121,8 +121,8 @@ class _AddFlightPageState extends State<AddFlightPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDate: DateTime.now(),
-      selectableDayPredicate: (day) =>
-          day.isAfter(departureDate ?? DateTime.now()),
+      // selectableDayPredicate: (day) =>
+      //     day.isAfter(departureDate ?? DateTime.now()),
     );
     if (picked != null) {
       setState(() {
