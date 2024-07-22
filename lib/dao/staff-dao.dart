@@ -7,13 +7,11 @@ abstract class StaffDao {
   @Query("select * from Staffs ")
   Future<List<Staff>> findAllStaffs();
   
-  @Query("""
-select  
-*
-from Staffs   
-where id = :id
-""")
-  Stream<                     Staff?                 > findStaffById(int id);
+  @Query("select  * from Staffs  where id = :id")
+  Future<Staff?>findStaffById(int id);
+
+  @Query("select * from Staffs where email = :email")
+  Future<Staff?>findStaffByEmail(String email);
   
  @Insert(onConflict: OnConflictStrategy.rollback)
   Future<void> createStaff(Staff newStaff);

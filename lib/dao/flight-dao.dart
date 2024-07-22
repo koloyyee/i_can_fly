@@ -1,6 +1,5 @@
 
 import 'package:floor/floor.dart';
-import 'package:i_can_fly/model/flight-details.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
 @dao
@@ -10,6 +9,9 @@ abstract class FlightDao {
   
   @Query("select  * where f.id = :id")
   Future<Flight?> findFlightById(int id);
+
+  @Query("select type as airplaneType from airplanes")
+  Future<List<String>> findAllAirplaneTypes();
 
   @Query("""
   select
