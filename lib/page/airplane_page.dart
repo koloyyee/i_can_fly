@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'view_airplanes_list.dart';
+import 'airplane/view_airplanes_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
 class AirplanesPage extends StatefulWidget {
