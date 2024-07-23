@@ -106,7 +106,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -400,9 +400,9 @@ class _$AirplaneDao extends AirplaneDao {
 
   @override
   Future<List<Airplane>> findAllAirplanes() async {
-    return _queryAdapter.queryList('select * from planes',
+    return _queryAdapter.queryList('SELECT * FROM airplanes',
         mapper: (Map<String, Object?> row) => Airplane(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             type: row['type'] as String,
             capacity: row['capacity'] as int,
             maxSpeed: row['maxSpeed'] as int,
@@ -412,9 +412,9 @@ class _$AirplaneDao extends AirplaneDao {
 
   @override
   Future<Airplane?> findAirplaneById(int id) async {
-    return _queryAdapter.query('select * from planes where id = ?1',
+    return _queryAdapter.query('SELECT * FROM airplanes WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Airplane(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             type: row['type'] as String,
             capacity: row['capacity'] as int,
             maxSpeed: row['maxSpeed'] as int,
@@ -424,20 +424,19 @@ class _$AirplaneDao extends AirplaneDao {
   }
 
   @override
-  Future<void> createAirplane(Airplane newAirplane) async {
-    await _airplaneInsertionAdapter.insert(
-        newAirplane, OnConflictStrategy.rollback);
+  Future<void> createAirplane(Airplane airplane) async {
+    await _airplaneInsertionAdapter.insert(airplane, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> updateAirplane(Airplane newAirplane) {
+  Future<int> updateAirplane(Airplane airplane) {
     return _airplaneUpdateAdapter.updateAndReturnChangedRows(
-        newAirplane, OnConflictStrategy.abort);
+        airplane, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteAirplane(Airplane newAirplane) {
-    return _airplaneDeletionAdapter.deleteAndReturnChangedRows(newAirplane);
+  Future<int> deleteAirplane(Airplane airplane) {
+    return _airplaneDeletionAdapter.deleteAndReturnChangedRows(airplane);
   }
 }
 

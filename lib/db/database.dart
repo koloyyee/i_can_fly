@@ -12,20 +12,20 @@ import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/entity/admin.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
-part 'database.g.dart';
+part 'database.g.dart'; // Make sure this matches the generated file name
 
-
-
-
-/// flutter packages pub run build_runner build
-/// flutter packages pub run build_runner watch
-/// dart run build_runner build
-/// dart run build_runner watch 
 @TypeConverters([DateTimeConverter])
-@Database(version: 1, entities:[Admin , Airline, Airplane, Flight, Customer])
+@Database(version: 1, entities: [Admin, Airline, Airplane, Flight, Customer])
 abstract class AppDatabase extends FloorDatabase {
   FlightDao get flightDao;
   AirlineDao get airlineDao;
   AirplaneDao get airplaneDao;
   AdminDao get adminDao;
+
+  static AppDatabase? _instance;
+
+  static Future<AppDatabase> getInstance() async {
+    _instance ??= await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    return _instance!;
+  }
 }
