@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
         "/flights": (context) => const FlightsPage(),
         "/admin-login": (context) => const FlightsPage(),
         "/add-flight": (context) => const AddFlightPage(),
-        "/airplanes": (context) => AirplaneListPage(),  // Add route for AirplaneListPage
+        "/airplanes": (context) => const AirplaneListPage(),  // Add route for AirplaneListPage
+        "/add-airplane": (context) => AddAirplanePage(),  // Add route for AddAirplanePage
       },
       restorationScopeId: "app",
     );
