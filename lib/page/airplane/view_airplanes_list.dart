@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/airplane/airplane_details.dart';
+import 'package:i_can_fly/page/airplane/edit_airplane_page.dart';
 import 'package:i_can_fly/entity/airplane.dart';
 
 class AirplaneListPage extends StatefulWidget {
+  const AirplaneListPage({super.key});
+
   @override
   _AirplaneListPageState createState() => _AirplaneListPageState();
 }
@@ -46,7 +48,7 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
                 title: Text(airplane.type),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AirplaneDetailsPage(airplane: airplane),
+                    builder: (context) => EditAirplanePage(airplane: airplane),
                   ));
                 },
               );
