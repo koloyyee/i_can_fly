@@ -1,9 +1,10 @@
 import 'package:floor/floor.dart';
 
-@Entity(tableName: "airplanes")
+@entity
 class Airplane {
   @PrimaryKey(autoGenerate: true)
-  final int? id; // Make id nullable because it's auto-generated
+  final int? id;
+
   final String type;
   final int capacity;
   final int maxSpeed;
@@ -11,7 +12,7 @@ class Airplane {
   final String manufacturer;
 
   Airplane({
-    this.id, // Make id optional
+    this.id,
     required this.type,
     required this.capacity,
     required this.maxSpeed,

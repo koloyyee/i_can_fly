@@ -14,6 +14,33 @@ class _AddAirplanePageState extends State<AddAirplanePage> {
   final _maxRangeController = TextEditingController();
   final _manufacturerController = TextEditingController();
 
+  Future<void> _addAirplane() async {
+    final type = _typeController.text;
+    final capacity = int.tryParse(_capacityController.text) ?? 0;
+    final maxSpeed = int.tryParse(_maxSpeedController.text) ?? 0;
+    final maxRange = int.tryParse(_maxRangeController.text) ?? 0;
+    final manufacturer = _manufacturerController.text;
+
+    if (type.isEmpty || manufacturer.isEmpty || capacity <= 0 || maxSpeed <= 0 || maxRange <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields correctly.')),
+      );
+      return;
+    }
+
+    final db = await AppDatabase.getInstance();
+    final airplane = Airplane(
+      type: type,
+      capacity: capacity,
+      maxSpeed: maxSpeed,
+      maxRange: maxRange,
+      manufacturer: manufacturer,
+    );
+    await db.airplaneDao.createAirplane(airplane);
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,33 +81,5 @@ class _AddAirplanePageState extends State<AddAirplanePage> {
         ),
       ),
     );
-  }
-
-  Future<void> _addAirplane() async {
-    final type = _typeController.text;
-    final capacity = int.tryParse(_capacityController.text) ?? 0;
-    final maxSpeed = int.tryParse(_maxSpeedController.text) ?? 0;
-    final maxRange = int.tryParse(_maxRangeController.text) ?? 0;
-    final manufacturer = _manufacturerController.text;
-
-    if (type.isEmpty || manufacturer.isEmpty || capacity <= 0 || maxSpeed <= 0 || maxRange <= 0) {
-      // Show an error if any field is invalid
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields correctly.')),
-      );
-      return;
-    }
-
-    final db = await AppDatabase.getInstance();
-    final airplane = Airplane(
-      type: type,
-      capacity: capacity,
-      maxSpeed: maxSpeed,
-      maxRange: maxRange,
-      manufacturer: manufacturer,
-    );
-    await db.airplaneDao.createAirplane(airplane);
-
-    Navigator.of(context).pop();
   }
 }
