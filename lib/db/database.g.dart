@@ -102,15 +102,15 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `admins` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `staffs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` INTEGER NOT NULL, `arrivalDateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `address` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `address` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -207,9 +207,9 @@ class _$FlightDao extends FlightDao {
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
             departureDateTime:
-                _dateTimeConverter.decode(row['departureDateTime'] as int),
+                _dateTimeConverter.decode(row['departureDateTime'] as String),
             arrivalDateTime:
-                _dateTimeConverter.decode(row['arrivalDateTime'] as int)));
+                _dateTimeConverter.decode(row['arrivalDateTime'] as String)));
   }
 
   @override
@@ -221,9 +221,9 @@ class _$FlightDao extends FlightDao {
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
             departureDateTime:
-                _dateTimeConverter.decode(row['departureDateTime'] as int),
+                _dateTimeConverter.decode(row['departureDateTime'] as String),
             arrivalDateTime:
-                _dateTimeConverter.decode(row['arrivalDateTime'] as int)),
+                _dateTimeConverter.decode(row['arrivalDateTime'] as String)),
         arguments: [id]);
   }
 
@@ -237,7 +237,7 @@ class _$FlightDao extends FlightDao {
   Future<Flight?> findFlightDetails(int id) async {
     return _queryAdapter.query(
         'select   f.id as flight_id,   f.departure_city,   f.arrival_city,   f.departure_datetime,   f.arrival_datetime,   f.airline_id,   f.airplane_id,   al.code as airline_code,   ap.manufacturer || \' \' || ap.type) as airplane_type   from flights f   join airplanes ap on f.airplane_id = ap.id   join airlines al on f.airline_id = al.id   where f.id = ?1',
-        mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int, airplaneType: row['airplaneType'] as String?, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as int), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as int)),
+        mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int, airplaneType: row['airplaneType'] as String?, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String)),
         arguments: [id]);
   }
 
@@ -447,7 +447,7 @@ class _$AdminDao extends AdminDao {
   )   : _queryAdapter = QueryAdapter(database),
         _adminInsertionAdapter = InsertionAdapter(
             database,
-            'admins',
+            'staffs',
             (Admin item) => <String, Object?>{
                   'id': item.id,
                   'email': item.email,
@@ -456,7 +456,7 @@ class _$AdminDao extends AdminDao {
                 }),
         _adminUpdateAdapter = UpdateAdapter(
             database,
-            'admins',
+            'staffs',
             ['id'],
             (Admin item) => <String, Object?>{
                   'id': item.id,
@@ -466,7 +466,7 @@ class _$AdminDao extends AdminDao {
                 }),
         _adminDeletionAdapter = DeletionAdapter(
             database,
-            'admins',
+            'staffs',
             ['id'],
             (Admin item) => <String, Object?>{
                   'id': item.id,
@@ -494,7 +494,7 @@ class _$AdminDao extends AdminDao {
             id: row['id'] as int,
             email: row['email'] as String,
             password: row['password'] as String,
-            createdAt: _dateTimeConverter.decode(row['createdAt'] as int)));
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as String)));
   }
 
   @override
@@ -504,7 +504,7 @@ class _$AdminDao extends AdminDao {
             id: row['id'] as int,
             email: row['email'] as String,
             password: row['password'] as String,
-            createdAt: _dateTimeConverter.decode(row['createdAt'] as int)),
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as String)),
         arguments: [id]);
   }
 
@@ -515,7 +515,7 @@ class _$AdminDao extends AdminDao {
             id: row['id'] as int,
             email: row['email'] as String,
             password: row['password'] as String,
-            createdAt: _dateTimeConverter.decode(row['createdAt'] as int)),
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as String)),
         arguments: [email]);
   }
 
