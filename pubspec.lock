@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "67.0.0"
   analyzer:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: analyzer
       sha256: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
@@ -290,7 +290,7 @@ packages:
     source: hosted
     version: "1.5.0"
   floor_generator:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: floor_generator
       sha256: "1499b3ab878a807e6fbe6f140dc014124845cd1df3090a113aae5fa7577a1e77"

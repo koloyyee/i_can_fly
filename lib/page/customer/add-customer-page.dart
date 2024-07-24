@@ -15,12 +15,22 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController birthdayController;
+  late TextEditingController addressController;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController();
     emailController = TextEditingController();
+    passwordController = TextEditingController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    birthdayController = TextEditingController();
+    addressController = TextEditingController();
 
     $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
       customerDao = db.customerDao;
@@ -31,6 +41,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   void dispose() {
     nameController.dispose();
     emailController.dispose();
+    passwordController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    birthdayController.dispose();
+    addressController.dispose();
     super.dispose();
   }
 
@@ -57,14 +72,56 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) => value == null || value.isEmpty ? 'Please enter an email' : null,
               ),
+              TextFormField(
+                controller: passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                validator: (value) => value == null || value.isEmpty ? 'Please enter a password' : null,
+              ),
+              TextFormField(
+                controller: firstNameController,
+                decoration: const InputDecoration(labelText: 'First Name'),
+                validator: (value) => value == null || value.isEmpty ? 'Please enter a first name' : null,
+              ),
+              TextFormField(
+                controller: lastNameController,
+                decoration: const InputDecoration(labelText: 'Last Name'),
+                validator: (value) => value == null || value.isEmpty ? 'Please enter a last name' : null,
+              ),
+              TextFormField(
+                controller: birthdayController,
+                decoration: const InputDecoration(labelText: 'Birthday (Unix Timestamp)'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a birthday';
+                  }
+                  try {
+                    int.parse(value);
+                  } catch (_) {
+                    return 'Invalid date format';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: addressController,
+                decoration: const InputDecoration(labelText: 'Address'),
+                validator: (value) => value == null || value.isEmpty ? 'Please enter an address' : null,
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     final customer = Customer(
-                      id: Customer.ID++,
+                      id: null,  // Let the database handle the ID
                       name: nameController.text,
                       email: emailController.text,
+                      password: passwordController.text,
+                      firstName: firstNameController.text,
+                      lastName: lastNameController.text,
+                      birthday: int.parse(birthdayController.text),
+                      address: addressController.text,
+                      createdAt: DateTime.now().millisecondsSinceEpoch, // Current time as timestamp
                     );
                     customerDao.createCustomer(customer).then((_) {
                       ScaffoldMessenger.of(context).showSnackBar(

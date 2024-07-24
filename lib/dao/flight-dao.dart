@@ -7,7 +7,7 @@ abstract class FlightDao {
   @Query("select * from flights")
   Future<List<Flight>> findAllFlights();
   
-  @Query("select  * where f.id = :id")
+  @Query("select  * from flights where f.id = :id")
   Future<Flight?> findFlightById(int id);
 
   @Query("select type as airplaneType from airplanes")

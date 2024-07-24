@@ -3,10 +3,10 @@ import 'package:i_can_fly/entity/airplane.dart';
 
 @dao
 abstract class AirplaneDao {
-  @Query("select * from planes")
+  @Query("select * from airplanes")
   Future<List<Airplane>> findAllAirplanes();
   
-  @Query("select * from planes where id = :id")
+  @Query("select * from airplanes where id = :id")
   Future<Airplane?> findAirplaneById(int id);
   
  @Insert(onConflict: OnConflictStrategy.rollback)

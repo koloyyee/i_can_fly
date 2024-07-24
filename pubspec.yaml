@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   floor: ^1.4.0
+  floor_generator: ^1.4.0
   intl: ^0.17.0
 
 
@@ -40,16 +41,11 @@ dependencies:
   shared_preferences: ^2.2.3
   encrypted_shared_preferences: ^3.0.1
   url_launcher: ^6.3.0
-
-  #flutter_secure_storage: ^5.0.0
-
   dartdoc: ^8.0.8
   sqflite: any
-  analyzer: ^6.4.1
+ #analyzer: ^6.4.1
 
 
-
-  #flutter_secure_storage: ^7.0.0
 
 
 dev_dependencies:
