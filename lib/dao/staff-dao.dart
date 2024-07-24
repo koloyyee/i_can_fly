@@ -4,13 +4,13 @@ import 'package:i_can_fly/entity/Staff.dart';
 
 @dao
 abstract class StaffDao {
-  @Query("select * from Staffs ")
+  @Query("select * from staffs ")
   Future<List<Staff>> findAllStaffs();
   
-  @Query("select  * from Staffs  where id = :id")
+  @Query("select  * from staffs  where id = :id")
   Future<Staff?>findStaffById(int id);
 
-  @Query("select * from Staffs where email = :email")
+  @Query("select * from staffs where email = :email")
   Future<Staff?>findStaffByEmail(String email);
   
  @Insert(onConflict: OnConflictStrategy.rollback)

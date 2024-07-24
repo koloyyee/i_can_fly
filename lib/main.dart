@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Welcome to I Can Fly"),
+        title: const Text("Welcome to I Can Fly - testing"),
         backgroundColor: Color(CTColor.Teal.colorValue),
         // backgroundColor: const Color(0x45ADA8),
         // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
