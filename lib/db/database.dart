@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/dao/airline-dao.dart';
 import 'package:i_can_fly/dao/airplane-dao.dart';
+import 'package:i_can_fly/dao/customer-dao.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/dao/admin-dao.dart';
 import 'package:i_can_fly/db/datetime-converter.dart';
