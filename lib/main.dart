@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/admin-login.dart';
 import 'package:i_can_fly/page/airplane/add_airplane.dart';
+import 'package:i_can_fly/page/customer/customer_list.dart';
 import 'package:i_can_fly/page/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
-import 'package:i_can_fly/page/airplane/airplane_list.dart';  // Import AirplaneListPage
+import 'package:i_can_fly/page/airplane/airplane_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
 void main() {
@@ -28,8 +29,10 @@ class MyApp extends StatelessWidget {
         "/flights": (context) => const FlightsPage(),
         "/admin-login": (context) => const FlightsPage(),
         "/add-flight": (context) => const AddFlightPage(),
-        "/airplanes": (context) => AirplaneListPage(),  // Add route for AirplaneListPage
-        "/add-airplane": (context) => AddAirplanePage(),  // Add route for AddAirplanePage
+        "/airplanes": (context) => AirplaneListPage(),
+        "/add-airplane": (context) => AddAirplanePage(),
+        "/customers": (context) => CustomerListPage(),
+
       },
       restorationScopeId: "app",
     );
@@ -81,9 +84,17 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text("Airlines List"),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, "/customers"); // Navigate to CustomerListPage
+              },
+              child: const Text("Customer List"),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
