@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
+/// A StatefulWidget that provides a form to add a flight reservation.
+///
+/// This widget interacts with a FlightDao to save the flight details into a database.
 class AddReservationPage extends StatefulWidget {
+  /// The FlightDao instance for performing database operations.
   final FlightDao flightDao;
 
+  /// Creates an instance of AddReservationPage.
+  ///
+  /// The [flightDao] parameter is required.
   AddReservationPage({Key? key, required this.flightDao}) : super(key: key);
 
   @override
@@ -18,6 +25,11 @@ class _AddReservationPageState extends State<AddReservationPage> {
   DateTime? _departureDateTime;
   DateTime? _arrivalDateTime;
 
+  /// Adds a flight to the database using the provided flight details.
+  ///
+  /// This method validates the input fields and creates a Flight object
+  /// which is then saved to the database via the FlightDao. After the flight
+  /// is successfully added, the current screen is popped from the navigation stack.
   void _addFlight() async {
     if (_departureCityController.text.isEmpty || _arrivalCityController.text.isEmpty) {
       // Optionally handle validation error, such as showing a Snackbar

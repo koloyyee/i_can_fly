@@ -6,9 +6,16 @@ import 'package:i_can_fly/page/reservation/reservation_details.dart';
 import 'package:i_can_fly/page/reservation/add_reservation.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
+/// A StatefulWidget that displays a list of flight reservations.
+///
+/// This widget interacts with a FlightDao to fetch and display flight details.
 class ReservationListPage extends StatefulWidget {
+  /// The FlightDao instance for performing database operations.
   final FlightDao flightDao;
 
+  /// Creates an instance of ReservationListPage.
+  ///
+  /// The [flightDao] parameter is required.
   ReservationListPage({Key? key, required this.flightDao}) : super(key: key);
 
   @override
