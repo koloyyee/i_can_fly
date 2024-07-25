@@ -240,7 +240,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
 
                           flightDao
                               .createFlight(Flight(
-                                  id: Flight.ID++,
+                                  id: null,
                                   airplaneType: airplaneType,
                                   departureCity: departureCityController.text,
                                   arrivalCity: arrivalCityController.text,

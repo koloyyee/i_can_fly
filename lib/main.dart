@@ -5,6 +5,7 @@ import 'package:i_can_fly/page/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
 import 'package:i_can_fly/page/airplane/airplane_list.dart';  // Import AirplaneListPage
 import 'package:i_can_fly/utils/theme-color.dart';
+import 'package:i_can_fly/page/reservation/reservation_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -79,6 +80,13 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text("Airlines List"),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/reservation");
+              },
+              child: const Text("Reservation List"),
+            ),
+
           ],
         ),
       ),
