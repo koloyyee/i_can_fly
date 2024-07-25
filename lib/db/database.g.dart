@@ -80,6 +80,8 @@ class _$AppDatabase extends AppDatabase {
 
   AdminDao? _adminDaoInstance;
 
+  CustomerDao? _customerDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -106,7 +108,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -136,6 +138,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   AdminDao get adminDao {
     return _adminDaoInstance ??= _$AdminDao(database, changeListener);
+  }
+
+  @override
+  CustomerDao get customerDao {
+    return _customerDaoInstance ??= _$CustomerDao(database, changeListener);
   }
 }
 
@@ -352,7 +359,7 @@ class _$AirplaneDao extends AirplaneDao {
   )   : _queryAdapter = QueryAdapter(database),
         _airplaneInsertionAdapter = InsertionAdapter(
             database,
-            'airplanes',
+            'Airplane',
             (Airplane item) => <String, Object?>{
                   'id': item.id,
                   'type': item.type,
@@ -363,7 +370,7 @@ class _$AirplaneDao extends AirplaneDao {
                 }),
         _airplaneUpdateAdapter = UpdateAdapter(
             database,
-            'airplanes',
+            'Airplane',
             ['id'],
             (Airplane item) => <String, Object?>{
                   'id': item.id,
@@ -375,7 +382,7 @@ class _$AirplaneDao extends AirplaneDao {
                 }),
         _airplaneDeletionAdapter = DeletionAdapter(
             database,
-            'airplanes',
+            'Airplane',
             ['id'],
             (Airplane item) => <String, Object?>{
                   'id': item.id,
@@ -533,6 +540,117 @@ class _$AdminDao extends AdminDao {
   @override
   Future<int> deleteAdmin(Admin newAdmin) {
     return _adminDeletionAdapter.deleteAndReturnChangedRows(newAdmin);
+  }
+}
+
+class _$CustomerDao extends CustomerDao {
+  _$CustomerDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _customerInsertionAdapter = InsertionAdapter(
+            database,
+            'customers',
+            (Customer item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'email': item.email,
+                  'password': item.password,
+                  'firstName': item.firstName,
+                  'lastName': item.lastName,
+                  'birthday': item.birthday,
+                  'address': item.address,
+                  'createdAt': item.createdAt
+                }),
+        _customerUpdateAdapter = UpdateAdapter(
+            database,
+            'customers',
+            ['id'],
+            (Customer item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'email': item.email,
+                  'password': item.password,
+                  'firstName': item.firstName,
+                  'lastName': item.lastName,
+                  'birthday': item.birthday,
+                  'address': item.address,
+                  'createdAt': item.createdAt
+                }),
+        _customerDeletionAdapter = DeletionAdapter(
+            database,
+            'customers',
+            ['id'],
+            (Customer item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'email': item.email,
+                  'password': item.password,
+                  'firstName': item.firstName,
+                  'lastName': item.lastName,
+                  'birthday': item.birthday,
+                  'address': item.address,
+                  'createdAt': item.createdAt
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Customer> _customerInsertionAdapter;
+
+  final UpdateAdapter<Customer> _customerUpdateAdapter;
+
+  final DeletionAdapter<Customer> _customerDeletionAdapter;
+
+  @override
+  Future<List<Customer>> findAllCustomers() async {
+    return _queryAdapter.queryList('SELECT * FROM customers',
+        mapper: (Map<String, Object?> row) => Customer(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            email: row['email'] as String,
+            password: row['password'] as String,
+            firstName: row['firstName'] as String,
+            lastName: row['lastName'] as String,
+            birthday: row['birthday'] as int,
+            address: row['address'] as String,
+            createdAt: row['createdAt'] as int));
+  }
+
+  @override
+  Future<Customer?> findCustomerById(int id) async {
+    return _queryAdapter.query('SELECT * FROM customers WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Customer(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            email: row['email'] as String,
+            password: row['password'] as String,
+            firstName: row['firstName'] as String,
+            lastName: row['lastName'] as String,
+            birthday: row['birthday'] as int,
+            address: row['address'] as String,
+            createdAt: row['createdAt'] as int),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> createCustomer(Customer newCustomer) async {
+    await _customerInsertionAdapter.insert(
+        newCustomer, OnConflictStrategy.rollback);
+  }
+
+  @override
+  Future<int> updateCustomer(Customer newCustomer) {
+    return _customerUpdateAdapter.updateAndReturnChangedRows(
+        newCustomer, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteCustomer(Customer newCustomer) {
+    return _customerDeletionAdapter.deleteAndReturnChangedRows(newCustomer);
   }
 }
 
