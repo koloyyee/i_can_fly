@@ -25,5 +25,7 @@ class Customer {
     required this.address,
     required this.createdAt,
   });
+
+
 }
 
