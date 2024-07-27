@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
-<<<<<<< HEAD
 /// A StatelessWidget that displays the details of a flight reservation.
 ///
 /// This widget shows the flight's departure and arrival cities, and the departure time.
@@ -13,11 +12,6 @@ class ReservationDetailsPage extends StatelessWidget {
   /// Creates an instance of ReservationDetailsPage.
   ///
   /// The [flight] parameter is required.
-=======
-class ReservationDetailsPage extends StatelessWidget {
-  final Flight flight;
-
->>>>>>> 6d7214a (fixed)
   ReservationDetailsPage({Key? key, required this.flight}) : super(key: key);
 
   @override

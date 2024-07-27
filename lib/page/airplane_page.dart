@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/page/airplane/airplane_page.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
-import 'airplane/view_airplanes_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
 import '../entity/airplane.dart';
@@ -98,7 +96,7 @@ class _AirplanePageState extends State<AirplanePage> {
                       vertical: 8.0, horizontal: 16.0),
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Color(CTColor.Teal.colorValue), // no DarkTeal yet probably missing something
+                    color: Color(CTColor.DarkTeal.colorValue),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
@@ -127,8 +125,11 @@ class _AirplanePageState extends State<AirplanePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "See All Your Airplanes Here!",
-          style: TextStyle(color: Colors.white),
+          "Airplanes List",
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w400,
+          ),
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
