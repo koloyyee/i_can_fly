@@ -5,6 +5,9 @@ import 'package:i_can_fly/page/airplane/add_airplane.dart';
 import 'package:i_can_fly/page/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
 import 'package:i_can_fly/page/airplane/airplane_list.dart';  // Import AirplaneListPage
+import 'package:i_can_fly/page/airplane/add_airplane.dart';
+import 'package:i_can_fly/page/flight-page.dart';
+import 'package:i_can_fly/page/flight/add-flight.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const HomePage(),
         "/flights": (context) => const FlightsPage(),
-        "/admin-login": (context) => const FlightsPage(),
+        "/admin-login": (context) => const AdminLoginPage(),
         "/add-flight": (context) => const AddFlightPage(),
         "/airplanes": (context) => AirplaneListPage(),  // Add route for AirplaneListPage
         "/add-airplane": (context) => AddAirplanePage(),  // Add route for AddAirplanePage
