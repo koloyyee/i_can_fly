@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
+<<<<<<< HEAD
 /// A StatefulWidget that provides a form to edit an existing flight reservation.
 ///
 /// This widget interacts with a FlightDao to update the flight details in the database.
@@ -15,6 +16,12 @@ class EditReservationPage extends StatefulWidget {
   /// Creates an instance of EditReservationPage.
   ///
   /// The [flight] and [flightDao] parameters are required.
+=======
+class EditReservationPage extends StatefulWidget {
+  final Flight flight;
+  final FlightDao flightDao;
+
+>>>>>>> 6d7214a (fixed)
   EditReservationPage({Key? key, required this.flight, required this.flightDao}) : super(key: key);
 
   @override
@@ -38,11 +45,14 @@ class _EditReservationPageState extends State<EditReservationPage> {
     _arrivalDateTime = widget.flight.arrivalDateTime;
   }
 
+<<<<<<< HEAD
   /// Updates the flight in the database with the new details.
   ///
   /// This method creates an updated Flight object and saves it to the database
   /// using FlightDao. After the flight is successfully updated, the current screen
   /// is popped from the navigation stack.
+=======
+>>>>>>> 6d7214a (fixed)
   void _updateFlight() async {
     Flight updatedFlight = Flight(
       id: widget.flight.id,  // Keep the original ID
