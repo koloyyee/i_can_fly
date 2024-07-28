@@ -1,3 +1,4 @@
+import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/db/database.dart';
@@ -25,26 +26,24 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     fetchFlights();
   }
 
-  fetchFlights() {
-
-    $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
+  void fetchFlights() {
+    AppDatabase.getInstance().then((db) {
       flightDao = db.flightDao;
-      flightDao.findAllFlights().then((flights) {
-        setState(() {
-          this.flights = flights;
-        });
-      });
+      flightDao
+          .findAllFlights()
+          .then((flights) => setState(() => this.flights = flights));
     });
   }
 
-  // Future<void> deleteFlight(Flight flight) async {
-  //   await flightDao.deleteFlight(flight);
-  //   flightDao.findAllFlights().then((flights) {
-  //     setState(() {
-  //       this.flights = flights;
-  //     });
-  //   });
-  // }
+  void deleteFlight(BuildContext context, Flight flight) async {
+    await flightDao.deleteFlight(flight);
+    flightDao.findAllFlights().then((flights) {
+      setState(() {
+        this.flights = flights;
+      });
+    });
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,33 +74,48 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
               for (var flight in flights)
                 GestureDetector(
                   onLongPress: () {
-                    showBottomSheet(context: context, builder: (BuildContext context) {
-                      return SizedBox(
-                        height: 500,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text("Departure City: ${flight.departureCity}"),
+                    showBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SizedBox(
+                            height: 500,
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                      "Departure City: ${flight.departureCity}"),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                      "Arrival City: ${flight.arrivalCity}"),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                      "Departure Date: ${formatter.format(flight.departureDateTime)}"),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                      "Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditFlightPage(
+                                                  flight: flight,
+                                                  flights: flights,
+                                                ))).then((_) {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  child: const Text("Edit Flight"),
+                                )
+                              ],
                             ),
-                            ListTile(
-                              title: Text("Arrival City: ${flight.arrivalCity}"),
-                            ),
-                            ListTile(
-                              title: Text("Departure Date: ${formatter.format(flight.departureDateTime)}"),
-                            ),
-                            ListTile(
-                              title: Text("Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
-                            ),
-                            ElevatedButton(onPressed:(){
-                               Navigator.push(context, MaterialPageRoute(builder: (context) => EditFlightPage(flight: flight, flights: flights,)))
-                              .then((_) {
-                               Navigator.pop(context);
-                              });
-                            }, child: const Text("Edit Flight"),)
-                          ],
-                        ),
-                      );
-                    });
+                          );
+                        });
                   },
                   child: ListTile(
                     title: Text(
@@ -127,15 +141,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      flightDao.deleteFlight(flight);
-                                      flightDao
-                                          .findAllFlights()
-                                          .then((flights) {
-                                        setState(() {
-                                          this.flights = flights;
-                                        });
-                                      });
-                                      Navigator.of(context).pop();
+                                      deleteFlight(context, flight);
                                     },
                                     child: const Text("Delete"),
                                   ),
@@ -150,4 +156,3 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
           );
   }
 }
-

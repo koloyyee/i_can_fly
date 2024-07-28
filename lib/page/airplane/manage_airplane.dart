@@ -3,10 +3,8 @@ import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
 import '../../utils/theme-color.dart';
 
-/**
- * ManageAirplanePage is a stateful widget that allows users to add, edit, or delete airplane details.
- * It handles both modes: adding a new airplane and editing an existing one.
- */
+/// ManageAirplanePage is a stateful widget that allows users to add, edit, or delete airplane details.
+/// It handles both modes: adding a new airplane and editing an existing one.
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane; // The airplane to be managed (can be null if adding a new airplane)
   final bool isEditMode; // Indicates whether the page is in edit mode
@@ -47,10 +45,8 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     super.dispose();
   }
 
-  /**
-   * Saves the airplane details to the database.
-   * If in edit mode, updates the existing airplane, otherwise creates a new airplane.
-   */
+  /// Saves the airplane details to the database.
+  /// If in edit mode, updates the existing airplane, otherwise creates a new airplane.
   void _save() async {
     final database = await AppDatabase.getInstance();
     final dao = database.airplaneDao;
@@ -72,9 +68,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     }
   }
 
-  /**
-   * Deletes the airplane from the database after user confirmation.
-   */
+  /// Deletes the airplane from the database after user confirmation.
   void _delete() async {
     final database = await AppDatabase.getInstance();
     final dao = database.airplaneDao;

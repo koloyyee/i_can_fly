@@ -5,7 +5,7 @@ import 'package:i_can_fly/entity/airplane.dart';
 class AirplaneDetailsPage extends StatefulWidget {
   final Airplane airplane;
 
-  AirplaneDetailsPage({required this.airplane});
+  const AirplaneDetailsPage({super.key, required this.airplane});
 
   @override
   _AirplaneDetailsPageState createState() => _AirplaneDetailsPageState();
@@ -29,22 +29,22 @@ class _AirplaneDetailsPageState extends State<AirplaneDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Type: ${_airplane.type}', style: TextStyle(fontSize: 18)),
-            Text('Capacity: ${_airplane.capacity}', style: TextStyle(fontSize: 18)),
-            Text('Max Speed: ${_airplane.maxSpeed}', style: TextStyle(fontSize: 18)),
-            Text('Max Range: ${_airplane.maxRange}', style: TextStyle(fontSize: 18)),
-            Text('Manufacturer: ${_airplane.manufacturer}', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
+            Text('Type: ${_airplane.type}', style: const TextStyle(fontSize: 18)),
+            Text('Capacity: ${_airplane.capacity}', style: const TextStyle(fontSize: 18)),
+            Text('Max Speed: ${_airplane.maxSpeed}', style: const TextStyle(fontSize: 18)),
+            Text('Max Range: ${_airplane.maxRange}', style: const TextStyle(fontSize: 18)),
+            Text('Manufacturer: ${_airplane.manufacturer}', style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _updateAirplane,
-              child: Text('Update Airplane'),
+              child: const Text('Update Airplane'),
             ),
             ElevatedButton(
               onPressed: _deleteAirplane,
-              child: Text('Delete Airplane'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, // Updated styling
               ),
+              child: const Text('Delete Airplane'),
             ),
           ],
         ),

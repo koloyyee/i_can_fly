@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/page/flight/admin-login.dart';
+import 'package:i_can_fly/page/admin/admin-login.dart';
 import 'package:i_can_fly/page/airplane/add_airplane.dart';
 import 'package:i_can_fly/page/customer/customer_list.dart';
 import 'package:i_can_fly/page/flight/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
 import 'package:i_can_fly/page/airplane/airplane_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
-import 'package:i_can_fly/page/reservation/reservation_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,9 +29,9 @@ class MyApp extends StatelessWidget {
         "/flights": (context) => const FlightsPage(),
         "/admin-login": (context) => const AdminLoginPage(),
         "/add-flight": (context) => const AddFlightPage(),
-        "/airplanes": (context) => AirplaneListPage(),
-        "/add-airplane": (context) => AddAirplanePage(),
-        "/customers": (context) => CustomerListPage(),
+        "/airplanes": (context) => const AirplaneListPage(),
+        "/add-airplane": (context) => const AddAirplanePage(),
+        "/customers": (context) => const CustomerListPage(),
 
       },
       restorationScopeId: "app",
@@ -69,7 +68,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/flights");
+                Navigator.pushNamed(context, "/admin-login");
               },
               child: const Text("Flights List"),
             ),

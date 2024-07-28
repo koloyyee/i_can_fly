@@ -4,6 +4,8 @@ import 'package:i_can_fly/page/airplane/airplane_details.dart';
 import 'package:i_can_fly/entity/airplane.dart';
 
 class AirplaneListPage extends StatefulWidget {
+  const AirplaneListPage({super.key});
+
   @override
   _AirplaneListPageState createState() => _AirplaneListPageState();
 }

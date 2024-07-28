@@ -5,7 +5,7 @@ import 'package:i_can_fly/entity/airplane.dart';
 class EditAirplanePage extends StatefulWidget {
   final Airplane airplane;
 
-  EditAirplanePage({required this.airplane});
+  const EditAirplanePage({super.key, required this.airplane});
 
   @override
   _EditAirplanePageState createState() => _EditAirplanePageState();
@@ -53,48 +53,48 @@ class _EditAirplanePageState extends State<EditAirplanePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Airplane')),
+      appBar: AppBar(title: const Text('Edit Airplane')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _typeController,
-              decoration: InputDecoration(labelText: 'Type'),
+              decoration: const InputDecoration(labelText: 'Type'),
             ),
             TextField(
               controller: _capacityController,
-              decoration: InputDecoration(labelText: 'Capacity'),
+              decoration: const InputDecoration(labelText: 'Capacity'),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: _maxSpeedController,
-              decoration: InputDecoration(labelText: 'Max Speed'),
+              decoration: const InputDecoration(labelText: 'Max Speed'),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: _maxRangeController,
-              decoration: InputDecoration(labelText: 'Max Range'),
+              decoration: const InputDecoration(labelText: 'Max Range'),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: _manufacturerController,
-              decoration: InputDecoration(labelText: 'Manufacturer'),
+              decoration: const InputDecoration(labelText: 'Manufacturer'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: _updateAirplane,
-                  child: Text('Update Airplane'),
+                  child: const Text('Update Airplane'),
                 ),
                 ElevatedButton(
                   onPressed: _deleteAirplane,
-                  child: Text('Delete Airplane'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red, // Updated styling
                   ),
+                  child: const Text('Delete Airplane'),
                 ),
               ],
             ),
