@@ -31,6 +31,13 @@ class _AirplanePageState extends State<AirplanePage> {
     }
   }
 
+  void _handleAirplaneUpdated(Airplane airplane) {
+    // Method to handle updates or deletions
+    setState(() {
+      _airplanes = _loadAirplanes();
+    });
+  }
+
   void _navigateToManagePage(BuildContext context, [Airplane? airplane]) {
     Navigator.push(
       context,
@@ -38,12 +45,12 @@ class _AirplanePageState extends State<AirplanePage> {
         builder: (context) => ManageAirplanePage(
           airplane: airplane,
           isEditMode: airplane != null,
+          onAirplaneUpdated: _handleAirplaneUpdated, // Pass the callback
         ),
       ),
     ).then((_) {
-      setState(() {
-        _airplanes = _loadAirplanes();
-      });
+      // Refresh the list when returning from ManageAirplanePage
+      _handleAirplaneUpdated(airplane!); // Refresh the list on return
     });
   }
 
@@ -86,13 +93,17 @@ class _AirplanePageState extends State<AirplanePage> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.airplane_ticket, color: Colors.white),
-                        const SizedBox(width: 16.0),
+                        Icon(Icons.airplane_ticket, color: Colors.white),
+                        SizedBox(width: 16),
                         Expanded(
                           child: Text(
-                            '${airplane.type}    ${airplane.capacity} Passengers',
-                            style: const TextStyle(fontSize: 16.0, color: Colors.white),
+                            airplane.type,
+                            style: const TextStyle(color: Colors.white, fontSize: 18),
                           ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.white),
+                          onPressed: () => _navigateToManagePage(context, airplane),
                         ),
                       ],
                     ),
@@ -105,8 +116,8 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToManagePage(context),
-        backgroundColor: Color(CTColor.Teal.colorValue),
         child: const Icon(Icons.add),
+        backgroundColor: Color(CTColor.Teal.colorValue),
       ),
     );
   }
