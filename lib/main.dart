@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/page/airplane/manage_airplane.dart';
-import 'package:i_can_fly/page/airplane_page.dart';
-import 'package:i_can_fly/page/flight-page.dart';
+import 'package:i_can_fly/page/flight/admin-login.dart';
+import 'package:i_can_fly/page/airplane/add_airplane.dart';
+import 'package:i_can_fly/page/customer/customer_list.dart';
+import 'package:i_can_fly/page/flight/flight-page.dart';
 import 'package:i_can_fly/page/flight/add-flight.dart';
+import 'package:i_can_fly/page/airplane/airplane_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
+import 'package:i_can_fly/page/reservation/reservation_list.dart';
 
 void main() {
   runApp(const MyApp());
+  // "2023-04-01 10:00:00"
 }
 
 class MyApp extends StatelessWidget {
@@ -24,9 +28,12 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const HomePage(),
         "/flights": (context) => const FlightsPage(),
-        "/admin-login": (context) => const FlightsPage(),
+        "/admin-login": (context) => const AdminLoginPage(),
         "/add-flight": (context) => const AddFlightPage(),
-        "/airplanes": (context) => const AirplanePage(),
+        "/airplanes": (context) => AirplaneListPage(),
+        "/add-airplane": (context) => AddAirplanePage(),
+        "/customers": (context) => CustomerListPage(),
+
       },
       restorationScopeId: "app",
     );
@@ -78,9 +85,24 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text("Airlines List"),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, "/customers"); // Navigate to CustomerListPage
+              },
+              child: const Text("Customer List"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, "/reservation"); // Navigate to CustomerListPage
+              },
+              child: const Text("Reservation Page"),
+            ),
           ],
         ),
       ),
     );
   }
 }
+

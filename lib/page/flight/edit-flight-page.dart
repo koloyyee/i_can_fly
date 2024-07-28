@@ -235,8 +235,8 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                   arrivalTime!.minute);
 
                               flightDao
-                                  .createFlight(Flight(
-                                      id: Flight.ID++,
+                                  .updateFlight(Flight(
+                                      id: widget.flight.id,
                                       airplaneType: airplaneType,
                                       departureCity:
                                           departureCityController.text,

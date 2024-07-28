@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/dao/airline-dao.dart';
 import 'package:i_can_fly/dao/airplane-dao.dart';
+import 'package:i_can_fly/dao/customer-dao.dart';
 import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/dao/admin-dao.dart';
 import 'package:i_can_fly/db/datetime-converter.dart';
@@ -12,6 +13,8 @@ import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/entity/admin.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
+import '../dao/customer-dao.dart';
+
 part 'database.g.dart'; // Make sure this matches the generated file name
 
 @TypeConverters([DateTimeConverter])
@@ -21,6 +24,7 @@ abstract class AppDatabase extends FloorDatabase {
   AirlineDao get airlineDao;
   AirplaneDao get airplaneDao;
   AdminDao get adminDao;
+  CustomerDao get customerDao;
 
   static AppDatabase? _instance;
 

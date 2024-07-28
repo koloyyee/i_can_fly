@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
-import '../entity/airplane.dart';
+import '../../entity/airplane.dart';
 
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});

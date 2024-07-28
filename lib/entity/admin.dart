@@ -1,7 +1,7 @@
 
 import 'package:floor/floor.dart';
 
-@Entity(tableName: "admins")
+@Entity(tableName: "staffs")
 class Admin{
   @PrimaryKey(autoGenerate: true)
   final int id;
