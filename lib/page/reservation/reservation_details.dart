@@ -12,13 +12,13 @@ class ReservationDetailsPage extends StatelessWidget {
   /// Creates an instance of ReservationDetailsPage.
   ///
   /// The [flight] parameter is required.
-  const ReservationDetailsPage({super.key, required this.flight});
+  ReservationDetailsPage({Key? key, required this.flight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flight Details"),
+        title: Text("Flight Details"),
       ),
       body: Column(
         children: <Widget>[
@@ -28,7 +28,7 @@ class ReservationDetailsPage extends StatelessWidget {
             onPressed: () {
               // Implement delete logic
             },
-            child: const Text('Delete Flight'),
+            child: Text('Delete Flight'),
           ),
         ],
       ),

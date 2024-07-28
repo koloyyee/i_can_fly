@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
@@ -15,7 +16,7 @@ class EditReservationPage extends StatefulWidget {
   /// Creates an instance of EditReservationPage.
   ///
   /// The [flight] and [flightDao] parameters are required.
-  const EditReservationPage({super.key, required this.flight, required this.flightDao});
+  EditReservationPage({Key? key, required this.flight, required this.flightDao}) : super(key: key);
 
   @override
   _EditReservationPageState createState() => _EditReservationPageState();
@@ -61,27 +62,27 @@ class _EditReservationPageState extends State<EditReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Flight Reservation"),
+        title: Text("Edit Flight Reservation"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TextField(
               controller: _departureCityController,
-              decoration: const InputDecoration(labelText: 'Departure City'),
+              decoration: InputDecoration(labelText: 'Departure City'),
             ),
             TextField(
               controller: _arrivalCityController,
-              decoration: const InputDecoration(labelText: 'Arrival City'),
+              decoration: InputDecoration(labelText: 'Arrival City'),
             ),
             TextField(
               controller: _airplaneTypeController,
-              decoration: const InputDecoration(labelText: 'Airplane Type'),
+              decoration: InputDecoration(labelText: 'Airplane Type'),
             ),
             // Buttons for date picking and saving
             ElevatedButton(
               onPressed: _updateFlight,
-              child: const Text('Save Changes'),
+              child: Text('Save Changes'),
             ),
           ],
         ),
