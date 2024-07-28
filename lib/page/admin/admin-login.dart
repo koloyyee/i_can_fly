@@ -1,7 +1,10 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/admin-dao.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/entity/admin.dart';
+
+// we need to save the credential if the login is successful 
+
 
 /// for the staff to
 class AdminLoginPage extends StatefulWidget {
@@ -13,17 +16,16 @@ class AdminLoginPage extends StatefulWidget {
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
   late AdminDao adminDao;
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  EncryptedSharedPreferences esp = EncryptedSharedPreferences();
 
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    $FloorAppDatabase.databaseBuilder("app_database.db").build().then((db) {
-      adminDao = db.adminDao;
-    });
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    AppDatabase.getInstance().then((db) => adminDao = db.adminDao);
   }
 
   @override
@@ -44,30 +46,30 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
             const Text("email"),
             const SizedBox(height: 10),
             TextField(
-              controller: emailController,
+              controller: _emailController,
             ),
             const SizedBox(height: 20),
             const Text("Password"),
             const SizedBox(height: 10),
             TextField(
-              controller: passwordController,
+              controller: _passwordController,
               obscureText: true,
             ),
             const SizedBox(height: 50),
             ElevatedButton(
               onPressed: () async {
-                String email = emailController.value.text;
+                String email = _emailController.value.text;
                 print(email);
                 // login
                 adminDao
-                    .findAdminByEmail(emailController.value.text)
+                    .findAdminByEmail(_emailController.value.text)
                     .then((user) {
-                      print(user);
                   if (user != null) {
-                    user.password == passwordController.value.text
-                        ? print("Login Success")
-                        : print("Login Failed");
-                    Navigator.pushNamed(context, "/flights");
+                    if(user.password == _passwordController.value.text && user.email == _emailController.value.text) {
+                      esp.setString("email", user.email);
+                      esp.setString("password", user.password);
+                      Navigator.pushNamed(context, "/flights");
+                    }
                   } else {
                     // some error message
                   }

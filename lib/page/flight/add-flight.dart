@@ -49,17 +49,28 @@ class _AddFlightPageState extends State<AddFlightPage> {
 
     departureCityController = TextEditingController();
     arrivalCityController = TextEditingController();
-    _fetchAirplaneTypes().then((value) {
-      setState(() {
-        _airplaneTypes = value;
-      });
-    });
-  }
 
-  Future<List<String>> _fetchAirplaneTypes() async {
-    final db = await AppDatabase.getInstance();
-    return db.flightDao.findAllAirplaneTypes();
+    AppDatabase.getInstance().then(( db) {
+        flightDao = db.flightDao;
+        flightDao.findAllAirplaneTypes().then((types) => _airplaneTypes = types);
+    });
+
+    // _fetchAirplaneTypes().then((value) {
+    //   setState(() {
+    //     _airplaneTypes = value;
+    //   });
+    // });
   }
+   
+  // Future<FlightDao> _initDao() async {
+  //   final db = await AppDatabase.getInstance();
+  //   return db.flightDao;
+  // }
+
+  // Future<List<String>> _fetchAirplaneTypes() async {
+  //   final db = await AppDatabase.getInstance();
+  //   return db.flightDao.findAllAirplaneTypes();
+  // }
 
   final _formKey = GlobalKey<FormState>();
 

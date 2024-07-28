@@ -6,7 +6,7 @@ import 'package:i_can_fly/entity/customer.dart';
 class EditCustomerPage extends StatefulWidget {
   final Customer customer;
 
-  EditCustomerPage({Key? key, required this.customer}) : super(key: key);
+  const EditCustomerPage({super.key, required this.customer});
 
   @override
   _EditCustomerPageState createState() => _EditCustomerPageState();
@@ -134,17 +134,17 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
               decoration: const InputDecoration(labelText: 'Birthday'),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _updateCustomer,
               child: const Text('Update'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _deleteCustomer,
               child: const Text('Delete'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/customer-dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddCustomerPage extends StatefulWidget {
+  const AddCustomerPage({super.key});
+
   @override
   _AddCustomerPageState createState() => _AddCustomerPageState();
 }
