@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/flight-dao.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/page/reservation/edit_reservation.dart';
 import 'package:i_can_fly/page/reservation/reservation_details.dart';
 import 'package:i_can_fly/page/reservation/add_reservation.dart';
-import 'package:i_can_fly/utils/theme-color.dart';
 
 /// A StatefulWidget that displays a list of flight reservations.
 ///
@@ -17,7 +14,7 @@ class ReservationListPage extends StatefulWidget {
   /// Creates an instance of ReservationListPage.
   ///
   /// The [flightDao] parameter is required.
-  ReservationListPage({Key? key, required this.flightDao}) : super(key: key);
+  const ReservationListPage({super.key, required this.flightDao});
 
   @override
   _ReservationListPageState createState() => _ReservationListPageState();
@@ -36,7 +33,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flight Reservations"),
+        title: const Text("Flight Reservations"),
       ),
       body: FutureBuilder<List<Flight>>(
         future: _flights,
@@ -61,7 +58,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
               },
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
@@ -71,8 +68,8 @@ class _ReservationListPageState extends State<ReservationListPage> {
             builder: (context) => AddReservationPage(flightDao: widget.flightDao), // Adjust according to how you handle flight creation
           ));
         },
-        child: Icon(Icons.add),
         tooltip: 'Add New Flight',
+        child: const Icon(Icons.add),
       ),
     );
   }
