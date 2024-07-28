@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/page/reservation/edit_reservation.dart';
 import 'package:i_can_fly/page/reservation/reservation_details.dart';
 import 'package:i_can_fly/page/reservation/add_reservation.dart';
-import 'package:i_can_fly/utils/theme-color.dart';
 
 /// A StatefulWidget that displays a list of flight reservations.
 ///
