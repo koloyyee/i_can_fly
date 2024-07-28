@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:i_can_fly/page/admin/admin_login.dart';
-
+import 'package:i_can_fly/entity/flight.dart';
+import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
 import 'package:i_can_fly/page/flight/view_flights_list.dart';
 
@@ -22,112 +22,71 @@ void main() {
     expect(find.text('See All Your Flights Here!'), findsOneWidget);
   });
 
-  /// Admin login page test
-  testWidgets("Admin login page", (WidgetTester tester) async {
-    await tester.pumpWidget(
+  /// create flight
+  testWidgets("Create Flight with invalids", (WidgetTester tester) {
+    // Build our app and trigger a frame.
+    return tester
+        .pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: AdminLoginPage(),
+          body: AddFlightPage(),
         ),
       ),
-    );
-    expect(find.byType(Form), findsOneWidget);
-    expect(find.byType(TextFormField), findsNWidgets(2));
-    expect(find.byKey(const Key('emailField')), findsOneWidget);
-    expect(find.byKey(const Key('passwordField')), findsOneWidget);
+    )
+        .then((value) async {
+      // expect to failed
+      expect(find.text('Please enter a valid city'), findsNothing);
+      expect(find.text('Please select a valid airplane type'), findsNothing);
+
+      // testing departure city
+      await tester.enterText(find.byKey(const Key("departureCityField")), "");
+      await tester.pump();
+
+      // testing destination city
+      await tester.enterText(find.byKey(const Key("arrivalCityField")), "");
+      await tester.pump();
+
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(find.text('Please enter a valid city'), findsNWidgets(2));
+      expect(find.text('Please select a valid airplane type'), findsOneWidget);
+    });
   });
-
- testWidgets("Admin login invalid email ", (WidgetTester tester) async {
-    await tester.pumpWidget(
+  testWidgets("Create Flight valid", (WidgetTester tester) {
+    // Build our app and trigger a frame.
+    return tester
+        .pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: AdminLoginPage(),
+          body: AddFlightPage(),
         ),
       ),
-    );
-    expect(find.text('Please enter email'), findsNothing);
+    )
+        .then((value) async {
+      // expect to failed
+      expect(find.text('Please enter a valid city'), findsNothing);
+      expect(find.text('Please select a valid airplane type'), findsNothing);
 
-    // expect to failed
-    await tester.enterText(find.byKey(const Key("emailField")), "invalidEmail");
-    await tester.pump();
+      // testing departure city
+      await tester.enterText(find.byKey(const Key("departureCityField")), "Toronto");
+      await tester.pump();
 
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
-    expect(find.text('Please enter a valid email address'), findsOneWidget);
- });
+      // testing destination city
+      await tester.enterText(find.byKey(const Key("arrivalCityField")), "New York");
+      await tester.pump();
 
- testWidgets("Admin login invalid password", (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: AdminLoginPage(),
-        ),
-      ),
-    );
-    expect(find.text('Please enter password'), findsNothing);
+      await tester.tap(find.byType(DropdownButtonFormField));
+      await tester.pump();
+      await tester.tap(find.text('Boeing 737').last);
+      await tester.pumpAndSettle();
 
-    // testing password
-    await tester.enterText(find.byKey(const Key("passwordField")), "123");
-    await tester.pump();
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
 
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
-    expect(find.text("Password must be at least 8 characters"), findsOneWidget);
- });
- testWidgets("Admin login valid email ", (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: AdminLoginPage(),
-        ),
-      ),
-    );
-    expect(find.text('Please enter email'), findsNothing);
-
-    // expect to failed
-    await tester.enterText(find.byKey(const Key("emailField")), "valid@email.com");
-    await tester.pump();
-
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
-    expect(find.text('Please enter a valid email address'), findsNothing);
- });
-
- testWidgets("Admin login password", (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: AdminLoginPage(),
-        ),
-      ),
-    );
-    expect(find.text('Please enter password'), findsNothing);
-
-    // testing password
-    await tester.enterText(find.byKey(const Key("passwordField")), "password123");
-    await tester.pump();
-
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
-    expect(find.text("Password must be at least 8 characters"), findsNothing);
- });
-
- testWidgets("Admin login password", (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: AdminLoginPage(),
-        ),
-      ),
-    );
-    expect(find.text('Please enter password'), findsNothing);
-
-    // testing password
-    await tester.enterText(find.byKey(const Key("passwordField")), "password123");
-    await tester.pump();
-
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
-    expect(find.text("Password must be at least 8 characters"), findsNothing);
- });
+      expect(find.text('Please enter a valid city'), findsNothing);
+      expect(find.text('Please select a valid airplane type'), findsNothing);
+    });
+  });
 }
