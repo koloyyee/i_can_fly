@@ -104,13 +104,13 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `staffs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `admins` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER NOT NULL, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `address` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
 
@@ -209,7 +209,7 @@ class _$FlightDao extends FlightDao {
   Future<List<Flight>> findAllFlights() async {
     return _queryAdapter.queryList('select * from flights',
         mapper: (Map<String, Object?> row) => Flight(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             airplaneType: row['airplaneType'] as String?,
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
@@ -223,7 +223,7 @@ class _$FlightDao extends FlightDao {
   Future<Flight?> findFlightById(int id) async {
     return _queryAdapter.query('select  * where f.id = ?1',
         mapper: (Map<String, Object?> row) => Flight(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             airplaneType: row['airplaneType'] as String?,
             arrivalCity: row['arrivalCity'] as String,
             departureCity: row['departureCity'] as String,
@@ -244,7 +244,7 @@ class _$FlightDao extends FlightDao {
   Future<Flight?> findFlightDetails(int id) async {
     return _queryAdapter.query(
         'select   f.id as flight_id,   f.departure_city,   f.arrival_city,   f.departure_datetime,   f.arrival_datetime,   f.airline_id,   f.airplane_id,   al.code as airline_code,   ap.manufacturer || \' \' || ap.type) as airplane_type   from flights f   join airplanes ap on f.airplane_id = ap.id   join airlines al on f.airline_id = al.id   where f.id = ?1',
-        mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int, airplaneType: row['airplaneType'] as String?, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String)),
+        mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int?, airplaneType: row['airplaneType'] as String?, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String)),
         arguments: [id]);
   }
 
@@ -454,7 +454,7 @@ class _$AdminDao extends AdminDao {
   )   : _queryAdapter = QueryAdapter(database),
         _adminInsertionAdapter = InsertionAdapter(
             database,
-            'staffs',
+            'admins',
             (Admin item) => <String, Object?>{
                   'id': item.id,
                   'email': item.email,
@@ -463,7 +463,7 @@ class _$AdminDao extends AdminDao {
                 }),
         _adminUpdateAdapter = UpdateAdapter(
             database,
-            'staffs',
+            'admins',
             ['id'],
             (Admin item) => <String, Object?>{
                   'id': item.id,
@@ -473,7 +473,7 @@ class _$AdminDao extends AdminDao {
                 }),
         _adminDeletionAdapter = DeletionAdapter(
             database,
-            'staffs',
+            'admins',
             ['id'],
             (Admin item) => <String, Object?>{
                   'id': item.id,
@@ -498,7 +498,7 @@ class _$AdminDao extends AdminDao {
   Future<List<Admin>> findAllAdmins() async {
     return _queryAdapter.queryList('select * from Admins',
         mapper: (Map<String, Object?> row) => Admin(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             email: row['email'] as String,
             password: row['password'] as String,
             createdAt: _dateTimeConverter.decode(row['createdAt'] as String)));
@@ -508,7 +508,7 @@ class _$AdminDao extends AdminDao {
   Future<Admin?> findAdminById(int id) async {
     return _queryAdapter.query('select  * from Admins where id = ?1',
         mapper: (Map<String, Object?> row) => Admin(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             email: row['email'] as String,
             password: row['password'] as String,
             createdAt: _dateTimeConverter.decode(row['createdAt'] as String)),
@@ -519,7 +519,7 @@ class _$AdminDao extends AdminDao {
   Future<Admin?> findAdminByEmail(String email) async {
     return _queryAdapter.query('select * from Admins where email = ?1',
         mapper: (Map<String, Object?> row) => Admin(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             email: row['email'] as String,
             password: row['password'] as String,
             createdAt: _dateTimeConverter.decode(row['createdAt'] as String)),
@@ -649,8 +649,8 @@ class _$CustomerDao extends CustomerDao {
   }
 
   @override
-  Future<int> deleteCustomer(Customer newCustomer) {
-    return _customerDeletionAdapter.deleteAndReturnChangedRows(newCustomer);
+  Future<void> deleteCustomer(Customer newCustomer) async {
+    await _customerDeletionAdapter.delete(newCustomer);
   }
 }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/customer-dao.dart';
+import 'package:i_can_fly/dao/customer_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/page/customer/add_customer_page.dart';
