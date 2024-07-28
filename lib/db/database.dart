@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
-import 'package:i_can_fly/dao/airline-dao.dart';
-import 'package:i_can_fly/dao/airplane-dao.dart';
-import 'package:i_can_fly/dao/customer-dao.dart';
-import 'package:i_can_fly/dao/flight-dao.dart';
-import 'package:i_can_fly/dao/admin-dao.dart';
+import 'package:i_can_fly/dao/airline_dao.dart';
+import 'package:i_can_fly/dao/airplane_dao.dart';
+import 'package:i_can_fly/dao/customer_dao.dart';
+import 'package:i_can_fly/dao/flight_dao.dart';
+import 'package:i_can_fly/dao/admin_dao.dart';
 import 'package:i_can_fly/db/datetime-converter.dart';
 import 'package:i_can_fly/entity/airline.dart';
 import 'package:i_can_fly/entity/airplane.dart';

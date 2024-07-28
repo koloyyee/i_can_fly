@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/flight-dao.dart';
+import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/page/reservation/reservation_details.dart';
 import 'package:i_can_fly/page/reservation/add_reservation.dart';

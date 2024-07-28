@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/flight-dao.dart';
+import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
 /// A StatefulWidget that provides a form to add a flight reservation.

@@ -1,11 +1,16 @@
 import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/flight-dao.dart';
+import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/page/flight/edit-flight-page.dart';
+import 'package:i_can_fly/page/flight/edit_flight_page.dart';
 import 'package:intl/intl.dart';
 
+/// A StatefulWidget that represents the list of flights.
+/// Instance of [FlightDao] for accessing the flight table.
+/// A list of [Flight] objects to store the flights.
+/// A method to fetch the flights from the database.
+/// A method to delete a flight from the database.
 class ViewFlightsList extends StatefulWidget {
   const ViewFlightsList({
     super.key,
@@ -64,7 +69,8 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
               ),
             ],
           ))
-        : ListView(
+        : ListView( 
+// 2.[x ] There must be a TextField along with a button that lets the user insert items into the ListView.
             children: [
               Image.asset(
                 "images/gliding_kitty.png",
