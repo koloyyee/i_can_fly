@@ -12,6 +12,7 @@ class AdminLoginPage extends StatefulWidget {
   @override
   State<AdminLoginPage> createState() => _AdminLoginPageState();
 }
+
 /// The state for the [AdminLoginPage] widget.
 class _AdminLoginPageState extends State<AdminLoginPage> {
   late AdminDao adminDao;
@@ -39,7 +40,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admin Login", style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Admin Login",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
@@ -83,7 +87,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   if (value == null || value.isEmpty) {
                     return "Please enter password";
                   }
-                  if( value.length <  8) {
+                  if (value.length < 8) {
                     return "Password must be at least 8 characters";
                   }
                   return null;
@@ -97,33 +101,24 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     String email = _emailController.value.text.toLowerCase();
                     String password = _passwordController.value.text;
                     // login
-                    adminDao
-                        .findAdminByEmail(email)
-                        .then((user) {
+                    adminDao.findAdminByEmail(email).then((user) {
+                      print(user?.email);
+                      print(user?.password);
                       if (user != null) {
-                        if (user.password == password && user.email.toLowerCase() == email) {
+                        if (user.password == password &&
+                            user.email.toLowerCase() == email) {
                           esp.setString("email", user.email);
                           esp.setString("password", user.password);
                           Navigator.pushNamed(context, "/flights");
+
+                        }  else {
+                          // some error message
+                          loginFailed(context, "Invalid email or password");
                         }
                       } else {
                         // some error message
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text("Error"),
-                                content:
-                                    const Text("Invalid email or password"),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text("OK"))
-                                ],
-                              );
-                            });
+                        loginFailed(context, "No user found");
+                        
                       }
                     });
                   }
@@ -141,5 +136,25 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         ),
       )),
     );
+  }
+
+
+
+  Future<dynamic> loginFailed(BuildContext context, String msg) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: Text(msg),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("OK"))
+            ],
+          );
+        });
   }
 }
