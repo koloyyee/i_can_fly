@@ -1,3 +1,4 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 /// A common actions menu that can be used in the app.
@@ -13,8 +14,11 @@ class CommonActionsMenu extends StatelessWidget {
     super.key,
   });
 
+
   @override
   Widget build(BuildContext context) {
+    EncryptedSharedPreferences esp = EncryptedSharedPreferences();
+
     return PopupMenuButton(itemBuilder: (BuildContext context) {
       return [
         PopupMenuItem(
@@ -55,6 +59,16 @@ class CommonActionsMenu extends StatelessWidget {
               Navigator.pushNamed(context, "/reservations");
             },
             child: const Text("Views Reservations"),
+          ),
+        ),
+        
+        PopupMenuItem(
+          child: OutlinedButton(
+            onPressed: () {
+              esp.clear();
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            child: const Text("Logout"),
           ),
         ),
       ];
