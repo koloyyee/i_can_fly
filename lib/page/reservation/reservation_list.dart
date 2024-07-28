@@ -14,7 +14,7 @@ class ReservationListPage extends StatefulWidget {
   /// Creates an instance of ReservationListPage.
   ///
   /// The [flightDao] parameter is required.
-  const ReservationListPage({super.key, required this.flightDao});
+  ReservationListPage({Key? key, required this.flightDao}) : super(key: key);
 
   @override
   _ReservationListPageState createState() => _ReservationListPageState();
@@ -33,7 +33,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flight Reservations"),
+        title: Text("Flight Reservations"),
       ),
       body: FutureBuilder<List<Flight>>(
         future: _flights,
@@ -58,7 +58,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
               },
             );
           } else {
-            return const CircularProgressIndicator();
+            return CircularProgressIndicator();
           }
         },
       ),
@@ -68,8 +68,8 @@ class _ReservationListPageState extends State<ReservationListPage> {
             builder: (context) => AddReservationPage(flightDao: widget.flightDao), // Adjust according to how you handle flight creation
           ));
         },
+        child: Icon(Icons.add),
         tooltip: 'Add New Flight',
-        child: const Icon(Icons.add),
       ),
     );
   }
