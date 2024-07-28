@@ -12,7 +12,7 @@ class AddReservationPage extends StatefulWidget {
   /// Creates an instance of AddReservationPage.
   ///
   /// The [flightDao] parameter is required.
-  const AddReservationPage({super.key, required this.flightDao});
+  AddReservationPage({Key? key, required this.flightDao}) : super(key: key);
 
   @override
   _AddReservationPageState createState() => _AddReservationPageState();
@@ -42,7 +42,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
       departureCity: _departureCityController.text,
       arrivalCity: _arrivalCityController.text,
       departureDateTime: _departureDateTime ?? DateTime.now(), // Consider using a DatePicker
-      arrivalDateTime: _arrivalDateTime ?? DateTime.now().add(const Duration(hours: 2)), // Consider using a DatePicker
+      arrivalDateTime: _arrivalDateTime ?? DateTime.now().add(Duration(hours: 2)), // Consider using a DatePicker
     );
 
     await widget.flightDao.createFlight(flight);
@@ -53,27 +53,27 @@ class _AddReservationPageState extends State<AddReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Flight Reservation"),
+        title: Text("Add Flight Reservation"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TextField(
               controller: _departureCityController,
-              decoration: const InputDecoration(labelText: 'Departure City'),
+              decoration: InputDecoration(labelText: 'Departure City'),
             ),
             TextField(
               controller: _arrivalCityController,
-              decoration: const InputDecoration(labelText: 'Arrival City'),
+              decoration: InputDecoration(labelText: 'Arrival City'),
             ),
             TextField(
               controller: _airplaneTypeController,
-              decoration: const InputDecoration(labelText: 'Airplane Type'),
+              decoration: InputDecoration(labelText: 'Airplane Type'),
             ),
             // Example buttons for picking dates would go here
             ElevatedButton(
               onPressed: _addFlight,
-              child: const Text('Add Flight'),
+              child: Text('Add Flight'),
             ),
           ],
         ),
