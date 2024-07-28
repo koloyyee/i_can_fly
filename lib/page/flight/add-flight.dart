@@ -141,7 +141,9 @@ class _AddFlightPageState extends State<AddFlightPage> {
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
-      body: Form(
+      body:  SingleChildScrollView(
+        child: Padding (padding: new EdgeInsets.all(12.2),
+          child: Form(
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -276,6 +278,11 @@ class _AddFlightPageState extends State<AddFlightPage> {
           ),
         ),
       ),
+        
+        )
+
+      )
+      
     );
   }
 }
