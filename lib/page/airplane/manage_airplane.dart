@@ -3,13 +3,9 @@ import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
 import '../../utils/theme-color.dart';
 
-/**
- * ManageAirplanePage is a stateful widget that allows users to add, edit, or delete airplane details.
- * It handles both modes: adding a new airplane and editing an existing one.
- */
 class ManageAirplanePage extends StatefulWidget {
-  final Airplane? airplane; // The airplane to be managed (can be null if adding a new airplane)
-  final bool isEditMode; // Indicates whether the page is in edit mode
+  final Airplane? airplane;
+  final bool isEditMode;
 
   const ManageAirplanePage({
     super.key,
@@ -30,7 +26,6 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing airplane data or empty values for new airplane
     _typeController = TextEditingController(text: widget.airplane?.type ?? '');
     _capacityController = TextEditingController(text: widget.airplane?.capacity.toString() ?? '');
     _maxSpeedController = TextEditingController(text: widget.airplane?.maxSpeed.toString() ?? '');
@@ -39,7 +34,6 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
 
   @override
   void dispose() {
-    // Dispose controllers to free up resources
     _typeController.dispose();
     _capacityController.dispose();
     _maxSpeedController.dispose();
@@ -47,34 +41,36 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     super.dispose();
   }
 
-  /**
-   * Saves the airplane details to the database.
-   * If in edit mode, updates the existing airplane, otherwise creates a new airplane.
-   */
   void _save() async {
+    if (_typeController.text.isEmpty ||
+        _capacityController.text.isEmpty ||
+        _maxSpeedController.text.isEmpty ||
+        _maxRangeController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill out all the fields')),
+      );
+      return;
+    }
+
     final database = await AppDatabase.getInstance();
     final dao = database.airplaneDao;
     final airplane = Airplane(
-      id: widget.airplane?.id,
+      id: widget.airplane?.id ?? 0,
       type: _typeController.text,
       capacity: int.parse(_capacityController.text),
       maxSpeed: int.parse(_maxSpeedController.text),
       maxRange: int.parse(_maxRangeController.text),
-      manufacturer: 'Unknown', // Adjust this as needed
     );
 
     if (widget.isEditMode) {
       await dao.updateAirplane(airplane);
-      Navigator.pop(context, true); // Return true to indicate success
     } else {
       await dao.createAirplane(airplane);
-      Navigator.pop(context, true); // Return true to indicate success
     }
+
+    Navigator.pop(context, true);
   }
 
-  /**
-   * Deletes the airplane from the database after user confirmation.
-   */
   void _delete() async {
     final database = await AppDatabase.getInstance();
     final dao = database.airplaneDao;
@@ -86,11 +82,11 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           content: const Text('Are you sure you want to delete this airplane?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true), // Confirm delete
+              onPressed: () => Navigator.of(context).pop(true),
               child: const Text('Yes'),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // Cancel delete
+              onPressed: () => Navigator.of(context).pop(false),
               child: const Text('No'),
             ),
           ],
@@ -99,10 +95,10 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
 
       if (shouldDelete ?? false) {
         await dao.deleteAirplane(widget.airplane!);
-        Navigator.pop(context, true); // Return true to indicate success
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Airplane Deleted')),
         );
+        Navigator.pop(context, true);
       }
     }
   }
@@ -110,18 +106,20 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: MediaQuery.of(context).orientation == Orientation.portrait
+          ? AppBar(
         title: Text(widget.isEditMode ? 'Edit Airplane' : 'Add Airplane'),
         backgroundColor: Color(CTColor.Teal.colorValue),
         actions: widget.isEditMode
             ? [
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: _delete, // Show delete button in edit mode
+            onPressed: _delete,
           ),
         ]
             : null,
-      ),
+      )
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -149,12 +147,18 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if (widget.isEditMode)
+                  ElevatedButton(
+                    onPressed: _save,
+                    child: const Text('Update'),
+                  )
+                else
+                  ElevatedButton(
+                    onPressed: _save,
+                    child: const Text('Save'),
+                  ),
                 ElevatedButton(
-                  onPressed: _save, // Save the airplane details
-                  child: Text(widget.isEditMode ? 'Update' : 'Save'),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context), // Cancel and go back
+                  onPressed: () => Navigator.pop(context),
                   child: const Text('Cancel'),
                 ),
               ],

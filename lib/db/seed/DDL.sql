@@ -5,7 +5,7 @@ CREATE TABLE `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code`
 
 -- airplanes definition
 
-CREATE TABLE `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, `manufacturer` TEXT NOT NULL);
+CREATE TABLE `airplanes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL);
 
 
 -- customers definition
