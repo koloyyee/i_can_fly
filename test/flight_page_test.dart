@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:i_can_fly/main.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
 
 void main() {

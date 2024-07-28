@@ -93,8 +93,8 @@ class _AirplanePageState extends State<AirplanePage> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.airplane_ticket, color: Colors.white),
-                        SizedBox(width: 16),
+                        const Icon(Icons.airplane_ticket, color: Colors.white),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Text(
                             airplane.type,
@@ -116,8 +116,8 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToManagePage(context),
-        child: const Icon(Icons.add),
         backgroundColor: Color(CTColor.Teal.colorValue),
+        child: const Icon(Icons.add),
       ),
     );
   }
