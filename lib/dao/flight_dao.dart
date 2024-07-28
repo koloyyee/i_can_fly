@@ -1,4 +1,3 @@
-
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/entity/flight.dart';
 
@@ -6,7 +5,7 @@ import 'package:i_can_fly/entity/flight.dart';
 abstract class FlightDao {
   @Query("select * from flights")
   Future<List<Flight>> findAllFlights();
-  
+
   @Query("select  * where f.id = :id")
   Future<Flight?> findFlightById(int id);
 
@@ -23,17 +22,17 @@ abstract class FlightDao {
   f.airline_id,
   f.airplane_id,
   al.code as airline_code,
-  ap.manufacturer || ' ' || ap.type) as airplane_type
+   ap.type as airplane_type
   from flights f
   join airplanes ap on f.airplane_id = ap.id
   join airlines al on f.airline_id = al.id
   where f.id = :id
   """)
   Future<Flight?> findFlightDetails(int id);
-  
+
   @insert
   Future<void> createFlight(Flight newFlight);
-  
+
   @update
   Future<int> updateFlight(Flight newFlight);
 

@@ -243,7 +243,7 @@ class _$FlightDao extends FlightDao {
   @override
   Future<Flight?> findFlightDetails(int id) async {
     return _queryAdapter.query(
-        'select   f.id as flight_id,   f.departure_city,   f.arrival_city,   f.departure_datetime,   f.arrival_datetime,   f.airline_id,   f.airplane_id,   al.code as airline_code,   ap.manufacturer || \' \' || ap.type) as airplane_type   from flights f   join airplanes ap on f.airplane_id = ap.id   join airlines al on f.airline_id = al.id   where f.id = ?1',
+        'select   f.id as flight_id,   f.departure_city,   f.arrival_city,   f.departure_datetime,   f.arrival_datetime,   f.airline_id,   f.airplane_id,   al.code as airline_code,    ap.type as airplane_type   from flights f   join airplanes ap on f.airplane_id = ap.id   join airlines al on f.airline_id = al.id   where f.id = ?1',
         mapper: (Map<String, Object?> row) => Flight(id: row['id'] as int?, airplaneType: row['airplaneType'] as String?, arrivalCity: row['arrivalCity'] as String, departureCity: row['departureCity'] as String, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String)),
         arguments: [id]);
   }
