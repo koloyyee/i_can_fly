@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pushNamed(
                     context, "/reservation"); // Navigate to CustomerListPage
               },
-              child: const Text("Reservation Page"),
+              child: const Text("Reservation List"),
             ),
 
           ],
