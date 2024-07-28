@@ -41,7 +41,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
 
   String airplaneType = "";
 
-  List<String> airplaneTypes = [];
+  List<String> _airplaneTypes = [];
 
   @override
   void initState() {
@@ -49,16 +49,16 @@ class _AddFlightPageState extends State<AddFlightPage> {
 
     departureCityController = TextEditingController();
     arrivalCityController = TextEditingController();
-
-    $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
-      flightDao = db.flightDao;
-      flightDao.findAllAirplaneTypes().then((value) {
-        setState(() {
-          print(value);
-          airplaneTypes = value;
-        });
+    _fetchAirplaneTypes().then((value) {
+      setState(() {
+        _airplaneTypes = value;
       });
     });
+  }
+
+  Future<List<String>> _fetchAirplaneTypes() async {
+    final db = await AppDatabase.getInstance();
+    return db.flightDao.findAllAirplaneTypes();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -134,148 +134,145 @@ class _AddFlightPageState extends State<AddFlightPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Create a New Trip!",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Color(CTColor.Teal.colorValue),
-      ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                children: [
-                  Image.asset(
-                    "images/gliding_kitty.png",
-                    width: 120,
-                    height: 120,
-                  ),
-                  TextFormField(
-                    controller: departureCityController,
-                    decoration: const InputDecoration(
-                      labelText: "Departure City",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a valid city";
-                      }
-                      return null;
-                    },
-                  ),
-                  OutlinedButton(
-                      onPressed: () => _selectDepartureDate(context),
-                      child: Text(departureDate == null
-                          ? "Select Date"
-                          : "Departure Date: ${DateFormat.yMd().format(departureDate!)}")),
-                  OutlinedButton(
-                    onPressed: () => _selectDepartureTime(context),
-                    child: Text(departureTime == null
-                        ? "Select Arrival Time"
-                        : "Departure Time: ${departureTime!.format(context)}"),
-                  ),
-                  TextFormField(
-                    controller: arrivalCityController,
-                    decoration: const InputDecoration(
-                      labelText: "Departure City",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a valid city";
-                      }
-                      return null;
-                    },
-                  ),
-                  OutlinedButton(
-                      onPressed: () => _selectArrivalDate(context),
-                      child: Text(arrivalDate == null
-                          ? "Select Date"
-                          : "Arrival Date: ${DateFormat.yMd().format(arrivalDate!)}")),
-                  OutlinedButton(
-                    onPressed: () => _selectArrivalTime(context),
-                    child: Text(arrivalTime == null
-                        ? "Select Arrival Time"
-                        : "Arrival Time: ${arrivalTime!.format(context)}"),
-                  ),
-                  DropdownButtonFormField(
-                      hint: const Text("Select Airplane Type"),
-                      validator: (value) => value == null
-                          ? "Please select a valid airplane type"
-                          : null,
-                      items: airplaneTypes
-                          .map(
-                              (e) => DropdownMenuItem(value: e, child: Text(e)))
-                          .toList(),
-                      onChanged: (value) => airplaneType = value.toString()),
-                ],
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-
-                      setState(() {
-                        if (departureTime != null && arrivalTime != null) {
-                          DateTime deptTime = DateTime(
-                              departureDate!.year,
-                              departureDate!.month,
-                              departureDate!.day,
-                              departureTime!.hour,
-                              departureTime!.minute);
-                          DateTime arrTime = DateTime(
-                              arrivalDate!.year,
-                              arrivalDate!.month,
-                              arrivalDate!.day,
-                              arrivalTime!.hour,
-                              arrivalTime!.minute);
-
-                          flightDao
-                              .createFlight(Flight(
-                                  id: null,
-                                  airplaneType: airplaneType,
-                                  departureCity: departureCityController.text,
-                                  arrivalCity: arrivalCityController.text,
-                                  departureDateTime: deptTime,
-                                  arrivalDateTime: arrTime))
-                              .then((value) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('New Flight Added!')),
-                            ).closed.then((reason) {
-                              Navigator.pop(context);
-                            });
-                          });
-                        }
-
-                        // add flight to database
-                        // print("Departure City: ${departureCityController.text}");
-                        // print("Arrival City: ${arrivalCityController.text}");
-                        // print("Departure Time: ${departureTime!.format(context)}");
-                        // print("Arrival Time: ${arrivalTime!.format(context)}");
-
-                        // print("Departure Field Valid: $departureFieldValid");
-                        // print("Departure Field Valid: $arrivalFieldValid");
-
-                        //     Navigator.pop(context);
-                        // }
-                        // });
-                      });
-                    }
-                  },
-                  child: const Text("Add New Flight"))
-            ],
+        appBar: AppBar(
+          title: const Text(
+            "Create a New Trip!",
+            style: TextStyle(color: Colors.white),
           ),
+          backgroundColor: Color(CTColor.Teal.colorValue),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Image.asset(
+                          "images/gliding_kitty.png",
+                          width: 120,
+                          height: 120,
+                        ),
+                        TextFormField(
+                          controller: departureCityController,
+                          decoration: const InputDecoration(
+                            labelText: "Departure City",
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a valid city";
+                            }
+                            return null;
+                          },
+                        ),
+                        OutlinedButton(
+                            onPressed: () => _selectDepartureDate(context),
+                            child: Text(departureDate == null
+                                ? "Select Date"
+                                : "Departure Date: ${DateFormat.yMd().format(departureDate!)}")),
+                        OutlinedButton(
+                          onPressed: () => _selectDepartureTime(context),
+                          child: Text(departureTime == null
+                              ? "Select Arrival Time"
+                              : "Departure Time: ${departureTime!.format(context)}"),
+                        ),
+                        TextFormField(
+                          controller: arrivalCityController,
+                          decoration: const InputDecoration(
+                            labelText: "Departure City",
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a valid city";
+                            }
+                            return null;
+                          },
+                        ),
+                        OutlinedButton(
+                            onPressed: () => _selectArrivalDate(context),
+                            child: Text(arrivalDate == null
+                                ? "Select Date"
+                                : "Arrival Date: ${DateFormat.yMd().format(arrivalDate!)}")),
+                        OutlinedButton(
+                          onPressed: () => _selectArrivalTime(context),
+                          child: Text(arrivalTime == null
+                              ? "Select Arrival Time"
+                              : "Arrival Time: ${arrivalTime!.format(context)}"),
+                        ),
+                        DropdownButtonFormField(
+                            hint: const Text("Select Airplane Type"),
+                            validator: (value) => value == null
+                                ? "Please select a valid airplane type"
+                                : null,
+                            items: _airplaneTypes
+                                .map((e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)))
+                                .toList(),
+                            onChanged: (value) =>
+                                airplaneType = value.toString()),
+                      ],
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            // If the form is valid, display a snackbar. In the real world,
+                            // you'd often call a server or save the information in a database.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
+                            );
+
+                            setState(() {
+                              if (departureTime != null &&
+                                  arrivalTime != null) {
+                                DateTime deptTime = DateTime(
+                                    departureDate!.year,
+                                    departureDate!.month,
+                                    departureDate!.day,
+                                    departureTime!.hour,
+                                    departureTime!.minute);
+                                DateTime arrTime = DateTime(
+                                    arrivalDate!.year,
+                                    arrivalDate!.month,
+                                    arrivalDate!.day,
+                                    arrivalTime!.hour,
+                                    arrivalTime!.minute);
+
+                                flightDao
+                                    .createFlight(Flight(
+                                        id: null,
+                                        airplaneType: airplaneType,
+                                        departureCity:
+                                            departureCityController.text,
+                                        arrivalCity: arrivalCityController.text,
+                                        departureDateTime: deptTime,
+                                        arrivalDateTime: arrTime))
+                                    .then((value) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('New Flight Added!')),
+                                      )
+                                      .closed
+                                      .then((reason) {
+                                    Navigator.pop(context);
+                                  });
+                                });
+                              }
+                            });
+                          }
+                        },
+                        child: const Text("Add New Flight"))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }
