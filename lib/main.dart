@@ -79,6 +79,14 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text("Airlines List"),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, "/reservation"); // Navigate to CustomerListPage
+              },
+              child: const Text("Reservation Page"),
+            ),
+
           ],
         ),
       ),
