@@ -1,10 +1,16 @@
+
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/flight-dao.dart';
+import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/page/flight/edit-flight-page.dart';
+import 'package:i_can_fly/page/flight/edit_flight_page.dart';
 import 'package:intl/intl.dart';
 
+/// A StatefulWidget that represents the list of flights.
+/// Instance of [FlightDao] for accessing the flight table.
+/// A list of [Flight] objects to store the flights.
+/// A method to fetch the flights from the database.
+/// A method to delete a flight from the database.
 class ViewFlightsList extends StatefulWidget {
   const ViewFlightsList({
     super.key,
@@ -25,26 +31,24 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     fetchFlights();
   }
 
-  fetchFlights() {
-
-    $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
+  void fetchFlights() {
+    AppDatabase.getInstance().then((db) {
       flightDao = db.flightDao;
-      flightDao.findAllFlights().then((flights) {
-        setState(() {
-          this.flights = flights;
-        });
-      });
+      flightDao
+          .findAllFlights()
+          .then((flights) => setState(() => this.flights = flights));
     });
   }
 
-  // Future<void> deleteFlight(Flight flight) async {
-  //   await flightDao.deleteFlight(flight);
-  //   flightDao.findAllFlights().then((flights) {
-  //     setState(() {
-  //       this.flights = flights;
-  //     });
-  //   });
-  // }
+  void deleteFlight(BuildContext context, Flight flight) async {
+    await flightDao.deleteFlight(flight);
+    flightDao.findAllFlights().then((flights) {
+      setState(() {
+        this.flights = flights;
+      });
+    });
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,8 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
               ),
             ],
           ))
-        : ListView(
+        : ListView( 
+// 2.[x ] There must be a TextField along with a button that lets the user insert items into the ListView.
             children: [
               Image.asset(
                 "images/gliding_kitty.png",
@@ -75,33 +80,48 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
               for (var flight in flights)
                 GestureDetector(
                   onLongPress: () {
-                    showBottomSheet(context: context, builder: (BuildContext context) {
-                      return SizedBox(
-                        height: 500,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text("Departure City: ${flight.departureCity}"),
+                    showBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SizedBox(
+                            height: 500,
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                      "Departure City: ${flight.departureCity}"),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                      "Arrival City: ${flight.arrivalCity}"),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                      "Departure Date: ${formatter.format(flight.departureDateTime)}"),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                      "Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditFlightPage(
+                                                  flight: flight,
+                                                  flights: flights,
+                                                ))).then((_) {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  child: const Text("Edit Flight"),
+                                )
+                              ],
                             ),
-                            ListTile(
-                              title: Text("Arrival City: ${flight.arrivalCity}"),
-                            ),
-                            ListTile(
-                              title: Text("Departure Date: ${formatter.format(flight.departureDateTime)}"),
-                            ),
-                            ListTile(
-                              title: Text("Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
-                            ),
-                            ElevatedButton(onPressed:(){
-                               Navigator.push(context, MaterialPageRoute(builder: (context) => EditFlightPage(flight: flight, flights: flights,)))
-                              .then((_) {
-                               Navigator.pop(context);
-                              });
-                            }, child: const Text("Edit Flight"),)
-                          ],
-                        ),
-                      );
-                    });
+                          );
+                        });
                   },
                   child: ListTile(
                     title: Text(
@@ -127,15 +147,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      flightDao.deleteFlight(flight);
-                                      flightDao
-                                          .findAllFlights()
-                                          .then((flights) {
-                                        setState(() {
-                                          this.flights = flights;
-                                        });
-                                      });
-                                      Navigator.of(context).pop();
+                                      deleteFlight(context, flight);
                                     },
                                     child: const Text("Delete"),
                                   ),
@@ -150,4 +162,3 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
           );
   }
 }
-
