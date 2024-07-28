@@ -31,13 +31,6 @@ class _AirplanePageState extends State<AirplanePage> {
     }
   }
 
-  void _handleAirplaneUpdated(Airplane airplane) {
-    // Method to handle updates or deletions
-    setState(() {
-      _airplanes = _loadAirplanes();
-    });
-  }
-
   void _navigateToManagePage(BuildContext context, [Airplane? airplane]) {
     Navigator.push(
       context,
@@ -45,12 +38,12 @@ class _AirplanePageState extends State<AirplanePage> {
         builder: (context) => ManageAirplanePage(
           airplane: airplane,
           isEditMode: airplane != null,
-          onAirplaneUpdated: _handleAirplaneUpdated, // Pass the callback
         ),
       ),
     ).then((_) {
-      // Refresh the list when returning from ManageAirplanePage
-      _handleAirplaneUpdated(airplane!); // Refresh the list on return
+      setState(() {
+        _airplanes = _loadAirplanes();
+      });
     });
   }
 
@@ -94,16 +87,12 @@ class _AirplanePageState extends State<AirplanePage> {
                     child: Row(
                       children: [
                         const Icon(Icons.airplane_ticket, color: Colors.white),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 16.0),
                         Expanded(
                           child: Text(
-                            airplane.type,
-                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                            '${airplane.type}    ${airplane.capacity} Passengers',
+                            style: const TextStyle(fontSize: 16.0, color: Colors.white),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.white),
-                          onPressed: () => _navigateToManagePage(context, airplane),
                         ),
                       ],
                     ),
