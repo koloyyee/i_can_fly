@@ -14,11 +14,13 @@ class ReservationDetailsPage extends StatelessWidget {
   /// The [flight] parameter is required.
   ReservationDetailsPage({Key? key, required this.flight}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Flight Details"),
+
       ),
       body: Column(
         children: <Widget>[
@@ -29,6 +31,7 @@ class ReservationDetailsPage extends StatelessWidget {
               // Implement delete logic
             },
             child: Text('Delete Flight'),
+
           ),
         ],
       ),

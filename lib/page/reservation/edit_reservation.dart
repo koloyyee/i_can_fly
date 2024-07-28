@@ -17,6 +17,7 @@ class EditReservationPage extends StatefulWidget {
   /// The [flight] and [flightDao] parameters are required.
   EditReservationPage({Key? key, required this.flight, required this.flightDao}) : super(key: key);
 
+
   @override
   _EditReservationPageState createState() => _EditReservationPageState();
 }
@@ -62,6 +63,7 @@ class _EditReservationPageState extends State<EditReservationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Flight Reservation"),
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -77,11 +79,13 @@ class _EditReservationPageState extends State<EditReservationPage> {
             TextField(
               controller: _airplaneTypeController,
               decoration: InputDecoration(labelText: 'Airplane Type'),
+
             ),
             // Buttons for date picking and saving
             ElevatedButton(
               onPressed: _updateFlight,
               child: Text('Save Changes'),
+
             ),
           ],
         ),
