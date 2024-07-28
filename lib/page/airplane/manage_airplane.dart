@@ -62,21 +62,13 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       maxRange: int.parse(_maxRangeController.text),
     );
 
-    try {
-      if (widget.isEditMode) {
-        await dao.updateAirplane(airplane);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Airplane Updated')),
-        );
-      } else {
-        await dao.createAirplane(airplane);
-      }
-      Navigator.pop(context, true); // Refresh the list
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving airplane: $e')),
-      );
+    if (widget.isEditMode) {
+      await dao.updateAirplane(airplane);
+    } else {
+      await dao.createAirplane(airplane);
     }
+
+    Navigator.pop(context, true);
   }
 
   void _delete() async {
@@ -109,11 +101,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Airplane Deleted')),
         );
-        Navigator.pop(context, true); // Refresh the list
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting airplane: $e')),
-        );
+        Navigator.pop(context, true);
       }
     }
   }
@@ -121,7 +109,8 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: MediaQuery.of(context).orientation == Orientation.portrait
+          ? AppBar(
         title: Text(widget.isEditMode ? 'Edit Airplane' : 'Add Airplane'),
         backgroundColor: Color(CTColor.Teal.colorValue),
         actions: widget.isEditMode
@@ -132,7 +121,8 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           ),
         ]
             : null,
-      ),
+      )
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
