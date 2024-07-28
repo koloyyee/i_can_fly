@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/page/flight/admin-login.dart';
+import 'package:i_can_fly/page/admin/admin_login.dart';
+import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/add_airplane.dart';
 import 'package:i_can_fly/page/customer/customer_list.dart';
-import 'package:i_can_fly/page/flight/flight-page.dart';
-import 'package:i_can_fly/page/flight/add-flight.dart';
+import 'package:i_can_fly/page/flight/flight_page.dart';
+import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/airplane/airplane_list.dart';
-import 'package:i_can_fly/utils/theme-color.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
+import 'package:i_can_fly/utils/theme-color.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,10 +30,12 @@ class MyApp extends StatelessWidget {
         "/": (context) => const HomePage(),
         "/flights": (context) => const FlightsPage(),
         "/admin-login": (context) => const AdminLoginPage(),
+        "/admin-register": (context) => const AdminRegisterPage(),
         "/add-flight": (context) => const AddFlightPage(),
-        "/airplanes": (context) => AirplaneListPage(),
-        "/add-airplane": (context) => AddAirplanePage(),
-        "/customers": (context) => CustomerListPage(),
+        "/airplanes": (context) => const AirplaneListPage(),
+        "/add-airplane": (context) => const AddAirplanePage(),
+        "/customers": (context) => const CustomerListPage(),
+        // "/reservations": (context) => const ReservationListPage(),
 
       },
       restorationScopeId: "app",
@@ -54,6 +57,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _database = $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    print(_database.then((db)=> print(db.database)));
   }
 
   @override
@@ -69,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/flights");
+                Navigator.pushNamed(context, "/admin-login");
               },
               child: const Text("Flights List"),
             ),
@@ -95,7 +99,7 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
-                    context, "/reservation"); // Navigate to CustomerListPage
+                    context, "/reservations"); // Navigate to CustomerListPage
               },
               child: const Text("Reservation Page"),
             ),

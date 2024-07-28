@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/page/flight/view-flights-list.dart';
+import 'package:i_can_fly/common/common_actions_menu.dart';
+import 'package:i_can_fly/page/flight/view_flights_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
 /// This page will simulate an airline keeping a list of flights between two cities.
@@ -32,6 +33,9 @@ class _FlightsPageState extends State<FlightsPage> {
       appBar: AppBar(
         title: const Text("See All Your Flights Here!", style: TextStyle(color: Colors.white),),
         backgroundColor: Color(CTColor.Teal.colorValue),
+      actions: const [
+        CommonActionsMenu()
+      ],
       ),
       body: const Center(
         child: ViewFlightsList()
@@ -80,4 +84,5 @@ class CreateBottomSheet extends StatelessWidget {
 /// This page will simulate an airline keeping a list of flights between two cities.
 /// You should be able to add new flights to your company’s list of routes, 
 /// view current flights or delete flights that are no longer offered.
+
 

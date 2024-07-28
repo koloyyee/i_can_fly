@@ -27,16 +27,16 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Airplane List')),
+      appBar: AppBar(title: const Text('Airplane List')),
       body: FutureBuilder<List<Airplane>>(
         future: _airplanes,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No airplanes found.'));
+            return const Center(child: Text('No airplanes found.'));
           }
 
           final airplanes = snapshot.data!;

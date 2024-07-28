@@ -36,7 +36,7 @@ class _AirplanesPageState extends State<AirplanesPage> {
 class CreateBottomSheet extends StatelessWidget {
   final List<TextField> textfields;
 
-  CreateBottomSheet({
+  const CreateBottomSheet({
     super.key,
     required this.textfields,
   });

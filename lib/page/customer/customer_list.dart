@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/customer-dao.dart';
+import 'package:i_can_fly/dao/customer_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/page/customer/add_customer_page.dart';
 import 'package:i_can_fly/page/customer/edit_customer_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CustomerListPage extends StatefulWidget {
+  const CustomerListPage({super.key});
+
   @override
   _CustomerListPageState createState() => _CustomerListPageState();
 }
@@ -38,7 +39,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
   void _navigateToAddCustomerPage() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddCustomerPage()),
+      MaterialPageRoute(builder: (context) => const AddCustomerPage()),
     );
 
     if (result != null && result) {
@@ -72,8 +73,8 @@ class _CustomerListPageState extends State<CustomerListPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              child: const Text("Add Customer"),
               onPressed: _navigateToAddCustomerPage,
+              child: const Text("Add Customer"),
             ),
           ),
           Expanded(

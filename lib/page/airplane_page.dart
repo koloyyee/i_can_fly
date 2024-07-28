@@ -5,10 +5,8 @@ import 'package:i_can_fly/utils/theme-color.dart';
 
 import '../entity/airplane.dart';
 
-/**
- * AirplanePage displays a list of airplanes and allows navigation to the ManageAirplanePage
- * for adding or editing airplane details.
- */
+/// AirplanePage displays a list of airplanes and allows navigation to the ManageAirplanePage
+/// for adding or editing airplane details.
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});
 
@@ -101,12 +99,12 @@ class _AirplanePageState extends State<AirplanePage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.airplane_ticket, color: Colors.white),
-                      SizedBox(width: 16.0),
+                      const Icon(Icons.airplane_ticket, color: Colors.white),
+                      const SizedBox(width: 16.0),
                       Expanded(
                         child: Text(
                           '${airplane.type}    ${airplane.capacity} Passengers',
-                          style: TextStyle(fontSize: 16.0, color: Colors.white),
+                          style: const TextStyle(fontSize: 16.0, color: Colors.white),
                         ),
                       ),
                     ],
@@ -145,8 +143,8 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToManagePage(context),
-        child: const Icon(Icons.add),
         backgroundColor: Color(CTColor.Teal.colorValue),
+        child: const Icon(Icons.add),
       ),
     );
   }
