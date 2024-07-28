@@ -6,11 +6,13 @@ import '../../utils/theme-color.dart';
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
   final bool isEditMode;
+  final void Function(Airplane)? onAirplaneUpdated; // Callback for updates
 
   const ManageAirplanePage({
     super.key,
     this.airplane,
     required this.isEditMode,
+    this.onAirplaneUpdated, // Add callback parameter
   });
 
   @override
@@ -68,6 +70,10 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       await dao.createAirplane(airplane);
     }
 
+    if (widget.onAirplaneUpdated != null) {
+      widget.onAirplaneUpdated!(airplane); // Call the callback
+    }
+
     Navigator.pop(context, true);
   }
 
@@ -96,8 +102,26 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       if (shouldDelete ?? false) {
         await dao.deleteAirplane(widget.airplane!);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Airplane Deleted')),
+          SnackBar(
+            content: const Text('Airplane Deleted'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () async {
+                // Undo delete logic
+                final undoAirplane = widget.airplane;
+                if (undoAirplane != null) {
+                  await dao.createAirplane(undoAirplane);
+                  if (widget.onAirplaneUpdated != null) {
+                    widget.onAirplaneUpdated!(undoAirplane);
+                  }
+                }
+              },
+            ),
+          ),
         );
+        if (widget.onAirplaneUpdated != null) {
+          widget.onAirplaneUpdated!(widget.airplane!); // Call the callback
+        }
         Navigator.pop(context, true);
       }
     }
