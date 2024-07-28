@@ -6,13 +6,11 @@ import '../../utils/theme-color.dart';
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
   final bool isEditMode;
-  final void Function(Airplane)? onAirplaneUpdated; // Callback for updates
 
   const ManageAirplanePage({
     super.key,
     this.airplane,
     required this.isEditMode,
-    this.onAirplaneUpdated, // Add callback parameter
   });
 
   @override
@@ -70,10 +68,6 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       await dao.createAirplane(airplane);
     }
 
-    if (widget.onAirplaneUpdated != null) {
-      widget.onAirplaneUpdated!(airplane); // Call the callback
-    }
-
     Navigator.pop(context, true);
   }
 
@@ -102,26 +96,8 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       if (shouldDelete ?? false) {
         await dao.deleteAirplane(widget.airplane!);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Airplane Deleted'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () async {
-                // Undo delete logic
-                final undoAirplane = widget.airplane;
-                if (undoAirplane != null) {
-                  await dao.createAirplane(undoAirplane);
-                  if (widget.onAirplaneUpdated != null) {
-                    widget.onAirplaneUpdated!(undoAirplane);
-                  }
-                }
-              },
-            ),
-          ),
+          const SnackBar(content: Text('Airplane Deleted')),
         );
-        if (widget.onAirplaneUpdated != null) {
-          widget.onAirplaneUpdated!(widget.airplane!); // Call the callback
-        }
         Navigator.pop(context, true);
       }
     }
@@ -130,7 +106,8 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: MediaQuery.of(context).orientation == Orientation.portrait
+          ? AppBar(
         title: Text(widget.isEditMode ? 'Edit Airplane' : 'Add Airplane'),
         backgroundColor: Color(CTColor.Teal.colorValue),
         actions: widget.isEditMode
@@ -140,8 +117,9 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
             onPressed: _delete,
           ),
         ]
-            : [],
-      ),
+            : null,
+      )
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
