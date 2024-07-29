@@ -1,6 +1,6 @@
 {
   "helloWorld": "Hello World",
-  "@i_can_fly": {
+  "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   }
 }
