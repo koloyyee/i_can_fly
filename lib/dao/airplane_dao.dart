@@ -13,8 +13,8 @@ abstract class AirplaneDao {
   Future<void> createAirplane(Airplane airplane);
 
   @update
-  Future<int> updateAirplane(Airplane airplane);
+  Future<void> updateAirplane(Airplane airplane);
 
   @delete
-  Future<int> deleteAirplane(Airplane airplane);
+  Future<void> deleteAirplane(Airplane airplane);
 }

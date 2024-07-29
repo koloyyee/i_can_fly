@@ -17,24 +17,14 @@ class _AirplanePageState extends State<AirplanePage> {
   @override
   void initState() {
     super.initState();
-    _airplanes = _loadAirplanes();
+    _loadAirplanes();
   }
 
-  Future<List<Airplane>> _loadAirplanes() async {
-    try {
-      final database = await AppDatabase.getInstance();
-      final dao = database.airplaneDao;
-      return await dao.findAllAirplanes();
-    } catch (e) {
-      print("Error loading airplanes: $e");
-      return [];
-    }
-  }
-
-  void _handleAirplaneUpdated(Airplane airplane) {
-    // Method to handle updates or deletions
+  Future<void> _loadAirplanes() async {
+    final database = await AppDatabase.getInstance();
+    final airplanes = await database.airplaneDao.findAllAirplanes();
     setState(() {
-      _airplanes = _loadAirplanes();
+      _airplanes = Future.value(airplanes);
     });
   }
 
@@ -45,13 +35,24 @@ class _AirplanePageState extends State<AirplanePage> {
         builder: (context) => ManageAirplanePage(
           airplane: airplane,
           isEditMode: airplane != null,
-          onAirplaneUpdated: _handleAirplaneUpdated, // Pass the callback
         ),
       ),
     ).then((_) {
-      // Refresh the list when returning from ManageAirplanePage
-      _handleAirplaneUpdated(airplane!); // Refresh the list on return
+      _loadAirplanes(); // Refresh the list
     });
+  }
+
+  void _deleteAirplane(BuildContext context, Airplane airplane) async {
+    final database = await AppDatabase.getInstance();
+    await database.airplaneDao.deleteAirplane(airplane);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Airplane deleted'),
+      ),
+    );
+
+    _loadAirplanes();
   }
 
   @override
@@ -84,28 +85,24 @@ class _AirplanePageState extends State<AirplanePage> {
                 final airplane = airplanes[index];
                 return GestureDetector(
                   onTap: () => _navigateToManagePage(context, airplane),
-                  child: Container(
+                  onLongPress: () => _deleteAirplane(context, airplane),
+                  child: Card(
                     margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Color(CTColor.DarkTeal.colorValue),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.airplane_ticket, color: Colors.white),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: Text(
-                            airplane.type,
-                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                    elevation: 4.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Type: ${airplane.type}',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.white),
-                          onPressed: () => _navigateToManagePage(context, airplane),
-                        ),
-                      ],
+                          Text('Capacity: ${airplane.capacity} seats'),
+                          Text('Max Speed: ${airplane.maxSpeed} km/h'),
+                          Text('Max Range: ${airplane.maxRange} km'),
+                        ],
+                      ),
                     ),
                   ),
                 );
