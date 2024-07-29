@@ -93,21 +93,12 @@ class _AirplanePageState extends State<AirplanePage> {
                     ),
                     child: Row(
                       children: [
-<<<<<<< HEAD
                         const Icon(Icons.airplane_ticket, color: Colors.white),
-                        const SizedBox(width: 16.0),
-                        Expanded(
-                          child: Text(
-                            '${airplane.type}    ${airplane.capacity} Passengers',
-                            style: const TextStyle(fontSize: 16.0, color: Colors.white),
-=======
-                        Icon(Icons.airplane_ticket, color: Colors.white),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Text(
                             airplane.type,
                             style: const TextStyle(color: Colors.white, fontSize: 18),
->>>>>>> 888f2be (Updated snackbar and alertdialog)
                           ),
                         ),
                         IconButton(
