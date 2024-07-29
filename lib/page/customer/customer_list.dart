@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/customer_dao.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/page/customer/add_customer_page.dart';
 import 'package:i_can_fly/page/customer/edit_customer_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../db/database.dart';
 
 class CustomerListPage extends StatefulWidget {
   const CustomerListPage({super.key});

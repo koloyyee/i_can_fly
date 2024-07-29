@@ -3,13 +3,13 @@ import 'package:i_can_fly/entity/admin.dart';
 
 @dao
 abstract class AdminDao {
-  @Query("select * from Admins ")
+  @Query("select * from admins ")
   Future<List<Admin>> findAllAdmins();
 
-  @Query("select  * from Admins where id = :id")
+  @Query("select  * from admins where id = :id")
   Future<Admin?> findAdminById(int id);
 
-  @Query("select * from Admins where email = :email")
+  @Query("select * from admins where email = :email")
   Future<Admin?> findAdminByEmail(String email);
 
   @Insert(onConflict: OnConflictStrategy.rollback)

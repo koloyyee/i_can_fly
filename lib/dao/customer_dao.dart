@@ -9,6 +9,9 @@ abstract class CustomerDao {
   @Query("SELECT * FROM customers WHERE id = :id")
   Future<Customer?> findCustomerById(int id);
 
+  @Query("SELECT * FROM customers WHERE email = :email AND password = :password")
+  Future<Customer?> findCustomerByEmailAndPassword(String email, String password);
+
   @Insert(onConflict: OnConflictStrategy.rollback)
   Future<void> createCustomer(Customer newCustomer);
 
