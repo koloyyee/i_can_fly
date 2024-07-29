@@ -160,16 +160,10 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.isEditMode)
-                  ElevatedButton(
-                    onPressed: _save,
-                    child: const Text('Update'),
-                  )
-                else
-                  ElevatedButton(
-                    onPressed: _save,
-                    child: const Text('Save'),
-                  ),
+                ElevatedButton(
+                  onPressed: _save,
+                  child: Text(widget.isEditMode ? 'Update' : 'Save'),
+                ),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Cancel'),

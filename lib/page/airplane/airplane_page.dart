@@ -3,6 +3,7 @@ import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 import '../../entity/airplane.dart';
+import 'orientation_widget.dart';
 
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});
@@ -13,6 +14,7 @@ class AirplanePage extends StatefulWidget {
 
 class _AirplanePageState extends State<AirplanePage> {
   late Future<List<Airplane>> _airplanes;
+  Airplane? selectedAirplane;
 
   @override
   void initState() {
@@ -38,6 +40,9 @@ class _AirplanePageState extends State<AirplanePage> {
         ),
       ),
     ).then((_) {
+      setState(() {
+        selectedAirplane = null;
+      });
       _loadAirplanes(); // Refresh the list
     });
   }
@@ -61,10 +66,9 @@ class _AirplanePageState extends State<AirplanePage> {
       builder: (context) => AlertDialog(
         title: const Text('Instructions'),
         content: const Text(
-          '1. Tap on an airplane to view and edit its details.\n'
-              '2. Click on the Trash icon to delete it.\n'
-              '3. Use the floating + button to add a new airplane.\n'
-          '4. All fields in the airplane creation form is required',
+          '1. Tap on an airplane to edit its details.\n'
+              '2. Long press on an airplane to delete it.\n'
+              '3. Use the floating action button to add a new airplane.',
         ),
         actions: [
           TextButton(
@@ -76,72 +80,96 @@ class _AirplanePageState extends State<AirplanePage> {
     );
   }
 
+  Widget _buildAirplaneList() {
+    return FutureBuilder<List<Airplane>>(
+      future: _airplanes,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No airplanes found.'));
+        } else {
+          final airplanes = snapshot.data!;
+          return ListView.builder(
+            itemCount: airplanes.length,
+            itemBuilder: (context, index) {
+              final airplane = airplanes[index];
+              return GestureDetector(
+                onTap: () {
+                  if (MediaQuery.of(context).orientation == Orientation.landscape) {
+                    setState(() {
+                      selectedAirplane = airplane;
+                    });
+                  } else {
+                    _navigateToManagePage(context, airplane);
+                  }
+                },
+                onLongPress: () => _deleteAirplane(context, airplane),
+                child: Card(
+                  elevation: 4,
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ListTile(
+                    title: Text(airplane.type),
+                    subtitle: Text('Capacity: ${airplane.capacity}'),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Airplanes List",
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w400,
-          ),
+    return OrientationWidget(
+      portraitChild: Scaffold(
+        appBar: AppBar(
+          title: const Text('Airplanes'),
+          backgroundColor: Color(CTColor.Teal.colorValue),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info),
+              onPressed: () => _showInstructions(context),
+            ),
+          ],
         ),
-        backgroundColor: Color(CTColor.Teal.colorValue),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () => _showInstructions(context),
-          ),
-        ],
+        body: _buildAirplaneList(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _navigateToManagePage(context),
+          child: const Icon(Icons.add),
+          backgroundColor: Color(CTColor.Teal.colorValue),
+        ),
       ),
-      body: FutureBuilder<List<Airplane>>(
-        future: _airplanes,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No airplanes found.'));
-          } else {
-            final airplanes = snapshot.data!;
-            return ListView.builder(
-              itemCount: airplanes.length,
-              itemBuilder: (context, index) {
-                final airplane = airplanes[index];
-                return GestureDetector(
-                  onTap: () => _navigateToManagePage(context, airplane),
-                  onLongPress: () => _deleteAirplane(context, airplane),
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    elevation: 4.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Type: ${airplane.type}',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Text('Capacity: ${airplane.capacity} seats'),
-                          Text('Max Speed: ${airplane.maxSpeed} km/h'),
-                          Text('Max Range: ${airplane.maxRange} km'),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _navigateToManagePage(context),
-        child: const Icon(Icons.add),
-        backgroundColor: Color(CTColor.Teal.colorValue),
+      landscapeChild: Scaffold(
+        appBar: AppBar(
+          title: const Text('Airplanes'),
+          backgroundColor: Color(CTColor.Teal.colorValue),
+        ),
+        body: Row(
+          children: [
+            Expanded(
+              flex: 2, // Adjust the width of the list
+              child: _buildAirplaneList(),
+            ),
+            if (selectedAirplane != null)
+              Expanded(
+                flex: 3, // Adjust the width of the details page
+                child: ManageAirplanePage(
+                  airplane: selectedAirplane,
+                  isEditMode: true,
+                ),
+              ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _navigateToManagePage(context),
+          child: const Icon(Icons.add),
+          backgroundColor: Color(CTColor.Teal.colorValue),
+        ),
       ),
     );
   }
