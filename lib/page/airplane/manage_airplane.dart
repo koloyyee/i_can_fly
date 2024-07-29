@@ -55,7 +55,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     final database = await AppDatabase.getInstance();
     final dao = database.airplaneDao;
     final airplane = Airplane(
-      id: widget.airplane?.id ?? 0,
+      id: widget.airplane?.id, // Nullable for new entries
       type: _typeController.text,
       capacity: int.parse(_capacityController.text),
       maxSpeed: int.parse(_maxSpeedController.text),
@@ -72,34 +72,40 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   }
 
   void _delete() async {
-    final database = await AppDatabase.getInstance();
-    final dao = database.airplaneDao;
-    if (widget.airplane != null) {
-      final shouldDelete = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to delete this airplane?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('No'),
-            ),
-          ],
-        ),
-      );
+    if (widget.airplane == null) return;
 
-      if (shouldDelete ?? false) {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text('Are you sure you want to delete this airplane?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete ?? false) {
+      final database = await AppDatabase.getInstance();
+      final dao = database.airplaneDao;
+
+      try {
         await dao.deleteAirplane(widget.airplane!);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Airplane Deleted')),
         );
         Navigator.pop(context, true);
+      } catch (e) {
+        print("tbc"); // missing catch here.
       }
+
     }
   }
 
@@ -147,16 +153,10 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.isEditMode)
-                  ElevatedButton(
-                    onPressed: _save,
-                    child: const Text('Update'),
-                  )
-                else
-                  ElevatedButton(
-                    onPressed: _save,
-                    child: const Text('Save'),
-                  ),
+                ElevatedButton(
+                  onPressed: _save,
+                  child: Text(widget.isEditMode ? 'Update' : 'Save'),
+                ),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Cancel'),

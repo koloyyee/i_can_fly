@@ -3,6 +3,7 @@ import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 import '../../entity/airplane.dart';
+import 'orientation_widget.dart';
 
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});
@@ -13,11 +14,12 @@ class AirplanePage extends StatefulWidget {
 
 class _AirplanePageState extends State<AirplanePage> {
   late Future<List<Airplane>> _airplanes;
+  Airplane? selectedAirplane;
 
   @override
   void initState() {
     super.initState();
-    _airplanes = _loadAirplanes();
+    _loadAirplanes();
   }
 
   Future<List<Airplane>> _loadAirplanes() async {
