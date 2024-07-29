@@ -50,6 +50,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
           child: Column(
             children: [
               TextFormField(
+                key: const Key("emailField"),
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: "Email",
@@ -72,6 +73,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               const Text("Password"),
               const SizedBox(height: 10),
               TextFormField(
+                key: const Key("passwordField"),
                 controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: "Password",
@@ -80,6 +82,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter password";
+                  }
+                  if( value.length <  8) {
+                    return "Password must be at least 8 characters";
                   }
                   return null;
                 },
