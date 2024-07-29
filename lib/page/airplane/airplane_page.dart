@@ -55,6 +55,27 @@ class _AirplanePageState extends State<AirplanePage> {
     _loadAirplanes();
   }
 
+  void _showInstructions(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Instructions'),
+        content: const Text(
+          '1. Tap on an airplane to view and edit its details.\n'
+              '2. Click on the Trash icon to delete it.\n'
+              '3. Use the floating + button to add a new airplane.\n'
+          '4. All fields in the airplane creation form is required',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +88,12 @@ class _AirplanePageState extends State<AirplanePage> {
           ),
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () => _showInstructions(context),
+          ),
+        ],
       ),
       body: FutureBuilder<List<Airplane>>(
         future: _airplanes,
