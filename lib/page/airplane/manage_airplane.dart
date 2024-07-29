@@ -102,7 +102,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           const SnackBar(content: Text('Airplane Deleted')),
         );
         Navigator.pop(context, true);
-      } catch  {
+      } catch (e) {
         print("tbc"); // missing catch here.
       }
 
