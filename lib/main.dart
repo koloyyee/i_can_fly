@@ -4,9 +4,16 @@ import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
 import 'package:i_can_fly/page/customer/customer_list.dart';
+import 'package:i_can_fly/page/customer/customer_login_page.dart';
+import 'package:i_can_fly/page/customer/customer_register_page.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
 import 'package:i_can_fly/page/flight/add_flight.dart';
+import 'package:i_can_fly/page/welcome.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
+import 'dart:async';
+import 'package:floor/floor.dart';
+
+import 'package:i_can_fly/page/reservation/reservation_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,15 +31,19 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(CTColor.Green.colorValue)),
         useMaterial3: true,
       ),
+      initialRoute: "/welcome",
       routes: {
+        "/welcome": (context) => const WelcomePage(),
         "/": (context) => const HomePage(),
         "/flights": (context) => const FlightsPage(),
         "/admin-login": (context) => const AdminLoginPage(),
         "/admin-register": (context) => const AdminRegisterPage(),
         "/add-flight": (context) => const AddFlightPage(),
+        "/customer-login": (context) => const CustomerLoginPage(),
+        "/customer-register": (context) => const CustomerRegisterPage(),
         "/airplanes": (context) => const AirplanePage(),
         "/customers": (context) => const CustomerListPage(),
-        // "/reservations": (context) => const ReservationListPage(),
+        //"/reservations": (context) => const ReservationListPage(flightDao),
 
       },
       restorationScopeId: "app",
@@ -89,14 +100,14 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
-                    context, "/customers"); // Navigate to CustomerListPage
+                    context, "/customers");
               },
               child: const Text("Customer List"),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
-                    context, "/reservations"); // Navigate to CustomerListPage
+                    context, "/reservations");
               },
               child: const Text("Reservation Page"),
             ),

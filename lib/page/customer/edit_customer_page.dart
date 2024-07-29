@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
+import '../../db/database.dart';
 
 
 class EditCustomerPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
     firstNameController = TextEditingController(text: widget.customer.firstName);
     lastNameController = TextEditingController(text: widget.customer.lastName);
     addressController = TextEditingController(text: widget.customer.address);
-    birthdayController = TextEditingController(text: widget.customer.birthday.toString());
+    birthdayController = TextEditingController(text: widget.customer.birthday.toIso8601String());
   }
 
   @override
@@ -57,6 +57,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
         addressController.text.isNotEmpty &&
         birthdayController.text.isNotEmpty) {
 
+      final birthday = DateTime.tryParse(birthdayController.text) ?? widget.customer.birthday;
       final updatedCustomer = Customer(
         id: widget.customer.id, // Use the existing ID to identify the customer to update
         name: nameController.text,
@@ -64,7 +65,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
         password: passwordController.text,
         firstName: firstNameController.text,
         lastName: lastNameController.text,
-        birthday: int.tryParse(birthdayController.text) ?? 0, // Default to 0 if parsing fails
+        birthday: birthday, // Use DateTime for birthday
         address: addressController.text,
         createdAt: widget.customer.createdAt, // Preserve the original createdAt timestamp
       );
@@ -131,8 +132,8 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             ),
             TextField(
               controller: birthdayController,
-              decoration: const InputDecoration(labelText: 'Birthday'),
-              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Birthday (yyyy-MM-dd)'),
+              keyboardType: TextInputType.datetime,
             ),
             const SizedBox(height: 20),
             ElevatedButton(

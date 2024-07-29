@@ -10,22 +10,19 @@ class Customer {
   final String password;
   final String firstName;
   final String lastName;
-  final int birthday;
+  final DateTime birthday;
   final String address;
-  final int createdAt;
+  final DateTime createdAt;
 
   Customer({
     this.id,
     required this.name,
     required this.email,
     required this.password,
-    required this.firstName,
-    required this.lastName,
+    this.firstName = "",
+    this.lastName = "",
     required this.birthday,
-    required this.address,
+    this.address = "",
     required this.createdAt,
   });
-
-
 }
-
