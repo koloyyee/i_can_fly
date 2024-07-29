@@ -6,13 +6,11 @@ import '../../utils/theme-color.dart';
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
   final bool isEditMode;
-  final void Function(Airplane)? onAirplaneUpdated; // Callback for updates
 
   const ManageAirplanePage({
     super.key,
     this.airplane,
     required this.isEditMode,
-    this.onAirplaneUpdated, // Add callback parameter
   });
 
   @override
@@ -57,72 +55,65 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     final database = await AppDatabase.getInstance();
     final dao = database.airplaneDao;
     final airplane = Airplane(
-      id: widget.airplane?.id ?? 0,
+      id: widget.airplane?.id, // Nullable for new entries
       type: _typeController.text,
       capacity: int.parse(_capacityController.text),
       maxSpeed: int.parse(_maxSpeedController.text),
       maxRange: int.parse(_maxRangeController.text),
     );
 
-    if (widget.isEditMode) {
-      await dao.updateAirplane(airplane);
-    } else {
-      await dao.createAirplane(airplane);
+    try {
+      if (widget.isEditMode) {
+        await dao.updateAirplane(airplane);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Airplane Updated')),
+        );
+      } else {
+        await dao.createAirplane(airplane);
+      }
+      Navigator.pop(context, true); // Refresh the list
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving airplane: $e')),
+      );
     }
-
-    if (widget.onAirplaneUpdated != null) {
-      widget.onAirplaneUpdated!(airplane); // Call the callback
-    }
-
-    Navigator.pop(context, true);
   }
 
   void _delete() async {
-    final database = await AppDatabase.getInstance();
-    final dao = database.airplaneDao;
-    if (widget.airplane != null) {
-      final shouldDelete = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to delete this airplane?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('No'),
-            ),
-          ],
-        ),
-      );
+    if (widget.airplane == null) return;
 
-      if (shouldDelete ?? false) {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text('Are you sure you want to delete this airplane?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete ?? false) {
+      final database = await AppDatabase.getInstance();
+      final dao = database.airplaneDao;
+
+      try {
         await dao.deleteAirplane(widget.airplane!);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Airplane Deleted'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () async {
-                // Undo delete logic
-                final undoAirplane = widget.airplane;
-                if (undoAirplane != null) {
-                  await dao.createAirplane(undoAirplane);
-                  if (widget.onAirplaneUpdated != null) {
-                    widget.onAirplaneUpdated!(undoAirplane);
-                  }
-                }
-              },
-            ),
-          ),
+          const SnackBar(content: Text('Airplane Deleted')),
         );
-        if (widget.onAirplaneUpdated != null) {
-          widget.onAirplaneUpdated!(widget.airplane!); // Call the callback
-        }
-        Navigator.pop(context, true);
+        Navigator.pop(context, true); // Refresh the list
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting airplane: $e')),
+        );
       }
     }
   }
@@ -130,8 +121,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MediaQuery.of(context).orientation == Orientation.portrait
-          ? AppBar(
+      appBar: AppBar(
         title: Text(widget.isEditMode ? 'Edit Airplane' : 'Add Airplane'),
         backgroundColor: Color(CTColor.Teal.colorValue),
         actions: widget.isEditMode
@@ -142,8 +132,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           ),
         ]
             : null,
-      )
-          : null,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
