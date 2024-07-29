@@ -112,7 +112,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `address` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` TEXT NOT NULL, `address` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -491,7 +491,7 @@ class _$AdminDao extends AdminDao {
 
   @override
   Future<List<Admin>> findAllAdmins() async {
-    return _queryAdapter.queryList('select * from Admins',
+    return _queryAdapter.queryList('select * from admins',
         mapper: (Map<String, Object?> row) => Admin(
             id: row['id'] as int?,
             email: row['email'] as String,
@@ -501,7 +501,7 @@ class _$AdminDao extends AdminDao {
 
   @override
   Future<Admin?> findAdminById(int id) async {
-    return _queryAdapter.query('select  * from Admins where id = ?1',
+    return _queryAdapter.query('select  * from admins where id = ?1',
         mapper: (Map<String, Object?> row) => Admin(
             id: row['id'] as int?,
             email: row['email'] as String,
@@ -512,7 +512,7 @@ class _$AdminDao extends AdminDao {
 
   @override
   Future<Admin?> findAdminByEmail(String email) async {
-    return _queryAdapter.query('select * from Admins where email = ?1',
+    return _queryAdapter.query('select * from admins where email = ?1',
         mapper: (Map<String, Object?> row) => Admin(
             id: row['id'] as int?,
             email: row['email'] as String,
@@ -553,9 +553,9 @@ class _$CustomerDao extends CustomerDao {
                   'password': item.password,
                   'firstName': item.firstName,
                   'lastName': item.lastName,
-                  'birthday': item.birthday,
+                  'birthday': _dateTimeConverter.encode(item.birthday),
                   'address': item.address,
-                  'createdAt': item.createdAt
+                  'createdAt': _dateTimeConverter.encode(item.createdAt)
                 }),
         _customerUpdateAdapter = UpdateAdapter(
             database,
@@ -568,9 +568,9 @@ class _$CustomerDao extends CustomerDao {
                   'password': item.password,
                   'firstName': item.firstName,
                   'lastName': item.lastName,
-                  'birthday': item.birthday,
+                  'birthday': _dateTimeConverter.encode(item.birthday),
                   'address': item.address,
-                  'createdAt': item.createdAt
+                  'createdAt': _dateTimeConverter.encode(item.createdAt)
                 }),
         _customerDeletionAdapter = DeletionAdapter(
             database,
@@ -583,9 +583,9 @@ class _$CustomerDao extends CustomerDao {
                   'password': item.password,
                   'firstName': item.firstName,
                   'lastName': item.lastName,
-                  'birthday': item.birthday,
+                  'birthday': _dateTimeConverter.encode(item.birthday),
                   'address': item.address,
-                  'createdAt': item.createdAt
+                  'createdAt': _dateTimeConverter.encode(item.createdAt)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -610,9 +610,9 @@ class _$CustomerDao extends CustomerDao {
             password: row['password'] as String,
             firstName: row['firstName'] as String,
             lastName: row['lastName'] as String,
-            birthday: row['birthday'] as int,
+            birthday: _dateTimeConverter.decode(row['birthday'] as String),
             address: row['address'] as String,
-            createdAt: row['createdAt'] as int));
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as String)));
   }
 
   @override
@@ -625,10 +625,30 @@ class _$CustomerDao extends CustomerDao {
             password: row['password'] as String,
             firstName: row['firstName'] as String,
             lastName: row['lastName'] as String,
-            birthday: row['birthday'] as int,
+            birthday: _dateTimeConverter.decode(row['birthday'] as String),
             address: row['address'] as String,
-            createdAt: row['createdAt'] as int),
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as String)),
         arguments: [id]);
+  }
+
+  @override
+  Future<Customer?> findCustomerByEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    return _queryAdapter.query(
+        'SELECT * FROM customers WHERE email = ?1 AND password = ?2',
+        mapper: (Map<String, Object?> row) => Customer(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            email: row['email'] as String,
+            password: row['password'] as String,
+            firstName: row['firstName'] as String,
+            lastName: row['lastName'] as String,
+            birthday: _dateTimeConverter.decode(row['birthday'] as String),
+            address: row['address'] as String,
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as String)),
+        arguments: [email, password]);
   }
 
   @override
