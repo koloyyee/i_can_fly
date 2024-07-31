@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
-import 'package:i_can_fly/page/flight/view_flights_list.dart';
 
-import '../analysis_options.yaml';
 
 void main() {
   testWidgets('Should see See All Your Flights Here!',
