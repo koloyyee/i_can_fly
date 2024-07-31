@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
-import '../../utils/theme-color.dart';
 
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
   final bool isEditMode;
 
   const ManageAirplanePage({
-    Key? key,
+    super.key,
     this.airplane,
     required this.isEditMode,
-  }) : super(key: key);
+  });
 
   @override
   _ManageAirplanePageState createState() => _ManageAirplanePageState();
@@ -75,7 +74,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
         );
       }
 
-      Navigator.pop(context, true); // Close the screen and refresh the list
+      Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error saving airplane: $e')),
@@ -114,7 +113,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           const SnackBar(content: Text('Airplane Deleted')),
         );
 
-        Navigator.pop(context, true); // Close the screen and refresh the list
+        Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error deleting airplane: $e')),
@@ -126,22 +125,16 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.isEditMode ? 'Edit Airplane' : 'Add Airplane'),
-        backgroundColor: Color(CTColor.Teal.colorValue),
-        actions: widget.isEditMode
-            ? [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _delete,
-          ),
-        ]
-            : null,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              widget.isEditMode ? 'Edit Airplane' : 'Add Airplane',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 20),
             TextField(
               controller: _typeController,
               decoration: const InputDecoration(labelText: 'Airplane Type'),
@@ -169,8 +162,13 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
                   onPressed: _save,
                   child: Text(widget.isEditMode ? 'Update' : 'Save'),
                 ),
+                if (widget.isEditMode)
+                  ElevatedButton(
+                    onPressed: _delete,
+                    child: const Text('Delete'),
+                  ),
                 ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/airplanes')),
                   child: const Text('Cancel'),
                 ),
               ],

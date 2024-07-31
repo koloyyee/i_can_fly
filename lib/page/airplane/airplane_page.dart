@@ -40,6 +40,7 @@ class _AirplanePageState extends State<AirplanePage> {
         ),
       ),
     ).then((_) {
+      // Reset selected airplane and reload airplanes
       setState(() {
         selectedAirplane = null;
       });
@@ -57,7 +58,13 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
     );
 
-    _loadAirplanes();
+    // Refresh the list after deletion
+    setState(() {
+      _loadAirplanes(); // Refresh the list
+      if (MediaQuery.of(context).orientation == Orientation.landscape) {
+        selectedAirplane = null; // Reset selection in landscape mode
+      }
+    });
   }
 
   void _showInstructions(BuildContext context) {
