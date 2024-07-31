@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../db/database.dart';
 
 class AddCustomerPage extends StatefulWidget {
   const AddCustomerPage({super.key});
@@ -65,16 +66,17 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         addressController.text.isNotEmpty &&
         birthdayController.text.isNotEmpty) {
 
+      final birthday = DateTime.tryParse(birthdayController.text) ?? DateTime.now();
       final newCustomer = Customer(
         id: DateTime.now().millisecondsSinceEpoch,
         name: nameController.text,
         address: addressController.text,
-        birthday: int.tryParse(birthdayController.text) ?? 0,
+        birthday: birthday,
         email: '',
         password: '',
         firstName: '',
         lastName: '',
-        createdAt: DateTime.now().millisecondsSinceEpoch,
+        createdAt: DateTime.now(),
       );
 
       final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
@@ -123,8 +125,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             ),
             TextField(
               controller: birthdayController,
-              decoration: const InputDecoration(labelText: 'Birthday'),
-              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Birthday (yyyy-MM-dd)'),
+              keyboardType: TextInputType.datetime,
             ),
             const SizedBox(height: 20),
             ElevatedButton(

@@ -15,8 +15,7 @@ class EditReservationPage extends StatefulWidget {
   /// Creates an instance of EditReservationPage.
   ///
   /// The [flight] and [flightDao] parameters are required.
-  EditReservationPage({Key? key, required this.flight, required this.flightDao}) : super(key: key);
-
+  const EditReservationPage({super.key, required this.flight, required this.flightDao});
 
   @override
   _EditReservationPageState createState() => _EditReservationPageState();
@@ -62,30 +61,27 @@ class _EditReservationPageState extends State<EditReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Flight Reservation"),
-
+        title: const Text("Edit Flight Reservation"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TextField(
               controller: _departureCityController,
-              decoration: InputDecoration(labelText: 'Departure City'),
+              decoration: const InputDecoration(labelText: 'Departure City'),
             ),
             TextField(
               controller: _arrivalCityController,
-              decoration: InputDecoration(labelText: 'Arrival City'),
+              decoration: const InputDecoration(labelText: 'Arrival City'),
             ),
             TextField(
               controller: _airplaneTypeController,
-              decoration: InputDecoration(labelText: 'Airplane Type'),
-
+              decoration: const InputDecoration(labelText: 'Airplane Type'),
             ),
             // Buttons for date picking and saving
             ElevatedButton(
               onPressed: _updateFlight,
-              child: Text('Save Changes'),
-
+              child: const Text('Save Changes'),
             ),
           ],
         ),

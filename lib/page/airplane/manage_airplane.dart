@@ -8,10 +8,10 @@ class ManageAirplanePage extends StatefulWidget {
   final bool isEditMode;
 
   const ManageAirplanePage({
-    super.key,
+    Key? key,
     this.airplane,
     required this.isEditMode,
-  });
+  }) : super(key: key);
 
   @override
   _ManageAirplanePageState createState() => _ManageAirplanePageState();
@@ -52,17 +52,17 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       return;
     }
 
-    final database = await AppDatabase.getInstance();
-    final dao = database.airplaneDao;
-    final airplane = Airplane(
-      id: widget.airplane?.id, // Nullable for new entries
-      type: _typeController.text,
-      capacity: int.parse(_capacityController.text),
-      maxSpeed: int.parse(_maxSpeedController.text),
-      maxRange: int.parse(_maxRangeController.text),
-    );
-
     try {
+      final database = await AppDatabase.getInstance();
+      final dao = database.airplaneDao;
+      final airplane = Airplane(
+        id: widget.airplane?.id,
+        type: _typeController.text,
+        capacity: int.parse(_capacityController.text),
+        maxSpeed: int.parse(_maxSpeedController.text),
+        maxRange: int.parse(_maxRangeController.text),
+      );
+
       if (widget.isEditMode) {
         await dao.updateAirplane(airplane);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -70,8 +70,12 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
         );
       } else {
         await dao.createAirplane(airplane);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Airplane Created')),
+        );
       }
-      Navigator.pop(context, true); // Refresh the list
+
+      Navigator.pop(context, true); // Close the screen and refresh the list
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error saving airplane: $e')),
@@ -101,15 +105,16 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     );
 
     if (shouldDelete ?? false) {
-      final database = await AppDatabase.getInstance();
-      final dao = database.airplaneDao;
-
       try {
+        final database = await AppDatabase.getInstance();
+        final dao = database.airplaneDao;
         await dao.deleteAirplane(widget.airplane!);
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Airplane Deleted')),
         );
-        Navigator.pop(context, true); // Refresh the list
+
+        Navigator.pop(context, true); // Close the screen and refresh the list
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error deleting airplane: $e')),
