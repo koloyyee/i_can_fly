@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
