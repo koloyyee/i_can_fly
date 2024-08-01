@@ -29,10 +29,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
     _passwordController = TextEditingController();
     AppDatabase.getInstance().then((db) => adminDao = db.adminDao);
     esp.getString("email").then((value) {
-      _emailController.text = value ?? "";
+      _emailController.text = value;
     });
     esp.getString("password").then((value) {
-      _passwordController.text = value ?? "";
+      _passwordController.text = value;
     });
   }
 
@@ -102,15 +102,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     String password = _passwordController.value.text;
                     // login
                     adminDao.findAdminByEmail(email).then((user) {
-                      print(user?.email);
-                      print(user?.password);
                       if (user != null) {
                         if (user.password == password &&
                             user.email.toLowerCase() == email) {
                           esp.setString("email", user.email);
                           esp.setString("password", user.password);
                           Navigator.pushNamed(context, "/flights");
-
                         }  else {
                           // some error message
                           loginFailed(context, "Invalid email or password");

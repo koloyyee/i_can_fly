@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/common/common_actions_menu.dart';
+import 'package:i_can_fly/page/airplane/orientation_widget.dart';
 import 'package:i_can_fly/page/flight/view_flights_list.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
 
@@ -37,8 +38,9 @@ class _FlightsPageState extends State<FlightsPage> {
         CommonActionsMenu()
       ],
       ),
-      body: const Center(
+      body : const SafeArea(
         child: ViewFlightsList()
+      
       ),
     floatingActionButton: FloatingActionButton(
       onPressed: () {

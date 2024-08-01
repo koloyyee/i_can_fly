@@ -46,7 +46,8 @@ class _EditFlightPageState extends State<EditFlightPage> {
     arrivalDate = widget.flight.arrivalDateTime;
     arrivalTime = TimeOfDay.fromDateTime(widget.flight.arrivalDateTime);
 
-    $FloorAppDatabase.databaseBuilder('app_database.db').build().then((db) {
+  AppDatabase.getInstance().then( (db) {
+    setState(() {
       flightDao = db.flightDao;
       flightDao.findAllAirplaneTypes().then((value) {
         setState(() {
@@ -54,6 +55,7 @@ class _EditFlightPageState extends State<EditFlightPage> {
         });
       });
     });
+  });
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -133,6 +135,10 @@ class _EditFlightPageState extends State<EditFlightPage> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
+        // leading: IconButton( icon: Icon(Icons.arrow_back),
+        // onPressed: () {
+        //   Navigator.pushNamed(context, "/flights");
+        // },),
       ),
       body: Form(
         key: _formKey,

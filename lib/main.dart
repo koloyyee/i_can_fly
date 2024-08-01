@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         // Define the default font family here if you want it applied throughout the app
         fontFamily: 'Montserrat',
       ),
-      initialRoute: "/welcome",
+      initialRoute: "/",
       routes: {
         "/welcome": (context) => const WelcomePage(),
         "/": (context) => const HomePage(),
