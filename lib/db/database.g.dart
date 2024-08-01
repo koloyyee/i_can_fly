@@ -108,7 +108,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL)');
         await database.execute(
@@ -406,7 +406,7 @@ class _$AirplaneDao extends AirplaneDao {
   Future<List<Airplane>> findAllAirplanes() async {
     return _queryAdapter.queryList('SELECT * FROM airplanes',
         mapper: (Map<String, Object?> row) => Airplane(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             type: row['type'] as String,
             capacity: row['capacity'] as int,
             maxSpeed: row['maxSpeed'] as int,
@@ -417,7 +417,7 @@ class _$AirplaneDao extends AirplaneDao {
   Future<Airplane?> findAirplaneById(int id) async {
     return _queryAdapter.query('SELECT * FROM airplanes WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Airplane(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             type: row['type'] as String,
             capacity: row['capacity'] as int,
             maxSpeed: row['maxSpeed'] as int,
@@ -431,14 +431,13 @@ class _$AirplaneDao extends AirplaneDao {
   }
 
   @override
-  Future<int> updateAirplane(Airplane airplane) {
-    return _airplaneUpdateAdapter.updateAndReturnChangedRows(
-        airplane, OnConflictStrategy.abort);
+  Future<void> updateAirplane(Airplane airplane) async {
+    await _airplaneUpdateAdapter.update(airplane, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteAirplane(Airplane airplane) {
-    return _airplaneDeletionAdapter.deleteAndReturnChangedRows(airplane);
+  Future<void> deleteAirplane(Airplane airplane) async {
+    await _airplaneDeletionAdapter.delete(airplane);
   }
 }
 
