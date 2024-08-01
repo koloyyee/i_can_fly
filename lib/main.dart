@@ -11,8 +11,6 @@ import 'package:i_can_fly/page/flight/flight_page.dart';
 import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/welcome.dart';
 import 'package:i_can_fly/utils/theme-color.dart';
-import 'dart:async';
-import 'package:floor/floor.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 
 void main() {

@@ -82,6 +82,8 @@ class _$AppDatabase extends AppDatabase {
 
   CustomerDao? _customerDaoInstance;
 
+  ReservationDao? _reservationDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -108,11 +110,13 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `airlines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `companyName` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER NOT NULL, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `airplanes` (`id` INTEGER, `type` TEXT NOT NULL, `capacity` INTEGER NOT NULL, `maxSpeed` INTEGER NOT NULL, `maxRange` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `flights` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `airplaneType` TEXT, `arrivalCity` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` TEXT NOT NULL, `address` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `reservation` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerName` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `destinationCity` TEXT NOT NULL, `departureTime` TEXT NOT NULL, `arrivalTime` TEXT NOT NULL, `reservationName` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -143,6 +147,12 @@ class _$AppDatabase extends AppDatabase {
   @override
   CustomerDao get customerDao {
     return _customerDaoInstance ??= _$CustomerDao(database, changeListener);
+  }
+
+  @override
+  ReservationDao get reservationDao {
+    return _reservationDaoInstance ??=
+        _$ReservationDao(database, changeListener);
   }
 }
 
@@ -406,7 +416,7 @@ class _$AirplaneDao extends AirplaneDao {
   Future<List<Airplane>> findAllAirplanes() async {
     return _queryAdapter.queryList('SELECT * FROM airplanes',
         mapper: (Map<String, Object?> row) => Airplane(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             type: row['type'] as String,
             capacity: row['capacity'] as int,
             maxSpeed: row['maxSpeed'] as int,
@@ -417,7 +427,7 @@ class _$AirplaneDao extends AirplaneDao {
   Future<Airplane?> findAirplaneById(int id) async {
     return _queryAdapter.query('SELECT * FROM airplanes WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Airplane(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             type: row['type'] as String,
             capacity: row['capacity'] as int,
             maxSpeed: row['maxSpeed'] as int,
@@ -431,14 +441,13 @@ class _$AirplaneDao extends AirplaneDao {
   }
 
   @override
-  Future<int> updateAirplane(Airplane airplane) {
-    return _airplaneUpdateAdapter.updateAndReturnChangedRows(
-        airplane, OnConflictStrategy.abort);
+  Future<void> updateAirplane(Airplane airplane) async {
+    await _airplaneUpdateAdapter.update(airplane, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteAirplane(Airplane airplane) {
-    return _airplaneDeletionAdapter.deleteAndReturnChangedRows(airplane);
+  Future<void> deleteAirplane(Airplane airplane) async {
+    await _airplaneDeletionAdapter.delete(airplane);
   }
 }
 
@@ -666,6 +675,114 @@ class _$CustomerDao extends CustomerDao {
   @override
   Future<void> deleteCustomer(Customer newCustomer) async {
     await _customerDeletionAdapter.delete(newCustomer);
+  }
+}
+
+class _$ReservationDao extends ReservationDao {
+  _$ReservationDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _reservationInsertionAdapter = InsertionAdapter(
+            database,
+            'reservation',
+            (Reservation item) => <String, Object?>{
+                  'reservationId': item.reservationId,
+                  'customerName': item.customerName,
+                  'departureCity': item.departureCity,
+                  'destinationCity': item.destinationCity,
+                  'departureTime':
+                      _dateTimeConverter.encode(item.departureTime),
+                  'arrivalTime': _dateTimeConverter.encode(item.arrivalTime),
+                  'reservationName': item.reservationName
+                }),
+        _reservationUpdateAdapter = UpdateAdapter(
+            database,
+            'reservation',
+            ['reservationId'],
+            (Reservation item) => <String, Object?>{
+                  'reservationId': item.reservationId,
+                  'customerName': item.customerName,
+                  'departureCity': item.departureCity,
+                  'destinationCity': item.destinationCity,
+                  'departureTime':
+                      _dateTimeConverter.encode(item.departureTime),
+                  'arrivalTime': _dateTimeConverter.encode(item.arrivalTime),
+                  'reservationName': item.reservationName
+                }),
+        _reservationDeletionAdapter = DeletionAdapter(
+            database,
+            'reservation',
+            ['reservationId'],
+            (Reservation item) => <String, Object?>{
+                  'reservationId': item.reservationId,
+                  'customerName': item.customerName,
+                  'departureCity': item.departureCity,
+                  'destinationCity': item.destinationCity,
+                  'departureTime':
+                      _dateTimeConverter.encode(item.departureTime),
+                  'arrivalTime': _dateTimeConverter.encode(item.arrivalTime),
+                  'reservationName': item.reservationName
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Reservation> _reservationInsertionAdapter;
+
+  final UpdateAdapter<Reservation> _reservationUpdateAdapter;
+
+  final DeletionAdapter<Reservation> _reservationDeletionAdapter;
+
+  @override
+  Future<List<Reservation>> findAllReservation() async {
+    return _queryAdapter.queryList('SELECT * FROM customers',
+        mapper: (Map<String, Object?> row) => Reservation(
+            reservationId: row['reservationId'] as int?,
+            customerName: row['customerName'] as String,
+            departureCity: row['departureCity'] as String,
+            destinationCity: row['destinationCity'] as String,
+            departureTime:
+                _dateTimeConverter.decode(row['departureTime'] as String),
+            arrivalTime:
+                _dateTimeConverter.decode(row['arrivalTime'] as String),
+            reservationName: row['reservationName'] as String));
+  }
+
+  @override
+  Future<Reservation?> findReservationById(int id) async {
+    return _queryAdapter.query('SELECT * FROM customers WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Reservation(
+            reservationId: row['reservationId'] as int?,
+            customerName: row['customerName'] as String,
+            departureCity: row['departureCity'] as String,
+            destinationCity: row['destinationCity'] as String,
+            departureTime:
+                _dateTimeConverter.decode(row['departureTime'] as String),
+            arrivalTime:
+                _dateTimeConverter.decode(row['arrivalTime'] as String),
+            reservationName: row['reservationName'] as String),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> createReservation(Reservation newReservation) async {
+    await _reservationInsertionAdapter.insert(
+        newReservation, OnConflictStrategy.rollback);
+  }
+
+  @override
+  Future<int> updateReservation(Reservation newReservation) {
+    return _reservationUpdateAdapter.updateAndReturnChangedRows(
+        newReservation, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteReservation(Reservation newReservation) async {
+    await _reservationDeletionAdapter.delete(newReservation);
   }
 }
 
