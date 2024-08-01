@@ -45,7 +45,11 @@ class _AddReservationPageState extends State<AddReservationPage> {
         departureCity: selectedFlight!.departureCity,
         destinationCity: selectedFlight!.arrivalCity,
         departureTime: selectedFlight!.departureDateTime,
+
         arrivalTime: selectedFlight!.arrivalDateTime,
+
+        arivalTime: selectedFlight!.arrivalDateTime,
+
         reservationName: _reservationNameController.text,
       );
 
