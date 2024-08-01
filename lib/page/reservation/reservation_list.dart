@@ -30,10 +30,11 @@ class _ReservationListPageState extends State<ReservationListPage> {
   void initState() {
     super.initState();
     AppDatabase.getInstance().then((db) {
-      _flightDao = db.flightDao;
-      _flights = _flightDao.findAllFlights();
+      setState(() {
+        _flightDao = db.flightDao;
+        _flights =_flightDao.findAllFlights();
+      });
     });
-    // _flights = widget.flightDao.findAllFlights(); // Assuming this method fetches all flights
   }
 
   @override
