@@ -63,17 +63,17 @@ class HomePage extends StatelessWidget {
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(70.0),
         children: [
           _buildButton(
             title: 'Flights List',
-            imagePath: 'images/flights.jpg', // Updated path without 'assets/'
+            imagePath: 'images/flights.jpg',
             context: context,
             routeName: '/admin-login',
           ),
           _buildButton(
             title: 'Airplanes List',
-            imagePath: 'images/airplane.jpg', // Updated path without 'assets/'
+            imagePath: 'images/airplane.jpg',
             context: context,
             routeName: '/airplanes',
           ),
@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
     required BuildContext context,
     required String routeName,
   }) {
-    final double imageHeight = 300.0; // Define height here
+    final double imageHeight = 275.0; // Define height here
     final double opacity = 0.50; // Set desired opacity (0.0 to 1.0)
 
     return GestureDetector(
@@ -131,7 +131,7 @@ class HomePage extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: Color(CTColor.BlackTeal.colorValue), // Text color set to DarkTeal
-                  fontSize: 60, // Change font size here
+                  fontSize: 35, // Change font size here
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Montserrat', // Apply Montserrat font
                 ),

@@ -117,7 +117,9 @@ class _AirplanePageState extends State<AirplanePage> {
                 child: Card(
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  color: Color(CTColor.LightTeal.colorValue), // Set card color here
                   child: ListTile(
+                    leading: Icon(Icons.airplane_ticket, color: Color(CTColor.Teal.colorValue)), // Add icon here
                     title: Text(airplane.type),
                     subtitle: Text('Capacity: ${airplane.capacity}'),
                   ),
@@ -129,6 +131,8 @@ class _AirplanePageState extends State<AirplanePage> {
       },
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +152,7 @@ class _AirplanePageState extends State<AirplanePage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () => _navigateToManagePage(context),
           child: const Icon(Icons.add),
-          backgroundColor: Color(CTColor.Teal.colorValue),
+          backgroundColor: Color(CTColor.LightTeal.colorValue),
         ),
       ),
       landscapeChild: Scaffold(
@@ -175,7 +179,7 @@ class _AirplanePageState extends State<AirplanePage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () => _navigateToManagePage(context),
           child: const Icon(Icons.add),
-          backgroundColor: Color(CTColor.Teal.colorValue),
+          backgroundColor: Color(CTColor.LightTeal.colorValue),
         ),
       ),
     );
