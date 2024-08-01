@@ -20,7 +20,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 part 'database.g.dart'; // Make sure this matches the generated file name
 
 // dart run build_runner build
-// dart run build_runner watch  
+// dart run build_runner watch
 
 @TypeConverters([DateTimeConverter])
 @Database(version: 1, entities: [Admin, Airline, Airplane, Flight, Customer, Reservation])
