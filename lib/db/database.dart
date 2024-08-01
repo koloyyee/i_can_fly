@@ -5,7 +5,7 @@ import 'package:i_can_fly/dao/airplane_dao.dart';
 import 'package:i_can_fly/dao/customer_dao.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/dao/admin_dao.dart';
-import 'package:i_can_fly/dao/reservation-dao.dart';
+import 'package:i_can_fly/dao/reservation_dao.dart';
 import 'package:i_can_fly/db/datetime-converter.dart';
 import 'package:i_can_fly/entity/airline.dart';
 import 'package:i_can_fly/entity/airplane.dart';
