@@ -80,11 +80,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/ # any images in the image dir.
-    - images/airplane.jpg
-    - images/flights.jpg
-    - images/Reservation.jpeg
-    - images/Customers.jpg
-    - images/airline.jpg
 
   fonts:
     - family: Montserrat

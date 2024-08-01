@@ -18,8 +18,8 @@ import 'package:intl/intl.dart';
 // 3.[x] You must use a database to store items that were inserted into the ListView to repopulate the list when the application is restarted.
 // 4.[x] Selecting items from the ListView should show details about the item that was selected. On a phone would use the whole screen to show the details but on a Tablet or Desktop screen, it would show the details beside the ListView.
 // 5.[x] Each activity must have at least 1 Snackbar, and 1 AlertDialog to show some kind of notification.
-// 6.[ ] Each activity must use EncryptedSharedPreferences to save something about what was typed in the EditText for use the next time the application is launched.
-// 7.[ ] Each person’s project must have an ActionBar with ActionItems that displays an AlertDialog with instructions for how to use the interface.
+// 6.[x] Each activity must use EncryptedSharedPreferences to save something about what was typed in the EditText for use the next time the application is launched.
+// 7.[x] Each person’s project must have an ActionBar with ActionItems that displays an AlertDialog with instructions for how to use the interface.
 // 8.[ ] There must be at least 1 other language supported by your part of the project. If you are not bilingual, then you must support both British and American English (words like colour, color, neighbour, neighbor, etc). If you know a language other than English, then you can support that language in your application and don’t need to support American English.All activities must be integrated into a single working application, on a single device or emulator. You should use GitHub for merging your code by creating pull requests.
 
 /// A StatefulWidget that represents the add flight page.

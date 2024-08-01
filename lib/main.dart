@@ -22,8 +22,10 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    // AppDatabase.getInstance().then((db) => print(db.database));
     return MaterialApp(
       title: 'Welcome!',
       theme: ThemeData(
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
         "/airplanes": (context) => const AirplanePage(),
         "/manage-airplane": (context) => const ManageAirplanePage(isEditMode: false),
         "/customers": (context) => const CustomerListPage(),
-        //"/reservations": (context) => const ReservationListPage(flightDao),
+        "/reservations": (context) => const ReservationListPage(),
       },
       restorationScopeId: "app",
     );
@@ -106,8 +108,8 @@ class HomePage extends StatelessWidget {
     required BuildContext context,
     required String routeName,
   }) {
-    final double imageHeight = 275.0; // Define height here
-    final double opacity = 0.50; // Set desired opacity (0.0 to 1.0)
+    const double imageHeight = 275.0; // Define height here
+    const double opacity = 0.50; // Set desired opacity (0.0 to 1.0)
 
     return GestureDetector(
       onTap: () {
