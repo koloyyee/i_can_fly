@@ -3,13 +3,8 @@ import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/dao/reservation_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/reservation.dart';
-
-
-import 'package:i_can_fly/page/customer/add_customer_page.dart';
-import 'package:i_can_fly/page/customer/edit_customer_page.dart';
 import 'package:i_can_fly/page/reservation/add_reservation_page.dart';
 import 'package:i_can_fly/page/reservation/reservation_details_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
@@ -55,7 +50,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
     if (result != null && result) {
       // Fetch the updated list
       _fetchReservation();
-      Fluttertoast.showToast(msg: 'New reservastion added with success');
+      Fluttertoast.showToast(msg: 'New reservation added with success');
     }
   }
 

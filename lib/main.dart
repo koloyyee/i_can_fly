@@ -21,7 +21,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     // AppDatabase.getInstance().then((db) => print(db.database));
@@ -64,8 +63,18 @@ class MyApp extends StatelessWidget {
         /// Route for the Reservations page.
         /// Requires a FlightDao object as an argument.
         "/reservations": (context) {
-          final flightDao = ModalRoute.of(context)!.settings.arguments as FlightDao;
-          return ReservationListPage(flightDao: flightDao);
+          // final flightDao = ModalRoute.of(context)!.settings.arguments as FlightDao;
+          // print(flightDao);
+           return FutureBuilder<AppDatabase>(
+             future: AppDatabase.getInstance(),
+             builder: (context, snapshot) {
+               if (snapshot.connectionState == ConnectionState.done) {
+                 return ReservationListPage(flightDao: snapshot.data!.flightDao);
+               } else {
+                 return const CircularProgressIndicator();
+               }
+             },
+           );
         },
       },
       restorationScopeId: "app",
