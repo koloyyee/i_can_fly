@@ -18,10 +18,11 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   late AdminDao adminDao;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
-  EncryptedSharedPreferences esp = EncryptedSharedPreferences();
+  final EncryptedSharedPreferences esp = EncryptedSharedPreferences();
 
   /// A global key that uniquely identifies the Form widget and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -127,31 +128,33 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   onPressed: () {
                     Navigator.pushNamed(context, "/admin-register");
                   },
-                  child: const Text("Register")),
-            ],
+                  child: const Text("Register"),
+                ),
+              ],
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 
-
-
   Future<dynamic> loginFailed(BuildContext context, String msg) {
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: Text(msg),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("OK"))
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(msg),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

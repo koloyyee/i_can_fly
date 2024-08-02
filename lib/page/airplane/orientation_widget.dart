@@ -5,10 +5,10 @@ class OrientationWidget extends StatelessWidget {
   final Widget landscapeChild;
 
   const OrientationWidget({
-    Key? key,
+    super.key,
     required this.portraitChild,
     required this.landscapeChild,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
