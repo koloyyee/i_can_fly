@@ -3,10 +3,10 @@ import 'package:i_can_fly/entity/reservation.dart';
 
 @dao
 abstract class ReservationDao {
-  @Query("SELECT * FROM customers")
+  @Query("SELECT * FROM reservation")
   Future<List<Reservation>> findAllReservation();
 
-  @Query("SELECT * FROM customers WHERE id = :id")
+  @Query("SELECT * FROM reservations WHERE id = :id")
   Future<Reservation?> findReservationById(int id);
 
   @Insert(onConflict: OnConflictStrategy.rollback)
