@@ -75,8 +75,9 @@ class _AirplanePageState extends State<AirplanePage> {
         title: const Text('Instructions'),
         content: const Text(
           '1. Tap on an airplane to edit its details.\n'
-              '2. Long press on an airplane to delete it.\n'
-              '3. Use the floating action button to add a new airplane.',
+              '     a. Select the Delete button to delete the item.\n'
+              '     b. Fill every field as they are all required.\n'
+              '2. Use the floating action button to add a new airplane.',
         ),
         actions: [
           TextButton(
