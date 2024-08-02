@@ -84,7 +84,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   labelText: "Password",
                   hintText: "Password",
                 ),
-<<<<<<< HEAD
+
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter password";
@@ -126,7 +126,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               ),
               const SizedBox(height: 20),
               OutlinedButton(
-=======
+
                 const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () async {
@@ -154,7 +154,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                 ),
                 const SizedBox(height: 20),
                 OutlinedButton(
->>>>>>> 4f92f81 (added responsive layout, made the main.dart more similar to what it was before. I still had to have the code like this to be able to pass database to the CustomerLoginPage() so it can access the database and retrieve the user. That's why main.dart has an databaseInitializer in the build widget. Some other stuff in the main.dart are to make the change of the language.)
+
                   onPressed: () {
                     Navigator.pushNamed(context, "/admin-register");
                   },

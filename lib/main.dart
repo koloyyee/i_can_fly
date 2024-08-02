@@ -167,6 +167,12 @@ class HomePage extends StatefulWidget {
 
   const HomePage({super.key});
 
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -250,33 +256,33 @@ class HomePage extends StatefulWidget {
                 ),
               ),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/airplanes");
-              },
-              child: const Text("Airplanes List"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/airlines");
-              },
-              child: const Text("Airlines List"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, "/customers");
-              },
-              child: const Text("Customer List"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, "/reservations");
-              },
-              child: const Text("Reservation Page"),
-
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pushNamed(context, "/airplanes");
+            //   },
+            //   child: const Text("Airplanes List"),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pushNamed(context, "/airlines");
+            //   },
+            //   child: const Text("Airlines List"),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pushNamed(
+            //         context, "/customers");
+            //   },
+            //   child: const Text("Customer List"),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pushNamed(
+            //         context, "/reservations");
+            //   },
+            //   child: const Text("Reservation Page"),
+            //
+            // ),
             ),
           ],
         ),
