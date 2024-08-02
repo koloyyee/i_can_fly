@@ -116,7 +116,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` TEXT NOT NULL, `address` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reservation` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerName` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `destinationCity` TEXT NOT NULL, `departureTime` TEXT NOT NULL, `arrivalTime` TEXT NOT NULL, `arivalTime` TEXT NOT NULL, `reservationName` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `reservation` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerName` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `destinationCity` TEXT NOT NULL, `departureTime` TEXT NOT NULL, `arivalTime` TEXT NOT NULL, `reservationName` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -693,7 +693,6 @@ class _$ReservationDao extends ReservationDao {
                   'destinationCity': item.destinationCity,
                   'departureTime':
                       _dateTimeConverter.encode(item.departureTime),
-                  'arrivalTime': _dateTimeConverter.encode(item.arrivalTime),
                   'arivalTime': _dateTimeConverter.encode(item.arivalTime),
                   'reservationName': item.reservationName
                 }),
@@ -708,7 +707,6 @@ class _$ReservationDao extends ReservationDao {
                   'destinationCity': item.destinationCity,
                   'departureTime':
                       _dateTimeConverter.encode(item.departureTime),
-                  'arrivalTime': _dateTimeConverter.encode(item.arrivalTime),
                   'arivalTime': _dateTimeConverter.encode(item.arivalTime),
                   'reservationName': item.reservationName
                 }),
@@ -723,7 +721,6 @@ class _$ReservationDao extends ReservationDao {
                   'destinationCity': item.destinationCity,
                   'departureTime':
                       _dateTimeConverter.encode(item.departureTime),
-                  'arrivalTime': _dateTimeConverter.encode(item.arrivalTime),
                   'arivalTime': _dateTimeConverter.encode(item.arivalTime),
                   'reservationName': item.reservationName
                 });
@@ -750,8 +747,6 @@ class _$ReservationDao extends ReservationDao {
             destinationCity: row['destinationCity'] as String,
             departureTime:
                 _dateTimeConverter.decode(row['departureTime'] as String),
-            arrivalTime:
-                _dateTimeConverter.decode(row['arrivalTime'] as String),
             arivalTime: _dateTimeConverter.decode(row['arivalTime'] as String),
             reservationName: row['reservationName'] as String));
   }
@@ -766,8 +761,6 @@ class _$ReservationDao extends ReservationDao {
             destinationCity: row['destinationCity'] as String,
             departureTime:
                 _dateTimeConverter.decode(row['departureTime'] as String),
-            arrivalTime:
-                _dateTimeConverter.decode(row['arrivalTime'] as String),
             arivalTime: _dateTimeConverter.decode(row['arivalTime'] as String),
             reservationName: row['reservationName'] as String),
         arguments: [id]);
