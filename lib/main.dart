@@ -5,19 +5,16 @@ import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
-import 'package:i_can_fly/page/airplane/manage_airplane.dart';
 import 'package:i_can_fly/page/customer/customer_list.dart';
 import 'package:i_can_fly/page/customer/customer_login_page.dart';
 import 'package:i_can_fly/page/customer/customer_register_page.dart';
 import 'package:i_can_fly/page/customer/edit_customer_page.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
 import 'package:i_can_fly/page/flight/add_flight.dart';
-import 'package:i_can_fly/page/airplane/airplane_page.dart';
 import 'package:i_can_fly/page/welcome.dart';
-import 'package:i_can_fly/utils/theme-color.dart';
-import 'dart:async';
 
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
+import 'package:i_can_fly/utils/theme_color.dart';
 
 void main() {
   runApp(const MyApp());
