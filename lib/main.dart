@@ -140,30 +140,28 @@ class HomePage extends StatelessWidget {
           _buildButton(
             title: 'Flights List',
             imagePath: 'images/flights.jpg',
+            //image credits: https://pikbest.com/backgrounds/airport-departure-board-arrival-and-information-at-in-3d_9626000.html
             context: context,
             routeName: '/admin-login',
           ),
           _buildButton(
             title: 'Airplanes List',
             imagePath: 'images/airplane.jpg',
+            //image credits: https://wallpapercave.com/w/wp2478615
             context: context,
             routeName: '/airplanes',
           ),
           _buildButton(
-            title: 'Airlines List',
-            imagePath: 'images/airline.jpg',
-            context: context,
-            routeName: '/airlines',
-          ),
-          _buildButton(
             title: 'Customer List',
             imagePath: 'images/Customers.jpg',
+            //image credits: https://www.samsic.aero/check-boarding?origin=6&type=taxonomy_term
             context: context,
             routeName: '/customers',
           ),
           _buildButton(
             title: 'Reservation Page',
             imagePath: 'images/Reservation.jpeg',
+            //image credits: https://pvtistes.net/en/air-transat-extra-23kg-luggage-allowance-canada/
             context: context,
             routeName: '/reservations',
           ),
