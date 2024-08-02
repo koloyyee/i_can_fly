@@ -43,7 +43,6 @@ class MyApp extends StatelessWidget {
         "/admin-login": (context) => const AdminLoginPage(),
         "/admin-register": (context) => const AdminRegisterPage(),
         "/add-flight": (context) => const AddFlightPage(),
-
         /// Route for the Customer Login page.
         /// This route initializes the AppDatabase and passes it to the CustomerLoginPage.
         "/customer-login": (context) {
