@@ -1,99 +1,115 @@
 import 'package:flutter/material.dart';
-import 'package:i_can_fly/dao/customer_dao.dart';
 import 'package:i_can_fly/entity/customer.dart';
+import 'package:i_can_fly/main.dart';
 import 'package:i_can_fly/page/customer/add_customer_page.dart';
-import 'package:i_can_fly/page/customer/edit_customer_page.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:i_can_fly/utils/app_localizations.dart';
+import 'package:intl/intl.dart';
 import '../../db/database.dart';
 
-class CustomerListPage extends StatefulWidget {
-  const CustomerListPage({super.key});
+class CustomerListPage extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final AppDatabase database;
 
-  @override
-  _CustomerListPageState createState() => _CustomerListPageState();
-}
+  CustomerListPage({Key? key, required this.database}) : super(key: key);
 
-class _CustomerListPageState extends State<CustomerListPage> {
-  late CustomerDao customerDao;
-  List<Customer> customerList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeDatabase();
-  }
-
-  Future<void> _initializeDatabase() async {
-    final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    customerDao = database.customerDao;
-    _fetchCustomers();
-  }
-
-  Future<void> _fetchCustomers() async {
-    final customers = await customerDao.findAllCustomers();
-    setState(() {
-      customerList = customers;
-    });
-  }
-
-  void _navigateToAddCustomerPage() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const AddCustomerPage()),
-    );
-
-    if (result != null && result) {
-      // Fetch the updated list
-      _fetchCustomers();
-      Fluttertoast.showToast(msg: 'New customer added with success');
-    }
-  }
-
-  void _navigateToEditCustomerPage(Customer customer) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditCustomerPage(customer: customer)),
-    );
-
-    if (result != null && result) {
-      // Fetch the updated list
-      _fetchCustomers();
+  Future<List<Customer>> _fetchCustomers() async {
+    try {
+      final customerDao = database.customerDao;
+      final customers = await customerDao.findAllCustomers();
+      print("Fetched customers: $customers");
+      return customers;
+    } catch (e) {
+      print("Error fetching customers: $e");
+      return [];
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Customer List'),
-        backgroundColor: Colors.teal,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _navigateToAddCustomerPage,
-              child: const Text("Add Customer"),
-            ),
-          ),
-          Expanded(
-            child: customerList.isEmpty
-                ? const Center(child: Text("No customers found."))
-                : ListView.builder(
-              itemCount: customerList.length,
-              itemBuilder: (context, index) {
-                final customer = customerList[index];
-                return ListTile(
-                  title: Text(customer.name),
-                  onTap: () => _navigateToEditCustomerPage(customer),
-                );
-              },
-            ),
+        title: Text(AppLocalizations.of(context)?.translate('customer_list') ?? 'Customer List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
           ),
         ],
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.teal),
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(AppLocalizations.of(context)?.translate('english') ?? 'English'),
+              onTap: () {
+                MyApp.setLocale(context, const Locale('en', ''));
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(AppLocalizations.of(context)?.translate('spanish') ?? 'Spanish'),
+              onTap: () {
+                MyApp.setLocale(context, const Locale('es', ''));
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      body: FutureBuilder<List<Customer>>(
+        future: _fetchCustomers(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No customers found.'));
+          } else {
+            final customers = snapshot.data!;
+            return ListView.builder(
+              itemCount: customers.length,
+              itemBuilder: (context, index) {
+                final customer = customers[index];
+                final birthdayDateTime = customer.birthday;
+                final createdAtDateTime = customer.createdAt;
+                return ListTile(
+                  title: Text(customer.name),
+                  subtitle: Text('${DateFormat('yyyy-MM-dd').format(birthdayDateTime)}'),
+                  onTap: () {
+                    // Handle tap for viewing or editing the customer
+                  },
+                );
+              },
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddCustomerPage(),
+            ),
+          );
+        },
+        tooltip: AppLocalizations.of(context)?.translate('add_customer') ?? 'Add Customer',
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
-

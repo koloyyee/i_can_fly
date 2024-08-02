@@ -84,6 +84,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   labelText: "Password",
                   hintText: "Password",
                 ),
+<<<<<<< HEAD
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter password";
@@ -125,6 +126,35 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               ),
               const SizedBox(height: 20),
               OutlinedButton(
+=======
+                const SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      String email = _emailController.text.toLowerCase();
+                      String password = _passwordController.text;
+
+                      // Ensure adminDao is initialized
+                      // login
+                      final user = await adminDao.findAdminByEmail(email);
+                      if (user != null) {
+                        if (user.password == password) {
+                          await esp.setString("email", user.email);
+                          await esp.setString("password", user.password);
+                          Navigator.pushNamed(context, "/flights");
+                        } else {
+                          loginFailed(context, "Invalid email or password");
+                        }
+                      } else {
+                        loginFailed(context, "No user found");
+                      }
+                                        }
+                  },
+                  child: const Text("Login"),
+                ),
+                const SizedBox(height: 20),
+                OutlinedButton(
+>>>>>>> 4f92f81 (added responsive layout, made the main.dart more similar to what it was before. I still had to have the code like this to be able to pass database to the CustomerLoginPage() so it can access the database and retrieve the user. That's why main.dart has an databaseInitializer in the build widget. Some other stuff in the main.dart are to make the change of the language.)
                   onPressed: () {
                     Navigator.pushNamed(context, "/admin-register");
                   },

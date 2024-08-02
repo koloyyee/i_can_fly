@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:i_can_fly/main.dart';
+import 'package:i_can_fly/utils/app_localizations.dart';
 import '../../db/database.dart';
 import 'package:intl/intl.dart'; // For date formatting and parsing
 
@@ -77,10 +79,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       createdAt: DateTime.now(),
     );
 
+
+    ///Move back to login page after registration.
     await customerDao.createCustomer(newCustomer);
     Fluttertoast.showToast(msg: 'Registration successful!');
 
-    Navigator.pushReplacementNamed(context, '/login'); // Navigate to login page after registration
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -99,94 +103,160 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customer Registration'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(AppLocalizations.of(context)?.translate('register') ?? 'Register'),
         backgroundColor: Colors.teal,
+        actions: [
+          Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.teal),
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              title: Text(AppLocalizations.of(context)?.translate('english') ?? 'English'),
+              onTap: () {
+                MyApp.setLocale(context, const Locale('en', ''));
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(AppLocalizations.of(context)?.translate('spanish') ?? 'Spanish'),
+              onTap: () {
+                MyApp.setLocale(context, const Locale('es', ''));
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('name') ?? 'Name',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
+                      return AppLocalizations.of(context)?.translate('name_required') ?? 'Name is required';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('email') ?? 'Email',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return AppLocalizations.of(context)?.translate('email_required') ?? 'Email is required';
                     }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Please enter a valid email';
+                    final emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                    final regExp = RegExp(emailPattern);
+                    if (!regExp.hasMatch(value)) {
+                      return AppLocalizations.of(context)?.translate('invalid_email') ?? 'Invalid email address';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('password') ?? 'Password',
+                  ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters long';
+                      return AppLocalizations.of(context)?.translate('password_required') ?? 'Password is required';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: firstNameController,
-                  decoration: const InputDecoration(labelText: 'First Name'),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('first_name') ?? 'First Name',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your first name';
+                      return AppLocalizations.of(context)?.translate('first_name_required') ?? 'First name is required';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: lastNameController,
-                  decoration: const InputDecoration(labelText: 'Last Name'),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('last_name') ?? 'Last Name',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your last name';
+                      return AppLocalizations.of(context)?.translate('last_name_required') ?? 'Last name is required';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: addressController,
-                  decoration: const InputDecoration(labelText: 'Address'),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('address') ?? 'Address',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your address';
+                      return AppLocalizations.of(context)?.translate('address_required') ?? 'Address is required';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: birthdayController,
-                  decoration: const InputDecoration(labelText: 'Birthday (yyyy-MM-dd)'),
-                  keyboardType: TextInputType.datetime,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)?.translate('birthday') ?? 'Birthday (yyyy-MM-dd)',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your birthday';
+                      return AppLocalizations.of(context)?.translate('birthday_required') ?? 'Birthday is required';
                     }
-                    if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) {
-                      return 'Please enter a valid date in yyyy-MM-dd format';
+                    try {
+                      DateFormat('yyyy-MM-dd').parse(value);
+                    } catch (e) {
+                      return AppLocalizations.of(context)?.translate('invalid_date') ?? 'Invalid date format. Please use yyyy-MM-dd.';
                     }
                     return null;
                   },
@@ -194,7 +264,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _register,
-                  child: const Text('Register'),
+                  child: Text(AppLocalizations.of(context)?.translate('register') ?? 'Register'),
                 ),
               ],
             ),

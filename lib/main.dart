@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
+
 import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
+
+import 'package:i_can_fly/db/database_initializer.dart';
+import 'package:i_can_fly/entity/customer.dart';
+import 'package:i_can_fly/page/admin/admin_login.dart';
+import 'package:i_can_fly/page/admin/admin_reg.dart';
+import 'package:i_can_fly/page/airplane/airplane_page.dart';
+import 'package:i_can_fly/page/customer/customer_home.dart';
+
 import 'package:i_can_fly/page/customer/customer_list.dart';
 import 'package:i_can_fly/page/customer/customer_login_page.dart';
 import 'package:i_can_fly/page/customer/customer_register_page.dart';
+import 'package:i_can_fly/page/customer/edit_customer_page.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
 import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/welcome.dart';
+import 'package:i_can_fly/utils/app_localizations.dart';
+
+import 'dart:async';
+
+
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 
@@ -18,71 +34,137 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+
+
+
+/// The main application widget.
+///
+/// This widget sets up the MaterialApp with routes and theme.
+
+class MyApp extends StatefulWidget {
+
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+
+  /// This method is intended to be used when changing the language
+  /// dynamically, such as through user input.
+  /// The source for this was the last week material.
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    final _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+
+  /// This updates the internal state with the new locale.
+  /// [locale] - The new locale to be set for the application.
+  Locale _locale = const Locale('en', '');
+
+  void changeLanguage(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // AppDatabase.getInstance().then((db) => print(db.database));
-    return MaterialApp(
-      title: 'Welcome!',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(CTColor.Green.colorValue)),
-        useMaterial3: true,
-        // Define the default font family here if you want it applied throughout the app
-        fontFamily: 'Montserrat',
-      ),
-      initialRoute: "/",
-      routes: {
-        "/welcome": (context) => const WelcomePage(),
-        "/": (context) => const HomePage(),
-        "/flights": (context) => const FlightsPage(),
-        "/admin-login": (context) => const AdminLoginPage(),
-        "/admin-register": (context) => const AdminRegisterPage(),
-        "/add-flight": (context) => const AddFlightPage(),
-        /// Route for the Customer Login page.
-        /// This route initializes the AppDatabase and passes it to the CustomerLoginPage.
-        "/customer-login": (context) {
-          final databaseFuture = $FloorAppDatabase.databaseBuilder('app_database.db').build();
-          return FutureBuilder<AppDatabase>(
-            future: databaseFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CustomerLoginPage(database: snapshot.data!);
-              } else {
-                return const CircularProgressIndicator();
-              }
-            },
-          );
-        },
-        "/customer-register": (context) => const CustomerRegisterPage(),
-        "/airplanes": (context) => const AirplanePage(),
-        "/manage-airplane": (context) => const ManageAirplanePage(isEditMode: false),
-        "/customers": (context) => const CustomerListPage(),
+    return DatabaseInitializer(
+      builder: (database) {
+        return MaterialApp(
+          title: 'Welcome!',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: Color(CTColor.Green.colorValue)),
+            useMaterial3: true,
+            // Define the default font family here if you want it applied throughout the app
+            fontFamily: 'Montserrat',
+          ),
 
-        /// Route for the Reservations page.
-        /// Requires a FlightDao object as an argument.
-        "/reservations": (context) {
-          // final flightDao = ModalRoute.of(context)!.settings.arguments as FlightDao;
-          // print(flightDao);
-           return FutureBuilder<AppDatabase>(
-             future: AppDatabase.getInstance(),
-             builder: (context, snapshot) {
-               if (snapshot.connectionState == ConnectionState.done) {
-                 return ReservationListPage(flightDao: snapshot.data!.flightDao);
-               } else {
-                 return const CircularProgressIndicator();
-               }
-             },
-           );
-        },
+          ///This code section is responsible for making translations possible.
+          locale: _locale,
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('es', ''),
+          ],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          initialRoute: "/",
+          routes: {
+            "/welcome": (context) => const WelcomePage(),
+            "/": (context) => HomePage(),
+            "/flights": (context) => const FlightsPage(),
+            "/admin-login": (context) => const AdminLoginPage(),
+            "/admin-register": (context) => const AdminRegisterPage(),
+            "/add-flight": (context) => const AddFlightPage(),
+
+            /// Route for the Customer Login page.
+            /// This route initializes the AppDatabase and passes it to the CustomerLoginPage.
+            "/customer-login": (context) =>
+                CustomerLoginPage(database: database),
+            "/customer-register": (context) => const CustomerRegisterPage(),
+            "/airplanes": (context) => const AirplanePage(),
+
+            /// Route for the Customer List page.
+            /// This route initializes the AppDatabase and passes it to the CustomerListPage.
+            "/customers": (context) => CustomerListPage(database: database),
+            "/edit-customer": (context) {
+              final customer = ModalRoute
+                  .of(context)
+                  ?.settings
+                  .arguments as Customer?;
+              return EditCustomerPage(customer: customer!);
+            },
+            "/customer-register": (context) => const CustomerRegisterPage(),
+            "/airplanes": (context) => const AirplanePage(),
+            "/manage-airplane": (context) =>
+            const ManageAirplanePage(isEditMode: false),
+
+
+            /// Route for the Reservations page.
+            /// Requires a FlightDao object as an argument.
+            "/reservations": (context) {
+              // final flightDao = ModalRoute.of(context)!.settings.arguments as FlightDao;
+              // print(flightDao);
+              return FutureBuilder<AppDatabase>(
+                future: AppDatabase.getInstance(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return ReservationListPage(
+                        flightDao: snapshot.data!.flightDao);
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                },
+              );
+            },
+          },
+          onGenerateRoute: (settings) {
+            if (settings.name == "/edit-customer") {
+              final customer = settings.arguments as Customer?;
+              return MaterialPageRoute(
+                builder: (context) => EditCustomerPage(customer: customer!),
+              );
+            }
+            return null;
+          },
+          restorationScopeId: "app",
+        );
       },
-      restorationScopeId: "app",
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
+
   const HomePage({super.key});
 
   @override
@@ -156,6 +238,7 @@ class HomePage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+
             Center(
               child: Text(
                 title,
@@ -166,6 +249,34 @@ class HomePage extends StatelessWidget {
                   fontFamily: 'Montserrat', // Apply Montserrat font
                 ),
               ),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/airplanes");
+              },
+              child: const Text("Airplanes List"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/airlines");
+              },
+              child: const Text("Airlines List"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, "/customers");
+              },
+              child: const Text("Customer List"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, "/reservations");
+              },
+              child: const Text("Reservation Page"),
+
+            ),
             ),
           ],
         ),

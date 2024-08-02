@@ -13,3 +13,5 @@ class DateTimeConverter extends TypeConverter<DateTime, String > {
     return value.toIso8601String();
   }
 }
+
+//Type 'int' is not a subtype of type 'String' in type cast
