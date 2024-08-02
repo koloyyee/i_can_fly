@@ -1,10 +1,13 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/customer_dao.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/main.dart';
 import 'package:i_can_fly/page/customer/customer_home.dart';
+import 'package:i_can_fly/page/reservation/reservation_list.dart';
+
 import 'package:i_can_fly/utils/app_localizations.dart';
-import '../../db/database.dart';
+
 
 /// A StatefulWidget that represents the customer login page.
 class CustomerLoginPage extends StatefulWidget {
@@ -44,7 +47,7 @@ class _CustomerLoginPageState extends State<CustomerLoginPage> {
 
     // Ensure appLocalizations is not null
     if (appLocalizations == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: Text('Localizations not found')),
       );
     }

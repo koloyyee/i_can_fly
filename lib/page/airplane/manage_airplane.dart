@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
-import '../../utils/theme-color.dart';
 
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
@@ -52,23 +51,35 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       return;
     }
 
-    final database = await AppDatabase.getInstance();
-    final dao = database.airplaneDao;
-    final airplane = Airplane(
-      id: widget.airplane?.id, // Nullable for new entries
-      type: _typeController.text,
-      capacity: int.parse(_capacityController.text),
-      maxSpeed: int.parse(_maxSpeedController.text),
-      maxRange: int.parse(_maxRangeController.text),
-    );
+    try {
+      final database = await AppDatabase.getInstance();
+      final dao = database.airplaneDao;
+      final airplane = Airplane(
+        id: widget.airplane?.id,
+        type: _typeController.text,
+        capacity: int.parse(_capacityController.text),
+        maxSpeed: int.parse(_maxSpeedController.text),
+        maxRange: int.parse(_maxRangeController.text),
+      );
 
-    if (widget.isEditMode) {
-      await dao.updateAirplane(airplane);
-    } else {
-      await dao.createAirplane(airplane);
+      if (widget.isEditMode) {
+        await dao.updateAirplane(airplane);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Airplane Updated')),
+        );
+      } else {
+        await dao.createAirplane(airplane);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Airplane Created')),
+        );
+      }
+
+      Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving airplane: $e')),
+      );
     }
-
-    Navigator.pop(context, true);
   }
 
   void _delete() async {
@@ -93,43 +104,37 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     );
 
     if (shouldDelete ?? false) {
-      final database = await AppDatabase.getInstance();
-      final dao = database.airplaneDao;
-
       try {
+        final database = await AppDatabase.getInstance();
+        final dao = database.airplaneDao;
         await dao.deleteAirplane(widget.airplane!);
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Airplane Deleted')),
         );
-        Navigator.pop(context, true);
-      } catch (e) {
-        print("tbc"); // missing catch here.
-      }
 
+        Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting airplane: $e')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MediaQuery.of(context).orientation == Orientation.portrait
-          ? AppBar(
-        title: Text(widget.isEditMode ? 'Edit Airplane' : 'Add Airplane'),
-        backgroundColor: Color(CTColor.Teal.colorValue),
-        actions: widget.isEditMode
-            ? [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _delete,
-          ),
-        ]
-            : null,
-      )
-          : null,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              widget.isEditMode ? 'Edit Airplane' : 'Add Airplane',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 20),
             TextField(
               controller: _typeController,
               decoration: const InputDecoration(labelText: 'Airplane Type'),
@@ -157,8 +162,13 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
                   onPressed: _save,
                   child: Text(widget.isEditMode ? 'Update' : 'Save'),
                 ),
+                if (widget.isEditMode)
+                  ElevatedButton(
+                    onPressed: _delete,
+                    child: const Text('Delete'),
+                  ),
                 ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/airplanes')),
                   child: const Text('Cancel'),
                 ),
               ],
