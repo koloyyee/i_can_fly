@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:i_can_fly/dao/flight_dao.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
@@ -39,12 +41,32 @@ class MyApp extends StatelessWidget {
         "/admin-login": (context) => const AdminLoginPage(),
         "/admin-register": (context) => const AdminRegisterPage(),
         "/add-flight": (context) => const AddFlightPage(),
-        // "/customer-login": (context) => const CustomerLoginPage(database: null,),
+        /// Route for the Customer Login page.
+        /// This route initializes the AppDatabase and passes it to the CustomerLoginPage.
+        "/customer-login": (context) {
+          final databaseFuture = $FloorAppDatabase.databaseBuilder('app_database.db').build();
+          return FutureBuilder<AppDatabase>(
+            future: databaseFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return CustomerLoginPage(database: snapshot.data!);
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          );
+        },
         "/customer-register": (context) => const CustomerRegisterPage(),
         "/airplanes": (context) => const AirplanePage(),
         "/manage-airplane": (context) => const ManageAirplanePage(isEditMode: false),
         "/customers": (context) => const CustomerListPage(),
-        // "/reservations": (context) => ReservationListPage(flightDao: null,),
+
+        /// Route for the Reservations page.
+        /// Requires a FlightDao object as an argument.
+        "/reservations": (context) {
+          final flightDao = ModalRoute.of(context)!.settings.arguments as FlightDao;
+          return ReservationListPage(flightDao: flightDao);
+        },
       },
       restorationScopeId: "app",
     );
