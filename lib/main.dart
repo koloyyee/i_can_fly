@@ -30,6 +30,8 @@ import 'dart:async';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 
+///these comments are just to push to git. adding just to make push command work
+///
 void main() {
   runApp(const MyApp());
 }

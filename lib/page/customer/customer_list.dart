@@ -5,7 +5,8 @@ import 'package:i_can_fly/page/customer/add_customer_page.dart';
 import 'package:i_can_fly/utils/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../../db/database.dart';
-
+///these comments are just to push to git. adding just to make push command work
+///
 class CustomerListPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final AppDatabase database;
