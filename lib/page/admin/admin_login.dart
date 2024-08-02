@@ -114,24 +114,20 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       String password = _passwordController.text;
 
                       // Ensure adminDao is initialized
-                      if (adminDao != null) {
-                        // login
-                        final user = await adminDao.findAdminByEmail(email);
-                        if (user != null) {
-                          if (user.password == password) {
-                            await esp.setString("email", user.email);
-                            await esp.setString("password", user.password);
-                            Navigator.pushNamed(context, "/flights");
-                          } else {
-                            loginFailed(context, "Invalid email or password");
-                          }
+                      // login
+                      final user = await adminDao.findAdminByEmail(email);
+                      if (user != null) {
+                        if (user.password == password) {
+                          await esp.setString("email", user.email);
+                          await esp.setString("password", user.password);
+                          Navigator.pushNamed(context, "/flights");
                         } else {
-                          loginFailed(context, "No user found");
+                          loginFailed(context, "Invalid email or password");
                         }
                       } else {
-                        loginFailed(context, "Database not initialized");
+                        loginFailed(context, "No user found");
                       }
-                    }
+                                        }
                   },
                   child: const Text("Login"),
                 ),
