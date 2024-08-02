@@ -26,7 +26,6 @@ class Reservation {
   final String destinationCity;
   final DateTime departureTime;
 
-  final DateTime arrivalTime;
 
   final DateTime arivalTime;
 
@@ -34,7 +33,7 @@ class Reservation {
 
 
 
-  Reservation({
+  Reservation( {
 
     // this.id,
     // required this.name,
@@ -51,8 +50,6 @@ class Reservation {
     required this.departureCity,
     required this.destinationCity,
     required this.departureTime,
-
-    required this.arrivalTime,
 
     required this.arivalTime,
 

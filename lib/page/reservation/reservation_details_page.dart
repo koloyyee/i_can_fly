@@ -27,8 +27,6 @@ class ReservationDetailsPage extends StatelessWidget {
             Text('Departure Date and Time: ${reservation.departureTime}', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
 
-            Text('Arrival Date and Time: ${reservation.arrivalTime}', style: TextStyle(fontSize: 16)),
-
             Text('Arrival Date and Time: ${reservation.arivalTime}', style: TextStyle(fontSize: 16)),
 
             SizedBox(height: 8),

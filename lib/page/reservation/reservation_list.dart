@@ -5,6 +5,10 @@ import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/reservation.dart';
 import 'package:i_can_fly/page/reservation/add_reservation_page.dart';
 import 'package:i_can_fly/page/reservation/reservation_details_page.dart';
+import 'package:i_can_fly/page/customer/add_customer_page.dart';
+import 'package:i_can_fly/page/customer/edit_customer_page.dart';
+import 'package:i_can_fly/page/reservation/reservation_details_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 

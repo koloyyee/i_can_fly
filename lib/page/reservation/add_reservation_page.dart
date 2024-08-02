@@ -45,11 +45,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
         departureCity: selectedFlight!.departureCity,
         destinationCity: selectedFlight!.arrivalCity,
         departureTime: selectedFlight!.departureDateTime,
-
-        arrivalTime: selectedFlight!.arrivalDateTime,
-
         arivalTime: selectedFlight!.arrivalDateTime,
-
         reservationName: _reservationNameController.text,
       );
 
@@ -119,7 +115,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _addReservation,
-              child: Text('Add Reservation'),
+              child: const Text('Add Reservation'),
             ),
           ],
         ),

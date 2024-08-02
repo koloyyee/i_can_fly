@@ -10,6 +10,8 @@ import 'package:i_can_fly/page/customer/customer_login_page.dart';
 import 'package:i_can_fly/page/customer/customer_register_page.dart';
 import 'package:i_can_fly/page/flight/flight_page.dart';
 import 'package:i_can_fly/page/flight/add_flight.dart';
+import 'package:i_can_fly/page/airplane/airplane_page.dart';
+import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/page/welcome.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
