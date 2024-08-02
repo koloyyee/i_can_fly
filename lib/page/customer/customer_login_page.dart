@@ -2,6 +2,7 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/customer_dao.dart';
 import 'package:i_can_fly/main.dart';
+import 'package:i_can_fly/page/customer/customer_home_page.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import '../../db/database.dart';
 
