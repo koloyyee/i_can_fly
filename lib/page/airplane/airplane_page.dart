@@ -3,6 +3,7 @@ import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
 import 'package:i_can_fly/page/airplane/orientation_widget.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
+import '../../common/common_actions_menu.dart';
 import '../../entity/airplane.dart';
 
 class AirplanePage extends StatefulWidget {
@@ -74,8 +75,9 @@ class _AirplanePageState extends State<AirplanePage> {
         title: const Text('Instructions'),
         content: const Text(
           '1. Tap on an airplane to edit its details.\n'
-              '2. Long press on an airplane to delete it.\n'
-              '3. Use the floating action button to add a new airplane.',
+              '     a. Select the Delete button to delete the item.\n'
+              '     b. Fill every field as they are all required.\n'
+              '2. Use the floating action button to add a new airplane.',
         ),
         actions: [
           TextButton(
@@ -142,9 +144,15 @@ class _AirplanePageState extends State<AirplanePage> {
           title: const Text('Airplanes'),
           backgroundColor: Color(CTColor.Teal.colorValue),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.info),
-              onPressed: () => _showInstructions(context),
+            CommonActionsMenu(
+              additionalItems: [
+                PopupMenuItem(
+                  child: TextButton(
+                    onPressed: () => _showInstructions(context),
+                    child: const Text("Instructions"),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -159,16 +167,28 @@ class _AirplanePageState extends State<AirplanePage> {
         appBar: AppBar(
           title: const Text('Airplanes'),
           backgroundColor: Color(CTColor.Teal.colorValue),
+          actions: [
+            CommonActionsMenu(
+              additionalItems: [
+                PopupMenuItem(
+                  child: TextButton(
+                    onPressed: () => _showInstructions(context),
+                    child: const Text("Instructions"),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
         body: Row(
           children: [
             Expanded(
-              flex: 2, // Adjust the width of the list
+              flex: 2,
               child: _buildAirplaneList(),
             ),
             if (selectedAirplane != null)
               Expanded(
-                flex: 3, // Adjust the width of the details page
+                flex: 3,
                 child: ManageAirplanePage(
                   airplane: selectedAirplane,
                   isEditMode: true,

@@ -9,18 +9,23 @@ import 'package:flutter/material.dart';
 /// - Views Planes
 /// - Views Customers
 /// - Views Reservations
+/// - Logout
+/// - Instructions
 class CommonActionsMenu extends StatelessWidget {
+  final List<PopupMenuItem> additionalItems;
+
   const CommonActionsMenu({
     super.key,
+    this.additionalItems = const [],
   });
-
 
   @override
   Widget build(BuildContext context) {
     EncryptedSharedPreferences esp = EncryptedSharedPreferences();
 
     return PopupMenuButton(itemBuilder: (BuildContext context) {
-      return [
+      // Common menu items
+      List<PopupMenuItem> items = [
         PopupMenuItem(
           child: TextButton(
             onPressed: () {
@@ -61,7 +66,7 @@ class CommonActionsMenu extends StatelessWidget {
             child: const Text("Views Reservations"),
           ),
         ),
-        
+        ...additionalItems,
         PopupMenuItem(
           child: OutlinedButton(
             onPressed: () {
@@ -72,6 +77,7 @@ class CommonActionsMenu extends StatelessWidget {
           ),
         ),
       ];
+      return items;
     });
   }
 }
