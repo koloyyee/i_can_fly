@@ -6,6 +6,7 @@ import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
+import 'package:i_can_fly/page/customer/customer_home_page.dart';
 import 'package:i_can_fly/page/customer/customer_list.dart';
 import 'package:i_can_fly/page/customer/customer_login_page.dart';
 import 'package:i_can_fly/page/customer/customer_register_page.dart';
@@ -153,71 +154,6 @@ class HomePage extends StatelessWidget {
                     context, "/reservation");
               },
               child: const Text("Reservation Page"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomerHomePage extends StatelessWidget {
-  final Customer customer;
-
-  const CustomerHomePage({super.key, required this.customer});
-
-  @override
-  Widget build(BuildContext context) {
-    final database = $FloorAppDatabase.databaseBuilder('app_database.db').build();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home Page"),
-        backgroundColor: Colors.teal,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Welcome to your home page!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Choose your preference',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  "/edit-customer",
-                  arguments: customer,
-                );
-              },
-              child: const Text("Edit Profile"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FutureBuilder<AppDatabase>(
-                      future: database,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return ReservationListPage(flightDao: snapshot.data!.flightDao);
-                        } else {
-                          return const CircularProgressIndicator();
-                        }
-                      },
-                    ),
-                  ),
-                );
-              },
-              child: const Text("Make a Reservation"),
             ),
           ],
         ),
