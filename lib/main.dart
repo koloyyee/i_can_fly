@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/db/database_initializer.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/page/admin/admin_login.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    AppDatabase.getInstance().then((db) => print(db.database));
     return DatabaseInitializer(
       builder: (database) {
         return MaterialApp(
