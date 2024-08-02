@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/utils/theme-color.dart';
+import 'package:i_can_fly/utils/theme_color.dart';
 import 'package:intl/intl.dart';
 
 /// A StatefulWidget that represents the edit flight page.
