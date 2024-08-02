@@ -10,7 +10,7 @@ class CustomerListPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final AppDatabase database;
 
-  CustomerListPage({Key? key, required this.database}) : super(key: key);
+  CustomerListPage({super.key, required this.database});
 
   Future<List<Customer>> _fetchCustomers() async {
     try {
@@ -88,7 +88,7 @@ class CustomerListPage extends StatelessWidget {
                 final createdAtDateTime = customer.createdAt;
                 return ListTile(
                   title: Text(customer.name),
-                  subtitle: Text('${DateFormat('yyyy-MM-dd').format(birthdayDateTime)}'),
+                  subtitle: Text(DateFormat('yyyy-MM-dd').format(birthdayDateTime)),
                   onTap: () {
                     // Handle tap for viewing or editing the customer
                   },

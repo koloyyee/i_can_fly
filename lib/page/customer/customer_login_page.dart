@@ -44,7 +44,7 @@ class _CustomerLoginPageState extends State<CustomerLoginPage> {
 
     // Ensure appLocalizations is not null
     if (appLocalizations == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: Text('Localizations not found')),
       );
     }
@@ -112,7 +112,7 @@ class _CustomerLoginPageState extends State<CustomerLoginPage> {
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: appLocalizations.translate('email'),
-                    hintText: appLocalizations.translate('email') + ' ' + appLocalizations.translate('e.g_example'),
+                    hintText: '${appLocalizations.translate('email')} ${appLocalizations.translate('e.g_example')}',
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {

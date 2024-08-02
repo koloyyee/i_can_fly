@@ -182,7 +182,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(context)?.translate('email_required') ?? 'Email is required';
                     }
-                    final emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
                     final regExp = RegExp(emailPattern);
                     if (!regExp.hasMatch(value)) {
                       return AppLocalizations.of(context)?.translate('invalid_email') ?? 'Invalid email address';

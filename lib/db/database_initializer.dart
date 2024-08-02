@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
-import 'package:i_can_fly/db/database_manager.dart';
 
 /// Class that handles the FutureBuilder for database initialization.
 /// This separates the database initialization from other classes,
@@ -8,7 +7,7 @@ import 'package:i_can_fly/db/database_manager.dart';
 class DatabaseInitializer extends StatelessWidget {
   final Widget Function(AppDatabase database) builder;
 
-  const DatabaseInitializer({Key? key, required this.builder}) : super(key: key);
+  const DatabaseInitializer({super.key, required this.builder});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class DatabaseInitializer extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

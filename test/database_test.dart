@@ -2,9 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/customer.dart';
-import 'package:floor/floor.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() {
   late AppDatabase database;
@@ -37,7 +34,7 @@ void main() {
     expect(retrievedCustomer.email, 'john.doe@example.com');
 
     // Allow a tolerance for datetime comparison
-    final tolerance = Duration(seconds: 10); // Adjust tolerance as needed
+    const tolerance = Duration(seconds: 10); // Adjust tolerance as needed
 
     // Print values for debugging
     print('Original birthday: ${customer.birthday}');

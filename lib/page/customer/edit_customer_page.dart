@@ -190,7 +190,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: birthdayController,
-                decoration: InputDecoration(labelText: appLocalizations.translate('birthday') + ' (yyyy-MM-dd)'),
+                decoration: InputDecoration(labelText: '${appLocalizations.translate('birthday')} (yyyy-MM-dd)'),
               ),
               const SizedBox(height: 20),
               Row(

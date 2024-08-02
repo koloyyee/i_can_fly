@@ -28,23 +28,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    _initializeDatabase();
-    _loadSavedCredentials();
-  }
-
-  Future<void> _initializeDatabase() async {
-    final database = await AppDatabase.getInstance();
-    setState(() {
-      adminDao = database.adminDao;
+    AppDatabase.getInstance().then((db) => adminDao = db.adminDao);
+    esp.getString("email").then((value) {
+      _emailController.text = value;
     });
-  }
-
-  Future<void> _loadSavedCredentials() async {
-    final email = await esp.getString("email");
-    final password = await esp.getString("password");
-    setState(() {
-      _emailController.text = email ?? "";
-      _passwordController.text = password ?? "";
+    esp.getString("password").then((value) {
+      _passwordController.text = value;
     });
   }
 
@@ -59,80 +48,83 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  key: const Key("emailField"),
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    hintText: "e.g: abc@def.com",
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter email";
-                    }
-                    String pattern =
-                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                    RegExp regex = RegExp(pattern);
-                    if (!regex.hasMatch(value)) {
-                      return "Please enter a valid email address";
-                    }
-                    return null;
-                  },
+          child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                key: const Key("emailField"),
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  hintText: "e.g: abc@def.com",
                 ),
-                const SizedBox(height: 20),
-                const Text("Password"),
-                const SizedBox(height: 10),
-                TextFormField(
-                  key: const Key("passwordField"),
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
-                    hintText: "Password",
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter password";
-                    }
-                    if (value.length < 8) {
-                      return "Password must be at least 8 characters";
-                    }
-                    return null;
-                  },
-                  obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter email";
+                  }
+                  String pattern =
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                  RegExp regex = RegExp(pattern);
+                  if (!regex.hasMatch(value)) {
+                    return "Please enter a valid email address";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              const Text("Password"),
+              const SizedBox(height: 10),
+              TextFormField(
+                key: const Key("passwordField"),
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  hintText: "Password",
                 ),
-                const SizedBox(height: 50),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      String email = _emailController.text.toLowerCase();
-                      String password = _passwordController.text;
-
-                      // Ensure adminDao is initialized
-                      // login
-                      final user = await adminDao.findAdminByEmail(email);
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter password";
+                  }
+                  if (value.length < 8) {
+                    return "Password must be at least 8 characters";
+                  }
+                  return null;
+                },
+                obscureText: true,
+              ),
+              const SizedBox(height: 50),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    String email = _emailController.value.text.toLowerCase();
+                    String password = _passwordController.value.text;
+                    // login
+                    adminDao.findAdminByEmail(email).then((user) {
                       if (user != null) {
-                        if (user.password == password) {
-                          await esp.setString("email", user.email);
-                          await esp.setString("password", user.password);
+                        if (user.password == password &&
+                            user.email.toLowerCase() == email) {
+                          esp.setString("email", user.email);
+                          esp.setString("password", user.password);
                           Navigator.pushNamed(context, "/flights");
-                        } else {
+                        }  else {
+                          // some error message
                           loginFailed(context, "Invalid email or password");
                         }
                       } else {
+                        // some error message
                         loginFailed(context, "No user found");
+                        
                       }
-                                        }
-                  },
-                  child: const Text("Login"),
-                ),
-                const SizedBox(height: 20),
-                OutlinedButton(
+                    });
+                  }
+                },
+                child: const Text("Login"),
+              ),
+              const SizedBox(height: 20),
+              OutlinedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, "/admin-register");
                   },
@@ -166,4 +158,3 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
     );
   }
 }
-

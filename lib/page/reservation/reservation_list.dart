@@ -1,76 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
-import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/page/reservation/reservation_details.dart';
-import 'package:i_can_fly/page/reservation/add_reservation.dart';
+import 'package:i_can_fly/dao/reservation_dao.dart';
+import 'package:i_can_fly/db/database.dart';
+import 'package:i_can_fly/entity/reservation.dart';
+import 'package:i_can_fly/page/reservation/add_reservation_page.dart';
+import 'package:i_can_fly/page/reservation/reservation_details_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-/// A StatefulWidget that displays a list of flight reservations.
-///
-/// This widget interacts with a FlightDao to fetch and display flight details.
+
+
 class ReservationListPage extends StatefulWidget {
-  /// The FlightDao instance for performing database operations.
-  final FlightDao flightDao;
+  final FlightDao flightDao; // Add flightDao as a parameter
 
-  /// Creates an instance of ReservationListPage.
-  ///
-  /// The [flightDao] parameter is required.
   const ReservationListPage({super.key, required this.flightDao});
-
   @override
   _ReservationListPageState createState() => _ReservationListPageState();
 }
 
 class _ReservationListPageState extends State<ReservationListPage> {
-  late Future<List<Flight>> _flights;
+  
+  late ReservationDao reservationDao;
+  List<Reservation> reservationList = [];
 
   @override
   void initState() {
     super.initState();
-    _flights = widget.flightDao.findAllFlights(); // Assuming this method fetches all flights
+    _initializeDatabase();
+  }
+
+  Future<void> _initializeDatabase() async {
+    final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    reservationDao = database.reservationDao;
+    _fetchReservation();
+  }
+
+  Future<void> _fetchReservation() async {
+    final reservations = await reservationDao.findAllReservation();
+    setState(() {
+      reservationList = reservations;
+    });
+  }
+
+  void _navigateToAddReservationPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddReservationPage()),
+    );
+
+    if (result != null && result) {
+      // Fetch the updated list
+      _fetchReservation();
+      Fluttertoast.showToast(msg: 'New reservation added with success');
+    }
+  }
+
+  void _navigateToReservationDetailsPage(Reservation reservation) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ReservationDetailsPage(reservation: reservation)),
+    );
+
+    if (result != null && result) {
+      // Fetch the updated list
+      _fetchReservation();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flight Reservations"),
+        title: const Text('Reservation List'),
+        backgroundColor: Colors.teal,
       ),
-      body: FutureBuilder<List<Flight>>(
-        future: _flights,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            }
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: _navigateToAddReservationPage,
+              child: const Text("Add Reservation"),
+            ),
+          ),
+          Expanded(
+            child: reservationList.isEmpty
+                ? const Center(child: Text("No reservations found."))
+                : ListView.builder(
+              itemCount: reservationList.length,
               itemBuilder: (context, index) {
-                Flight flight = snapshot.data![index];
+                final reservation = reservationList[index];
                 return ListTile(
-                  title: Text("Flight to ${flight.arrivalCity} from ${flight.departureCity}"),
-                  subtitle: Text("Departure at ${flight.departureDateTime}"),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ReservationDetailsPage(flight: flight),
-                    ));
-                  },
+                  title: Text(reservation.reservationName),
+                  onTap: () => _navigateToReservationDetailsPage(reservation),
                 );
               },
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => AddReservationPage(flightDao: widget.flightDao), // Adjust according to how you handle flight creation
-          ));
-        },
-        tooltip: 'Add New Flight',
-        child: const Icon(Icons.add),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
