@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/common/common_actions_menu.dart';
 import 'package:i_can_fly/page/flight/view_flights_list.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 
 /// This page will simulate an airline keeping a list of flights between two cities.
@@ -31,7 +32,7 @@ class _FlightsPageState extends State<FlightsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("See All Your Flights Here!", style: TextStyle(color: Colors.white),),
+        title: Text(lookupTranslate(context, "flight_page_title"), style: TextStyle(color: Colors.white),),
         backgroundColor: Color(CTColor.Teal.colorValue),
       actions: const [
         CommonActionsMenu()

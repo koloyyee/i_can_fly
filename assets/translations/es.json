@@ -56,6 +56,7 @@
  "Please_select_a_valid_airplane_type": "Por favor seleccione un tipo de avión válido",
   "arrival_date": "Fecha de Llegada",
   "confirm_delete": "¿Estás seguro de que quieres eliminar el vuelo de",
-  "to" : "a"
+  "to" : "a",
+  "flight_page_title": "¡Vea Todos Sus Vuelos Aquí!"
 
 }

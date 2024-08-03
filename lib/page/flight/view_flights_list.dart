@@ -4,6 +4,7 @@ import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/page/airplane/orientation_widget.dart';
 import 'package:i_can_fly/page/flight/edit_flight_page.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 import 'package:intl/intl.dart';
 
 /// A StatefulWidget that represents the list of flights.
@@ -221,18 +222,18 @@ class FlightDetails extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text("Departure City: ${flight.departureCity}"),
+            title: Text("${lookupTranslate(context, "departure_city")}: ${flight.departureCity}"),
           ),
           ListTile(
-            title: Text("Arrival City: ${flight.arrivalCity}"),
-          ),
-          ListTile(
-            title: Text(
-                "Departure Date: ${formatter.format(flight.departureDateTime)}"),
+            title: Text("${lookupTranslate(context, "arrival_city")}: ${flight.arrivalCity}"),
           ),
           ListTile(
             title: Text(
-                "Arrival Date: ${formatter.format(flight.arrivalDateTime)}"),
+                "${lookupTranslate(context, "departure_date")}: ${formatter.format(flight.departureDateTime)}"),
+          ),
+          ListTile(
+            title: Text(
+                "${lookupTranslate(context, "arrival_date")}: ${formatter.format(flight.arrivalDateTime)}"),
           ),
           ElevatedButton(
             onPressed: () {
@@ -246,7 +247,7 @@ class FlightDetails extends StatelessWidget {
                 Navigator.pop(context);
               });
             },
-            child: const Text("Edit Flight"),
+            child: Text(lookupTranslate(context, "update")),
           )
         ],
       ),
