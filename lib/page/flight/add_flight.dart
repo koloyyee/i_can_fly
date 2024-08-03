@@ -261,8 +261,8 @@ class _AddFlightPageState extends State<AddFlightPage> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(
                                         SnackBar(
-                                            duration: const Duration(milliseconds: 230),
-                                            content: Text(lookupTranslate(context, "flight_added_successfully"))),
+                                            duration: const Duration(seconds: 2),
+                                            content: Text(lookupTranslate(context, "new_flight_added"))),
                                       )
                                       .closed
                                       .then((reason) {

@@ -257,10 +257,12 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                            duration: const Duration(microseconds: 250),
+                                            duration: const Duration(seconds: 2),
                                               content:
                                                   Text("${lookupTranslate(context, "update")}!")),
-                                        );
+                                        ).closed.then((reason) {
+                                          Navigator.pop(context, true);
+                                        });
                                       });
                                     }
                                   });
