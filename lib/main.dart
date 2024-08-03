@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:i_can_fly/common/language_drawer.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/db/database_initializer.dart';
@@ -78,9 +79,9 @@ class _MyAppState extends State<MyApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          initialRoute: "/welcome",
+          initialRoute: "/",
           routes: {
-            "/welcome": (context) => const WelcomePage(),
+            // "/welcome": (context) => const WelcomePage(),
             "/": (context) => const HomePage(),
             "/customer-home": (context) {
               final customer = ModalRoute.of(context)?.settings.arguments as Customer?;
@@ -134,6 +135,7 @@ class HomePage extends StatelessWidget {
         title: const Text("Welcome to I Can Fly"),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
+      endDrawer: const LanguageDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(70.0),
         children: [
