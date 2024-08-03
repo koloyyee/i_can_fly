@@ -87,8 +87,8 @@ class _MyAppState extends State<MyApp> {
               return CustomerHomePage(customer: customer!);
             },
             "/flights": (context) => const FlightsPage(),
-            "/admin-login": (context) => const AdminLoginPage(),
-            "/admin-register": (context) => const AdminRegisterPage(),
+            // "/admin-login": (context) => const AdminLoginPage(),
+            // "/admin-register": (context) => const AdminRegisterPage(),
             "/add-flight": (context) => const AddFlightPage(),
             "/customer-login": (context) => CustomerLoginPage(database: database),
             "/customer-register": (context) => const CustomerRegisterPage(),
@@ -141,7 +141,7 @@ class HomePage extends StatelessWidget {
             title: 'Flights List',
             imagePath: 'images/flights.jpg',
             context: context,
-            routeName: '/admin-login',
+            routeName: '/flights',
           ),
           _buildButton(
             title: 'Airplanes List',
