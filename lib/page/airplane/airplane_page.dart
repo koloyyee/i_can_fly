@@ -5,6 +5,7 @@ import 'package:i_can_fly/page/airplane/orientation_widget.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 import '../../common/common_actions_menu.dart';
 import '../../entity/airplane.dart';
+import '../../utils/app_localizations.dart';
 
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});
@@ -52,10 +53,11 @@ class _AirplanePageState extends State<AirplanePage> {
   void _deleteAirplane(BuildContext context, Airplane airplane) async {
     final database = await AppDatabase.getInstance();
     await database.airplaneDao.deleteAirplane(airplane);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Airplane deleted'),
+      SnackBar(
+        content: Text(appLocalizations.translate('airplane_deleted')),
       ),
     );
 
@@ -69,27 +71,32 @@ class _AirplanePageState extends State<AirplanePage> {
   }
 
   void _showInstructions(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Instructions'),
-        content: const Text(
-          '1. Tap on an airplane to edit its details.\n'
-              '     a. Select the Delete button to delete the item.\n'
-              '     b. Fill every field as they are all required.\n'
-              '2. Use the floating action button to add a new airplane.',
+        title: Text(appLocalizations.translate('instructions')),
+        content: Text(
+          '${appLocalizations.translate('instructions_step_1')}\n'
+              '    ${appLocalizations.translate('instructions_step_1a')}\n'
+              '    ${appLocalizations.translate('instructions_step_1b')}\n'
+              '${appLocalizations.translate('instructions_step_2')}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: Text(appLocalizations.translate('ok')),
           ),
         ],
       ),
     );
   }
 
+
   Widget _buildAirplaneList() {
+    final appLocalizations = AppLocalizations.of(context)!;
+
     return FutureBuilder<List<Airplane>>(
       future: _airplanes,
       builder: (context, snapshot) {
@@ -98,7 +105,7 @@ class _AirplanePageState extends State<AirplanePage> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No airplanes found.'));
+          return Center(child: Text(appLocalizations.translate('no_airplanes_found')));
         } else {
           final airplanes = snapshot.data!;
           return ListView.builder(
@@ -123,7 +130,7 @@ class _AirplanePageState extends State<AirplanePage> {
                   child: ListTile(
                     leading: Icon(Icons.airplane_ticket, color: Color(CTColor.Teal.colorValue)), // Add icon here
                     title: Text(airplane.type),
-                    subtitle: Text('Capacity: ${airplane.capacity}'),
+                    subtitle: Text('${AppLocalizations.of(context)!.translate('capacity')}: ${airplane.capacity}'),
                   ),
                 ),
               );
@@ -138,10 +145,12 @@ class _AirplanePageState extends State<AirplanePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
+
     return OrientationWidget(
       portraitChild: Scaffold(
         appBar: AppBar(
-          title: const Text('Airplanes'),
+          title: Text(appLocalizations.translate('airplanes')),
           backgroundColor: Color(CTColor.Teal.colorValue),
           actions: [
             CommonActionsMenu(
@@ -149,7 +158,7 @@ class _AirplanePageState extends State<AirplanePage> {
                 PopupMenuItem(
                   child: TextButton(
                     onPressed: () => _showInstructions(context),
-                    child: const Text("Instructions"),
+                    child: Text(appLocalizations.translate('instructions')),
                   ),
                 ),
               ],
@@ -165,7 +174,7 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
       landscapeChild: Scaffold(
         appBar: AppBar(
-          title: const Text('Airplanes'),
+          title: Text(appLocalizations.translate('airplanes')),
           backgroundColor: Color(CTColor.Teal.colorValue),
           actions: [
             CommonActionsMenu(
@@ -173,7 +182,7 @@ class _AirplanePageState extends State<AirplanePage> {
                 PopupMenuItem(
                   child: TextButton(
                     onPressed: () => _showInstructions(context),
-                    child: const Text("Instructions"),
+                    child: Text(appLocalizations.translate('instructions')),
                   ),
                 ),
               ],

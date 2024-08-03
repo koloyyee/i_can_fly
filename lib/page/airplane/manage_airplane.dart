@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
+import '../../utils/app_localizations.dart';
 
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
@@ -41,12 +42,13 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
   }
 
   void _save() async {
+    final appLocalizations = AppLocalizations.of(context)!;
     if (_typeController.text.isEmpty ||
         _capacityController.text.isEmpty ||
         _maxSpeedController.text.isEmpty ||
         _maxRangeController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill out all the fields')),
+        SnackBar(content: Text(appLocalizations.translate('fill_all_fields'))),
       );
       return;
     }
@@ -65,12 +67,12 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       if (widget.isEditMode) {
         await dao.updateAirplane(airplane);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Airplane Updated')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.translate('airplane_updated'))),
         );
       } else {
         await dao.createAirplane(airplane);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Airplane Created')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.translate('airplane_created'))),
         );
       }
 
@@ -88,16 +90,16 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this airplane?'),
+        title: Text(AppLocalizations.of(context)!.translate('confirm_delete')),
+        content: Text(AppLocalizations.of(context)!.translate('confirm_delete_message')),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Yes'),
+            child: Text(AppLocalizations.of(context)!.translate('yes')),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('No'),
+            child: Text(AppLocalizations.of(context)!.translate('no')),
           ),
         ],
       ),
@@ -110,13 +112,13 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
         await dao.deleteAirplane(widget.airplane!);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Airplane Deleted')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.translate('airplane_deleted'))),
         );
 
         Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting airplane: $e')),
+          SnackBar(content: Text('${AppLocalizations.of(context)!.translate('error_deleting_airplane')}: $e')),
         );
       }
     }
@@ -131,27 +133,35 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              widget.isEditMode ? 'Edit Airplane' : 'Add Airplane',
+              widget.isEditMode ? AppLocalizations.of(context)!.translate('edit_airplane') : AppLocalizations.of(context)!.translate('add_airplane'),
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
             TextField(
               controller: _typeController,
-              decoration: const InputDecoration(labelText: 'Airplane Type'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.translate('airplane_type'),
+              ),
             ),
             TextField(
               controller: _capacityController,
-              decoration: const InputDecoration(labelText: 'Passenger Capacity'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.translate('passenger_capacity'),
+              ),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: _maxSpeedController,
-              decoration: const InputDecoration(labelText: 'Max Speed'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.translate('max_speed'),
+              ),
               keyboardType: TextInputType.number,
             ),
             TextField(
               controller: _maxRangeController,
-              decoration: const InputDecoration(labelText: 'Max Range/Distance'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.translate('max_range'),
+              ),
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 20),
@@ -160,16 +170,18 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
               children: [
                 ElevatedButton(
                   onPressed: _save,
-                  child: Text(widget.isEditMode ? 'Update' : 'Save'),
+                  child: Text(widget.isEditMode
+                      ? AppLocalizations.of(context)!.translate('update')
+                      : AppLocalizations.of(context)!.translate('save')),
                 ),
                 if (widget.isEditMode)
                   ElevatedButton(
                     onPressed: _delete,
-                    child: const Text('Delete'),
+                    child: Text(AppLocalizations.of(context)!.translate('delete')),
                   ),
                 ElevatedButton(
                   onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/airplanes')),
-                  child: const Text('Cancel'),
+                  child: Text(AppLocalizations.of(context)!.translate('cancel')),
                 ),
               ],
             ),

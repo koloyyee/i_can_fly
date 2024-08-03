@@ -27,7 +27,36 @@
   "edit_profile": "Editar Perfil",
   "delete_customer": "Eliminar",
   "customer_list": "Lista the consumidores",
-  "add_customer": "Adicionar consumidor"
+  "add_customer": "Adicionar consumidor",
+
+  "airplanes": "Aviones",
+  "instructions": "Instrucciones",
+  "airplane_type": "Tipo de Avión",
+  "passenger_capacity": "Capacidad de Pasajeros",
+  "max_speed": "Velocidad Máxima",
+  "max_range": "Rango Máximo",
+  "edit_airplane": "Editar Avión",
+  "add_airplane": "Agregar Avión",
+  "save": "Guardar",
+  "airplane_deleted": "Avión eliminado",
+  "airplane_created": "Avión creado",
+  "airplane_updated": "Avión actualizado",
+  "confirm_delete": "Confirmar Eliminación",
+  "confirm_delete_message": "¿Está seguro de que desea eliminar este avión?",
+  "yes": "Sí",
+  "no": "No",
+  "fill_all_fields": "Por favor, complete todos los campos",
+  "error_saving_airplane": "Error al guardar el avión: {error}",
+  "error_deleting_airplane": "Error al eliminar el avión",
+  "instructions_step_1": "1. Toca un avión para editar sus detalles.",
+  "instructions_step_1a": "    a. Selecciona el botón Eliminar para borrar el ítem.",
+  "instructions_step_1b": "    b. Rellena cada campo, ya que todos son obligatorios.",
+  "instructions_step_2": "2. Usa el botón flotante para agregar un nuevo avión.",
+  "ok": "OK",
+  "no_airplanes_found": "No se encontraron aviones.",
+  "capacity": "Capacidad"
+
+
 }
 
 
