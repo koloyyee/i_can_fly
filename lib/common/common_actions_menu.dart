@@ -56,7 +56,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/customers");
             },
-            child: Text(lookupTranslate(context, "view_customer")),
+            child: Text(lookupTranslate(context, "view_customers")),
           ),
         ),
         PopupMenuItem(
