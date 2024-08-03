@@ -45,8 +45,6 @@ class _FlightsPageState extends State<FlightsPage> {
     floatingActionButton: FloatingActionButton(
       onPressed: () {
           Navigator.pushNamed(context, "/add-flight");
-        // showModalBottomSheet(context: context, builder: (BuildContext context) {
-        // });
       },
       child: const Icon(Icons.add),
     ),

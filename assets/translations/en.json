@@ -58,6 +58,11 @@
  "Please_select_a_valid_airplane_type": "Please select a valid airplane type",
  "confirm_delete": "Are you sure you want to delete the flight from",
  "to": "to",
- "flight_page_title" :"See All Your Flights Here!"
+ "flight_page_title" :"See All Your Flights Here!",
+ "home" :"Home",
+ "add_flight" :"Add Flight",
+ "view_customers" :"View Customers",
+  "view_reservations" :"View Reservations",
+  "view_planes" :"View Planes"
 
 }
