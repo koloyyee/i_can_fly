@@ -53,7 +53,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat formatter = DateFormat('yy-mm-dd – kk:mm');
+    DateFormat formatter = DateFormat('yy-MM-dd – kk:mm');
     fetchFlights();
     return flights.isEmpty
         ? Center(
