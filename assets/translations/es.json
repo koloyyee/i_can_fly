@@ -43,5 +43,14 @@
   "new_flight_added": "¡Nuevo Vuelo Agregado!",
   "add_new_flight": "Agregar Nuevo Vuelo",
   "see_all_your_flights_here": "¡Vea todos sus vuelos aquí!",
-  "submit": "Enviar"
+  "submit": "Enviar",
+  "update_the_flight": "¡Actualiza el vuelo!",
+  "please_enter_a_valid_email_address": "Por favor, introduzca una dirección de correo electrónico válida",
+  "admin_login": "Inicio de sesión de administrador",
+  "please_enter_password": "Por favor, introduzca la contraseña",
+  "please_enter_email": "Por favor, introduzca el correo electrónico",
+  "invalid_email_or_password": "Correo electrónico o contraseña no válidos",
+  "no_user_found": "No se encontró usuario",
+
+   "admin_register": "Registro de Administrador"
 }

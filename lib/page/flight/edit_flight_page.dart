@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
+import 'package:i_can_fly/utils/app_localizations.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 import 'package:intl/intl.dart';
 
@@ -130,9 +131,10 @@ class _EditFlightPageState extends State<EditFlightPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
+          AppLocalizations.of(context)?.translate("update_the_flight") ??
           "Update the Flight!",
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
         // leading: IconButton( icon: Icon(Icons.arrow_back),

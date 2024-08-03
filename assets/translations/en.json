@@ -43,5 +43,14 @@
   "new_flight_added": "New Flight Added!",
   "add_new_flight": "Add New Flight",
   "see_all_your_flights_here": "See All Your Flights Here!",
-  "submit": "Submit"
+  "submit": "Submit",
+  "update_the_flight": "Update the Flight!",
+  "please_enter_a_valid_email_address": "Please enter a valid email address",
+  "admin_login": "Admin Login",
+  "please_enter_password": "Please enter password",
+  "please_enter_email": "Please enter email",
+  "password_min_length": "Password must be at least 8 characters",
+  "invalid_email_or_password": "Invalid email or password",
+  "no_user_found": "No user found",
+   "admin_register": "Admin Register"
 }

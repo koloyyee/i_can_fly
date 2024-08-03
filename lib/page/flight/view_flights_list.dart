@@ -31,6 +31,10 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     super.initState();
     fetchFlights();
   }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   void fetchFlights() {
     AppDatabase.getInstance().then((db) {
