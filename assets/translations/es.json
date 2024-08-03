@@ -27,9 +27,21 @@
   "edit_profile": "Editar Perfil",
   "delete_customer": "Eliminar",
   "customer_list": "Lista the consumidores",
-  "add_customer": "Adicionar consumidor"
+  "add_customer": "Adicionar consumidor",
+  "departure_city": "Ciudad de Salida",
+  "please_select_a_valid_time": "Por favor seleccione una hora válida",
+  "please_enter_a_valid_city": "Por favor ingrese una ciudad válida",
+  "select_date": "Seleccionar Fecha",
+  "departure_date": "Fecha de Salida",
+  "select_departure_time": "Seleccionar Hora de Salida",
+  "departure_time": "Hora de Salida",
+  "arrival_city": "Ciudad de Llegada",
+  "select_arrival_time": "Seleccionar Hora de Llegada",
+  "arrival_time": "Hora de Llegada",
+  "select_airplane_type": "Seleccionar Tipo de Avión",
+  "processing_data": "Procesando Datos",
+  "new_flight_added": "¡Nuevo Vuelo Agregado!",
+  "add_new_flight": "Agregar Nuevo Vuelo",
+  "see_all_your_flights_here": "¡Vea todos sus vuelos aquí!",
+  "submit": "Enviar"
 }
-
-
-
-

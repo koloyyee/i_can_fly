@@ -263,7 +263,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(
                                         const SnackBar(
-                                            duration: Duration(seconds: 3),
+                                            duration: Duration(milliseconds: 230),
                                             content: Text('New Flight Added!')),
                                       )
                                       .closed

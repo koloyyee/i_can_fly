@@ -27,5 +27,21 @@
   "edit_profile": "Edit Profile",
   "delete_customer": "Delete Customer",
   "customer_list": "Customer List",
-  "add_customer": "Add Customer"
+  "add_customer": "Add Customer",
+  "departure_city": "Departure City",
+  "please_select_a_valid_time": "Please select a valid time",
+  "please_enter_a_valid_city": "Please enter a valid city",
+  "select_date": "Select Date",
+  "departure_date": "Departure Date",
+  "select_departure_time": "Select Departure Time",
+  "departure_time": "Departure Time",
+  "arrival_city": "Arrival City",
+  "select_arrival_time": "Select Arrival Time",
+  "arrival_time": "Arrival Time",
+  "select_airplane_type": "Select Airplane Type",
+  "processing_data": "Processing Data",
+  "new_flight_added": "New Flight Added!",
+  "add_new_flight": "Add New Flight",
+  "see_all_your_flights_here": "See All Your Flights Here!",
+  "submit": "Submit"
 }
