@@ -18,6 +18,7 @@ import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/page/welcome.dart';
 import 'package:i_can_fly/utils/app_localizations.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 
 import 'package:i_can_fly/utils/theme_color.dart';
 
@@ -132,7 +133,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Welcome to I Can Fly"),
+        title:  Text(lookupTranslate(context, "welcome_to")),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
       endDrawer: const LanguageDrawer(),
@@ -140,31 +141,31 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(70.0),
         children: [
           _buildButton(
-            title: 'Flights List',
+            title: lookupTranslate(context, "flights_list"),
             imagePath: 'images/flights.jpg',
             context: context,
             routeName: '/flights',
           ),
           _buildButton(
-            title: 'Airplanes List',
+            title: lookupTranslate(context, "airplanes_list"),
             imagePath: 'images/airplane.jpg',
             context: context,
             routeName: '/airplanes',
           ),
           _buildButton(
-            title: 'Airlines List',
+            title: lookupTranslate(context, "airline_list"),
             imagePath: 'images/airline.jpg',
             context: context,
             routeName: '/airlines',
           ),
           _buildButton(
-            title: 'Customer List',
+            title: lookupTranslate(context, "customer_list"),
             imagePath: 'images/Customers.jpg',
             context: context,
             routeName: '/customers',
           ),
           _buildButton(
-            title: 'Reservation Page',
+            title: lookupTranslate(context, "reservations_list"),
             imagePath: 'images/Reservation.jpeg',
             context: context,
             routeName: '/reservations',

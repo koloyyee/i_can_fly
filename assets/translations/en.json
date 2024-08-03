@@ -63,6 +63,11 @@
  "add_flight" :"Add Flight",
  "view_customers" :"View Customers",
   "view_reservations" :"View Reservations",
-  "view_planes" :"View Planes"
-
+  "view_planes" :"View Planes",
+  "welcome_to": "Welcome to I Can Fly",
+  "flights_list": "Flights List",
+  "airplanes_list": "Airplanes List",
+  "airline_list": "Airline List",
+  "reservations_list": "Reservation List"
+  
 }

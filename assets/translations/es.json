@@ -57,6 +57,10 @@
   "arrival_date": "Fecha de Llegada",
   "confirm_delete": "¿Estás seguro de que quieres eliminar el vuelo de",
   "to" : "a",
-  "flight_page_title": "¡Vea Todos Sus Vuelos Aquí!"
-
+  "flight_page_title": "¡Vea Todos Sus Vuelos Aquí!",
+  "welcome_to": "Bienvenido a I Can Fly",
+  "flights_list": "Lista de Vuelos",
+  "airplanes_list": "Lista de Aviones",
+  "airline_list": "Lista de Aerolíneas",
+  "reservations_list": "Lista de Reservas"
 }
