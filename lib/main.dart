@@ -152,12 +152,12 @@ class HomePage extends StatelessWidget {
             context: context,
             routeName: '/airplanes',
           ),
-          _buildButton(
-            title: lookupTranslate(context, "airline_list"),
-            imagePath: 'images/airline.jpg',
-            context: context,
-            routeName: '/airlines',
-          ),
+          // _buildButton(
+          //   title: lookupTranslate(context, "airline_list"),
+          //   imagePath: 'images/airline.jpg',
+          //   context: context,
+          //   routeName: '/airlines',
+          // ),
           _buildButton(
             title: lookupTranslate(context, "customer_list"),
             imagePath: 'images/Customers.jpg',
