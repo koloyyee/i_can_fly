@@ -53,6 +53,9 @@
   "no_user_found": "No se encontró usuario",
   "admin_register": "Registro de Administrador",
   "create_new_flight": "¡Crear un Nuevo Vuelo!",
- "Please_select_a_valid_airplane_type": "Por favor seleccione un tipo de avión válido"
+ "Please_select_a_valid_airplane_type": "Por favor seleccione un tipo de avión válido",
+  "arrival_date": "Fecha de Llegada",
+  "confirm_delete": "¿Estás seguro de que quieres eliminar el vuelo de",
+  "to" : "a"
 
 }
