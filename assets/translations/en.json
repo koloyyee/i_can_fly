@@ -64,6 +64,7 @@
   "arrival_city": "Arrival City",
   "select_arrival_time": "Select Arrival Time",
   "arrival_time": "Arrival Time",
+
    "arrival_date": "Arrival Date",
   "select_airplane_type": "Select Airplane Type",
   "processing_data": "Processing Data",
