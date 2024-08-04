@@ -266,7 +266,8 @@ class _AddFlightPageState extends State<AddFlightPage> {
                                       )
                                       .closed
                                       .then((reason) {
-                                    Navigator.pop(context);
+                                          Navigator.pushNamed(context, "/flights");
+                                    // Navigator.pop(context);
                                   });
                                 });
                               }

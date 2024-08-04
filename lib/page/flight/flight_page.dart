@@ -32,6 +32,7 @@ class _FlightsPageState extends State<FlightsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(lookupTranslate(context, "flight_page_title"), style: TextStyle(color: Colors.white),),
         backgroundColor: Color(CTColor.Teal.colorValue),
       actions: const [
