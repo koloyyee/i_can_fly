@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 import 'package:intl/intl.dart';
 
@@ -73,11 +74,11 @@ class _AddFlightPageState extends State<AddFlightPage> {
       context: context,
       initialTime: TimeOfDay.now(),
       errorInvalidText:
-          departureTime != null ? null : "Please select a valid time",
+          departureTime != null ? null : lookupTranslate(context, "please_select_a_valid_time") ,
+
     );
     if (picked != null) {
       setState(() {
-        print("Departure Time: ${picked.format(context)}");
         departureTime = picked;
       });
     }
@@ -88,11 +89,10 @@ class _AddFlightPageState extends State<AddFlightPage> {
       context: context,
       initialTime: TimeOfDay.now(),
       errorInvalidText:
-          arrivalTime != null ? null : "Please select a valid time",
+          arrivalTime != null ? null : lookupTranslate(context, "please_select_a_valid_time"),
     );
     if (picked != null) {
       setState(() {
-        print("Arrival Time: ${picked.format(context)}");
         arrivalTime = picked;
       });
     }
@@ -104,7 +104,6 @@ class _AddFlightPageState extends State<AddFlightPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDate: DateTime.now(),
-      // selectableDayPredicate: (day) => day.isAfter(DateTime.now()),
     );
     if (picked != null) {
       setState(() {
@@ -119,8 +118,6 @@ class _AddFlightPageState extends State<AddFlightPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDate: DateTime.now(),
-      // selectableDayPredicate: (day) =>
-      //     day.isAfter(departureDate ?? DateTime.now()),
     );
     if (picked != null) {
       setState(() {
@@ -133,9 +130,9 @@ class _AddFlightPageState extends State<AddFlightPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Create a New Trip!",
-            style: TextStyle(color: Colors.white),
+          title: Text(
+            lookupTranslate(context, "create_new_flight") ,
+            style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: Color(CTColor.Teal.colorValue),
         ),
@@ -159,12 +156,12 @@ class _AddFlightPageState extends State<AddFlightPage> {
                         TextFormField(
                           key: const Key("departureCityField"),
                           controller: departureCityController,
-                          decoration: const InputDecoration(
-                            labelText: "Departure City",
+                          decoration: InputDecoration(
+                            labelText: lookupTranslate(context, "departure_city"),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter a valid city";
+                              return lookupTranslate(context, "please_enter_a_valid_city");
                             }
                             return null;
                           },
@@ -173,24 +170,25 @@ class _AddFlightPageState extends State<AddFlightPage> {
                             key: const Key("departureDateButton"),
                             onPressed: () => _selectDepartureDate(context),
                             child: Text(departureDate == null
-                                ? "Select Date"
-                                : "Departure Date: ${DateFormat.yMd().format(departureDate!)}")),
+                                ? lookupTranslate(context, "select_date")
+                                : "${lookupTranslate(context, "departure_date")}: ${DateFormat.yMd().format(departureDate!)}")),
                         OutlinedButton(
                           key: const Key("departureTimeButton"),
                           onPressed: () => _selectDepartureTime(context),
                           child: Text(departureTime == null
-                              ? "Select Departure Time"
-                              : "Departure Time: ${departureTime!.format(context)}"),
+                              ? lookupTranslate(context, "select_departure_time")
+                              : "${lookupTranslate(context, "departure_time")}: ${departureTime!.format(context)}"),
+
                         ),
                         TextFormField(
                           key: const Key("arrivalCityField"),
                           controller: arrivalCityController,
-                          decoration: const InputDecoration(
-                            labelText: "Arrival City",
+                          decoration: InputDecoration(
+                            labelText: lookupTranslate(context, "arrival_city"),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter a valid city";
+                              return lookupTranslate(context, "please_enter_a_valid_city");
                             }
                             return null;
                           },
@@ -205,14 +203,14 @@ class _AddFlightPageState extends State<AddFlightPage> {
                           key: const Key("arrivalTimeButton"),
                           onPressed: () => _selectArrivalTime(context),
                           child: Text(arrivalTime == null
-                              ? "Select Arrival Time"
-                              : "Arrival Time: ${arrivalTime!.format(context)}"),
+                              ? lookupTranslate(context, "select_arrival_time") 
+                              : "${lookupTranslate(context, "arrival_time")}: ${arrivalTime!.format(context)}"),
                         ),
                         DropdownButtonFormField(
                             key: const Key("airplaneTypeDropdown"),
-                            hint: const Text("Select Airplane Type"),
+                            hint: Text(lookupTranslate(context, "select_airplane_type")),
                             validator: (value) => value == null
-                                ? "Please select a valid airplane type"
+                                ? lookupTranslate(context, "please_select_airplane_type") 
                                 : null,
                             items: _airplaneTypes
                                 .map((e) =>
@@ -229,9 +227,9 @@ class _AddFlightPageState extends State<AddFlightPage> {
                             // If the form is valid, display a snackbar. In the real world,
                             // you'd often call a server or save the information in a database.
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                duration: Duration(seconds: 1) ,
-                                content: Text('Processing Data')),
+                              SnackBar(
+                                duration: const Duration(seconds: 1) ,
+                                content: Text(lookupTranslate(context, "processing_data"))),
                             );
 
                             setState(() {
@@ -262,9 +260,9 @@ class _AddFlightPageState extends State<AddFlightPage> {
                                     .then((value) {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(
-                                        const SnackBar(
-                                            duration: Duration(seconds: 3),
-                                            content: Text('New Flight Added!')),
+                                        SnackBar(
+                                            duration: const Duration(seconds: 2),
+                                            content: Text(lookupTranslate(context, "new_flight_added"))),
                                       )
                                       .closed
                                       .then((reason) {
@@ -275,7 +273,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
                             });
                           }
                         },
-                        child: const Text("Add New Flight")),
+                        child: Text(lookupTranslate(context, "add_new_flight"))),
                   ],
                 ),
               ),

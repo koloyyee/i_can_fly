@@ -1,5 +1,7 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:i_can_fly/utils/app_localizations.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 
 /// A common actions menu that can be used in the app.
 /// This menu will be used in the app bar of the pages.
@@ -31,7 +33,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/");
             },
-            child: const Text("Home"),
+            child: Text(AppLocalizations.of(context)?.translate("home")?? "Home"),
           ),
         ),
         PopupMenuItem(
@@ -39,7 +41,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/add-flight");
             },
-            child: const Text("Add Flight"),
+            child: Text(lookupTranslate(context, "add_flight")),
           ),
         ),
         PopupMenuItem(
@@ -47,7 +49,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/airplanes");
             },
-            child: const Text("Views Planes"),
+            child: Text(lookupTranslate(context, "view_planes")),
           ),
         ),
         PopupMenuItem(
@@ -55,7 +57,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/customers");
             },
-            child: const Text("Views Customers"),
+            child: Text(lookupTranslate(context, "view_customers")),
           ),
         ),
         PopupMenuItem(
@@ -63,7 +65,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/reservations");
             },
-            child: const Text("Views Reservations"),
+            child: Text(lookupTranslate(context, "view_reservations")),
           ),
         ),
         ...additionalItems,
@@ -73,7 +75,7 @@ class CommonActionsMenu extends StatelessWidget {
               esp.clear();
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
-            child: const Text("Logout"),
+            child: Text(lookupTranslate(context, "logout")),
           ),
         ),
       ];

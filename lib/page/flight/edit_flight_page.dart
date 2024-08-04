@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
+import 'package:i_can_fly/utils/app_localizations.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 import 'package:intl/intl.dart';
 
@@ -86,7 +88,7 @@ class _EditFlightPageState extends State<EditFlightPage> {
       context: context,
       initialTime: arrivalTime ?? TimeOfDay.now(),
       errorInvalidText:
-          arrivalTime != null ? null : "Please select a valid time",
+          arrivalTime != null ? null : lookupTranslate(context, "please_select_a_valid_time"),
     );
     if (picked != null) {
       setState(() {
@@ -101,7 +103,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDate: departureDate ?? DateTime.now(),
-      // selectableDayPredicate: (day) => day.isAfter(DateTime.now()),
     );
     if (picked != null) {
       setState(() {
@@ -116,8 +117,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDate: arrivalDate ?? DateTime.now(),
-      // selectableDayPredicate: (day) =>
-      //     day.isAfter(departureDate ?? DateTime.now()),
     );
     if (picked != null) {
       setState(() {
@@ -130,15 +129,11 @@ class _EditFlightPageState extends State<EditFlightPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Update the Flight!",
-          style: TextStyle(color: Colors.white),
+        title: Text( lookupTranslate(context,"update_the_flight" )
+          ,
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(CTColor.Teal.colorValue),
-        // leading: IconButton( icon: Icon(Icons.arrow_back),
-        // onPressed: () {
-        //   Navigator.pushNamed(context, "/flights");
-        // },),
       ),
       body: Form(
           key: _formKey,
@@ -156,13 +151,13 @@ class _EditFlightPageState extends State<EditFlightPage> {
                       ),
                       TextFormField(
                         controller: departureCityController,
-                        decoration: const InputDecoration(
-                          labelText: "Departure City",
+                        decoration: InputDecoration(
+                          labelText: lookupTranslate(context, "departure_city"),
                         ),
                         // initialValue: widget.flight.departureCity,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please enter a valid city";
+                            return lookupTranslate(context, "please_enter_a_valid_city");
                           }
                           return null;
                         },
@@ -170,24 +165,23 @@ class _EditFlightPageState extends State<EditFlightPage> {
                       OutlinedButton(
                           onPressed: () => _selectDepartureDate(context),
                           child: Text(departureDate == null
-                              ? "Select Date"
-                              : "Departure Date: ${DateFormat.yMd().format(departureDate!)}")),
+                              ? lookupTranslate(context, "select_date")
+                              : "${lookupTranslate(context, "departure_date")}: ${DateFormat.yMd().format(departureDate!)}")),
                       OutlinedButton(
                         onPressed: () => _selectDepartureTime(context),
                         child: Text(departureTime == null
-                            ? "Select Arrival Time"
-                            : "Departure Time: ${departureTime!.format(context)}"),
+                            ? lookupTranslate(context, "select_departure_time")
+                            : "${lookupTranslate(context, "departure_time")}: ${departureTime!.format(context)}"),
                       ),
                       TextFormField(
                         controller: arrivalCityController,
-                        decoration: const InputDecoration(
-                          labelText: "Departure City",
+                        decoration: InputDecoration(
+                          labelText: lookupTranslate(context, "arrival_city"),
                         ),
 
-                        // initialValue: widget.flight.arrivalCity,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please enter a valid city";
+                            return lookupTranslate(context, "please_enter_a_valid_city");
                           }
                           return null;
                         },
@@ -195,16 +189,16 @@ class _EditFlightPageState extends State<EditFlightPage> {
                       OutlinedButton(
                           onPressed: () => _selectArrivalDate(context),
                           child: Text(arrivalDate == null
-                              ? "Select Date"
-                              : "Arrival Date: ${DateFormat.yMd().format(arrivalDate!)}")),
+                              ? lookupTranslate(context, "select_arrival_date")
+                              : "${lookupTranslate(context, "arrival_date")}: ${DateFormat.yMd().format(arrivalDate!)}")),
                       OutlinedButton(
                         onPressed: () => _selectArrivalTime(context),
                         child: Text(arrivalTime == null
-                            ? "Select Arrival Time"
-                            : "Arrival Time: ${arrivalTime!.format(context)}"),
+                            ? lookupTranslate(context, "select_arrival_time")
+                            : "${lookupTranslate(context, "arrival_time")}: ${arrivalTime!.format(context)}"),
                       ),
                       DropdownButtonFormField(
-                          hint: const Text("Select Airplane Type"),
+                          hint: Text(lookupTranslate(context, "select_airplane_type")),
                           value: widget.flight.airplaneType,
                           validator: (value) => value == null
                               ? "Please select a valid airplane type"
@@ -228,8 +222,9 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                   // If the form is valid, display a snackbar. In the real world,
                                   // you'd often call a server or save the information in a database.
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Processing Data')),
+                                    SnackBar(
+                                        duration: const Duration(seconds: 1),
+                                        content: Text(lookupTranslate(context, "processing_data"))),
                                   );
 
                                   setState(() {
@@ -261,31 +256,34 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                           .then((value) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
+                                            duration: const Duration(seconds: 2),
                                               content:
-                                                  Text('New Flight Added!')),
-                                        );
+                                                  Text("${lookupTranslate(context, "update")}!")),
+                                        ).closed.then((reason) {
+                                          Navigator.pop(context, true);
+                                        });
                                       });
                                     }
                                   });
                                 }
                               },
-                              child: const Text("Update Flight")),
+                              child: Text(lookupTranslate(context, "update"))),
                           ElevatedButton(
                             onPressed: () {
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text("Delete Flight"),
+                                      title: Text(lookupTranslate(context, "delete")),
                                       content: Text(
-                                          "Are you sure you want to delete the flight from ${widget.flight.departureCity} to ${widget.flight.arrivalCity}?"),
+                                          "${lookupTranslate(context, "confirm_delete")} ${widget.flight.departureCity} ${lookupTranslate(context, "to")} ${widget.flight.arrivalCity}?"),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: const Text("Cancel"),
+                                          child: Text(lookupTranslate(context, "cancel")),
                                         ),
                                         TextButton(
                                           onPressed: () {
@@ -301,13 +299,13 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                             Navigator.of(context).pop();
                                             Navigator.pop(context, true);
                                           },
-                                          child: const Text("Delete"),
+                                          child: Text(lookupTranslate(context, "delete")),
                                         ),
                                       ],
                                     );
                                   });
                             },
-                            child: const Text("Delete Flight"),
+                            child: Text(lookupTranslate(context, "delete")),
                           ),
                         ]),
                   ),

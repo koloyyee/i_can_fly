@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:i_can_fly/common/language_drawer.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/db/database_initializer.dart';
@@ -17,6 +18,7 @@ import 'package:i_can_fly/page/flight/add_flight.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/page/welcome.dart';
 import 'package:i_can_fly/utils/app_localizations.dart';
+import 'package:i_can_fly/utils/helpers.dart';
 
 import 'package:i_can_fly/utils/theme_color.dart';
 
@@ -78,17 +80,17 @@ class _MyAppState extends State<MyApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          initialRoute: "/welcome",
+          initialRoute: "/",
           routes: {
-            "/welcome": (context) => const WelcomePage(),
+            // "/welcome": (context) => const WelcomePage(),
             "/": (context) => const HomePage(),
             "/customer-home": (context) {
               final customer = ModalRoute.of(context)?.settings.arguments as Customer?;
               return CustomerHomePage(customer: customer!);
             },
             "/flights": (context) => const FlightsPage(),
-            "/admin-login": (context) => const AdminLoginPage(),
-            "/admin-register": (context) => const AdminRegisterPage(),
+            // "/admin-login": (context) => const AdminLoginPage(),
+            // "/admin-register": (context) => const AdminRegisterPage(),
             "/add-flight": (context) => const AddFlightPage(),
             "/customer-login": (context) => CustomerLoginPage(database: database),
             "/customer-register": (context) => const CustomerRegisterPage(),
@@ -131,35 +133,42 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Welcome to I Can Fly"),
+        title:  Text(lookupTranslate(context, "welcome_to")),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
+      endDrawer: const LanguageDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(70.0),
         children: [
           _buildButton(
-            title: 'Flights List',
+            title: lookupTranslate(context, "flights_list"),
             imagePath: 'images/flights.jpg',
             //image credits: https://pikbest.com/backgrounds/airport-departure-board-arrival-and-information-at-in-3d_9626000.html
             context: context,
-            routeName: '/admin-login',
+            routeName: '/flights',
           ),
           _buildButton(
-            title: 'Airplanes List',
+            title: lookupTranslate(context, "airplanes_list"),
             imagePath: 'images/airplane.jpg',
             //image credits: https://wallpapercave.com/w/wp2478615
             context: context,
             routeName: '/airplanes',
           ),
+          // _buildButton(
+          //   title: lookupTranslate(context, "airline_list"),
+          //   imagePath: 'images/airline.jpg',
+          //   context: context,
+          //   routeName: '/airlines',
+          // ),
           _buildButton(
-            title: 'Customer List',
+            title: lookupTranslate(context, "customer_list"),
             imagePath: 'images/Customers.jpg',
             //image credits: https://www.samsic.aero/check-boarding?origin=6&type=taxonomy_term
             context: context,
             routeName: '/customers',
           ),
           _buildButton(
-            title: 'Reservation Page',
+            title: lookupTranslate(context, "reservations_list"),
             imagePath: 'images/Reservation.jpeg',
             //image credits: https://pvtistes.net/en/air-transat-extra-23kg-luggage-allowance-canada/
             context: context,

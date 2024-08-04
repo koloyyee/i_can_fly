@@ -1,8 +1,11 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/admin_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/admin.dart';
+import 'package:i_can_fly/utils/helpers.dart';
+import 'package:path/path.dart';
 
 /// A StatefulWidget that represents the admin register page.
 /// Instance of [EncryptedSharedPreferences] for securely storing and retrieving data.
@@ -43,7 +46,7 @@ class _AdminRegisterPageState extends State<AdminRegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admin Register"),
+        title: Text(lookupTranslate(context, "admin_register")),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -53,21 +56,21 @@ class _AdminRegisterPageState extends State<AdminRegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text("Admin Register"),
+                Text(lookupTranslate(context, "admin_register")),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: "Email",
+                  decoration: InputDecoration(
+                    labelText: lookupTranslate(context, "email"),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter email";
+                      return lookupTranslate(context, "please_enter_email");
                     }
                     String pattern =
                         r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
                     RegExp regex = RegExp(pattern);
                     if (!regex.hasMatch(value)) {
-                      return "Please enter a valid email address";
+                      return lookupTranslate(context, "invalid_email_or_password");
                     }
                     return null;
                   },
@@ -75,12 +78,12 @@ class _AdminRegisterPageState extends State<AdminRegisterPage> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
+                  decoration: InputDecoration(
+                    labelText: lookupTranslate(context, "password"),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length < 8) {
-                      return "Please enter password, at least 8 characters";
+                      return lookupTranslate(context, "password_min_length");
                     }
                     return null;
                   },
@@ -99,7 +102,7 @@ class _AdminRegisterPageState extends State<AdminRegisterPage> {
                           Navigator.pushNamed(context, "/admin-login");
                     }
                   },
-                  child: const Text("Register"),
+                  child: Text(lookupTranslate(context, "register")),
                 ),
               ],
             ),

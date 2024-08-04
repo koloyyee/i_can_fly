@@ -28,7 +28,6 @@
   "delete_customer": "Eliminar",
   "customer_list": "Lista the consumidores",
   "add_customer": "Adicionar consumidor",
-
   "airplanes": "Aviones",
   "instructions": "Instrucciones",
   "airplane_type": "Tipo de Avión",
@@ -54,11 +53,39 @@
   "instructions_step_2": "2. Usa el botón flotante para agregar un nuevo avión.",
   "ok": "OK",
   "no_airplanes_found": "No se encontraron aviones.",
-  "capacity": "Capacidad"
-
-
+  "capacity": "Capacidad",
+  "departure_city": "Ciudad de Salida",
+  "please_select_a_valid_time": "Por favor seleccione una hora válida",
+  "please_enter_a_valid_city": "Por favor ingrese una ciudad válida",
+  "select_date": "Seleccionar Fecha",
+  "departure_date": "Fecha de Salida",
+  "select_departure_time": "Seleccionar Hora de Salida",
+  "departure_time": "Hora de Salida",
+  "arrival_city": "Ciudad de Llegada",
+  "select_arrival_time": "Seleccionar Hora de Llegada",
+  "arrival_time": "Hora de Llegada",
+  "select_airplane_type": "Seleccionar Tipo de Avión",
+  "processing_data": "Procesando Datos",
+  "new_flight_added": "¡Nuevo Vuelo Agregado!",
+  "add_new_flight": "Agregar Nuevo Vuelo",
+  "see_all_your_flights_here": "¡Vea todos sus vuelos aquí!",
+  "submit": "Enviar",
+  "update_the_flight": "¡Actualiza el vuelo!",
+  "please_enter_a_valid_email_address": "Por favor, introduzca una dirección de correo electrónico válida",
+  "admin_login": "Inicio de sesión de administrador",
+  "please_enter_password": "Por favor, introduzca la contraseña",
+  "please_enter_email": "Por favor, introduzca el correo electrónico",
+  "invalid_email_or_password": "Correo electrónico o contraseña no válidos",
+  "no_user_found": "No se encontró usuario",
+  "admin_register": "Registro de Administrador",
+  "create_new_flight": "¡Crear un Nuevo Vuelo!",
+ "Please_select_a_valid_airplane_type": "Por favor seleccione un tipo de avión válido",
+  "arrival_date": "Fecha de Llegada",
+  "to" : "a",
+  "flight_page_title": "¡Vea Todos Sus Vuelos Aquí!",
+  "welcome_to": "Bienvenido a I Can Fly",
+  "flights_list": "Lista de Vuelos",
+  "airplanes_list": "Lista de Aviones",
+  "airline_list": "Lista de Aerolíneas",
+  "reservations_list": "Lista de Reservas"
 }
-
-
-
-
