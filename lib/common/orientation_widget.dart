@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+/// A widget that provides different layouts based on the device orientation.
+///
+/// The `OrientationWidget` class is a stateless widget that displays
+/// different child widgets depending on whether the device is in portrait
+/// or landscape orientation.
+/// Properties:
+/// - `portraitChild`: The widget to display when the device is in portrait orientation.
+/// - `landscapeChild`: The widget to display when the device is in landscape orientation.
+
 class OrientationWidget extends StatelessWidget {
   final Widget portraitChild;
   final Widget landscapeChild;

@@ -3,15 +3,22 @@ import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
 import '../../utils/app_localizations.dart';
 
+/// Author: Kyla Pineda
+/// Date: August 4, 2024
+///
+/// This page allows users to manage (add or edit) airplane details.
+/// It includes text fields for entering airplane attributes and buttons to save, delete, or cancel.
+/// If editing an existing airplane, the page will pre-fill the fields with the airplane's data.
+
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
   final bool isEditMode;
 
   const ManageAirplanePage({
-    super.key,
-    this.airplane,
+    Key? key,
+    required this.airplane,
     required this.isEditMode,
-  });
+  }) : super(key: key);
 
   @override
   _ManageAirplanePageState createState() => _ManageAirplanePageState();
@@ -41,6 +48,10 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     super.dispose();
   }
 
+  /// [2]
+  /// Saves the airplane details to the database.
+  /// Shows a SnackBar notification on success or failure.
+  /// If editing an existing airplane, updates it; otherwise, creates a new record.
   void _save() async {
     final appLocalizations = AppLocalizations.of(context)!;
     if (_typeController.text.isEmpty ||
@@ -67,16 +78,16 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
       if (widget.isEditMode) {
         await dao.updateAirplane(airplane);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.translate('airplane_updated'))),
+          SnackBar(content: Text(appLocalizations.translate('airplane_updated'))),
         );
       } else {
         await dao.createAirplane(airplane);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.translate('airplane_created'))),
+          SnackBar(content: Text(appLocalizations.translate('airplane_created'))),
         );
       }
 
-      Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
+      Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to airplane list
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error saving airplane: $e')),
@@ -84,6 +95,9 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     }
   }
 
+  /// [3]
+  /// Deletes the current airplane and shows a confirmation dialog.
+  /// If the user confirms, the airplane is deleted, and the user is navigated back to the airplane page.
   void _delete() async {
     if (widget.airplane == null) return;
 
@@ -115,7 +129,7 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
           SnackBar(content: Text(AppLocalizations.of(context)!.translate('airplane_deleted'))),
         );
 
-        Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to the airplane page
+        Navigator.popUntil(context, ModalRoute.withName('/airplanes')); // Go back to airplane list
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${AppLocalizations.of(context)!.translate('error_deleting_airplane')}: $e')),
@@ -124,6 +138,9 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     }
   }
 
+  /// [4]
+  /// Builds the UI for managing airplane details.
+  /// Displays text fields for airplane attributes and buttons for save, delete (if editing), and cancel.
   @override
   Widget build(BuildContext context) {
     return Scaffold(

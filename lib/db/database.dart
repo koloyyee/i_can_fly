@@ -17,7 +17,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 
 
-part 'database.g.dart'; // Make sure this matches the generated file name
+part 'database.g.dart';
 
 // dart run build_runner build
 // dart run build_runner watch
