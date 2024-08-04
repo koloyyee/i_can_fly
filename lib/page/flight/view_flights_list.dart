@@ -32,10 +32,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     super.initState();
     fetchFlights();
   }
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   void fetchFlights() {
     AppDatabase.getInstance().then((db) {
@@ -118,34 +119,39 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     DateFormat formatter,
   ) {
     return GestureDetector(
-      onLongPress: () {
-        var isPortrait =
-            MediaQuery.of(context).orientation == Orientation.portrait;
-        if (isPortrait) {
-          flightDetailsSheet(context, flight, formatter);
-        } else {
-          setState(() {
-            selectedFlight = flight;
-          });
-        }
-      },
-      child: ListTile(
-        title: Text("🛫${flight.departureCity} ➡️ 🛬${flight.arrivalCity}"),
-        subtitle: Text(
-            "${formatter.format(flight.departureDateTime)} ➡️ ${formatter.format(flight.arrivalDateTime)}"),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return DeleteAlertDialog(
-                      flight: flight, deleteFlight: deleteFlight);
-                });
-          },
-        ),
-      ),
-    );
+        onLongPress: () {
+          var isPortrait =
+              MediaQuery.of(context).orientation == Orientation.portrait;
+          if (isPortrait) {
+            flightDetailsSheet(context, flight, formatter);
+          } else {
+            setState(() {
+              selectedFlight = flight;
+            });
+          }
+        },
+        child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
+            child: Card(
+              elevation: 3,
+              child: ListTile(
+                title: Text(
+                    "🛫${flight.departureCity} ➡️ 🛬${flight.arrivalCity}"),
+                subtitle: Text(
+                    "${formatter.format(flight.departureDateTime)} ➡️ ${formatter.format(flight.arrivalDateTime)}"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return DeleteAlertDialog(
+                              flight: flight, deleteFlight: deleteFlight);
+                        });
+                  },
+                ),
+              ),
+            )));
   }
 
   PersistentBottomSheetController flightDetailsSheet(
@@ -222,10 +228,12 @@ class FlightDetails extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text("${lookupTranslate(context, "departure_city")}: ${flight.departureCity}"),
+            title: Text(
+                "${lookupTranslate(context, "departure_city")}: ${flight.departureCity}"),
           ),
           ListTile(
-            title: Text("${lookupTranslate(context, "arrival_city")}: ${flight.arrivalCity}"),
+            title: Text(
+                "${lookupTranslate(context, "arrival_city")}: ${flight.arrivalCity}"),
           ),
           ListTile(
             title: Text(

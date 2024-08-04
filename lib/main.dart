@@ -197,9 +197,12 @@ class HomePage extends StatelessWidget {
           children: [
             Opacity(
               opacity: opacity,
-              child: Image.asset(
+              child:ClipRRect( 
+                borderRadius: BorderRadius.circular(20),
+               child: Image.asset(
                 imagePath,
                 fit: BoxFit.cover,
+              ),
               ),
             ),
             Center(
