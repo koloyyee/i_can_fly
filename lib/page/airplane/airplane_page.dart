@@ -151,8 +151,9 @@ class _AirplanePageState extends State<AirplanePage> {
   }
 
   Widget DetailsPage() {
+    final appLocalizations = AppLocalizations.of(context)!;
     if (selectedAirplane == null) {
-      return const Center(child: Text("No airplane selected"));
+      return Container();
     } else {
       return Padding(
         padding: const EdgeInsets.all(16.0),
@@ -160,12 +161,12 @@ class _AirplanePageState extends State<AirplanePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Type: ${selectedAirplane!.type}",
+              " ${selectedAirplane!.type}",
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            Text("Capacity: ${selectedAirplane!.capacity}"),
-            Text("Max Speed: ${selectedAirplane!.maxSpeed}"),
-            Text("Max Range: ${selectedAirplane!.maxRange}"),
+            Text("${appLocalizations.translate('capacity')}: ${selectedAirplane!.capacity}"),
+            Text("${appLocalizations.translate('max_speed')}: ${selectedAirplane!.maxSpeed}"),
+            Text("${appLocalizations.translate('max_range')}: ${selectedAirplane!.maxRange}"),
             const SizedBox(height: 20), // Space between details and button
             Center(
               child: ElevatedButton(
@@ -174,7 +175,7 @@ class _AirplanePageState extends State<AirplanePage> {
                     selectedAirplane = null; // Hide details page
                   });
                 },
-                child: Text("OK"),
+                child: Text(appLocalizations.translate('ok')),
               ),
             ),
           ],
