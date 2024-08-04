@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
-import 'package:i_can_fly/page/airplane/orientation_widget.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 import '../../common/common_actions_menu.dart';
+import '../../common/orientation_widget.dart';
 import '../../entity/airplane.dart';
 import '../../utils/app_localizations.dart';
 
