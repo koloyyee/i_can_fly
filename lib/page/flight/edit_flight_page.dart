@@ -32,7 +32,7 @@ class _EditFlightPageState extends State<EditFlightPage> {
   late DateTime? arrivalDate;
   late TimeOfDay? arrivalTime;
 
-  String airplaneType = "";
+  String? airplaneType;
 
   List<String> airplaneTypes = [];
 
@@ -47,13 +47,14 @@ class _EditFlightPageState extends State<EditFlightPage> {
     departureTime = TimeOfDay.fromDateTime(widget.flight.departureDateTime);
     arrivalDate = widget.flight.arrivalDateTime;
     arrivalTime = TimeOfDay.fromDateTime(widget.flight.arrivalDateTime);
+    airplaneType = widget.flight.airplaneType;
 
     AppDatabase.getInstance().then((db) {
       setState(() {
         flightDao = db.flightDao;
         flightDao.findAllAirplaneTypes().then((value) {
           setState(() {
-            airplaneTypes = value;
+            airplaneTypes.addAll(value);
           });
         });
       });
@@ -199,7 +200,7 @@ class _EditFlightPageState extends State<EditFlightPage> {
                       ),
                       DropdownButtonFormField(
                           hint: Text(lookupTranslate(context, "select_airplane_type")),
-                          value: widget.flight.airplaneType,
+                          value: airplaneType ?? airplaneTypes.first,
                           validator: (value) => value == null
                               ? "Please select a valid airplane type"
                               : null,
@@ -261,7 +262,8 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                               content:
                                                   Text("${lookupTranslate(context, "update")}!")),
                                         ).closed.then((reason) {
-                                          Navigator.pop(context, true);
+                                          Navigator.pushNamed(context, "/flights");
+                                          // Navigator.pop(context, true);
                                         });
                                       });
                                     }

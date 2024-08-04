@@ -40,9 +40,9 @@ class CommonActionsMenu extends StatelessWidget {
         PopupMenuItem(
           child: TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/add-flight");
+              Navigator.pushNamed(context, "/flight");
             },
-            child: Text(appLocalizations.translate("add_flight")),
+            child: Text(appLocalizations.translate("flights_list")),
           ),
         ),
         PopupMenuItem(
