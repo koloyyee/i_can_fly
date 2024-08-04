@@ -96,10 +96,24 @@ class _AirplanePageState extends State<AirplanePage> {
       builder: (context) => AlertDialog(
         title: Text(appLocalizations.translate('instructions')),
         content: Text(
-          '${appLocalizations.translate('instructions_step_1')}\n'
-              '    ${appLocalizations.translate('instructions_step_1a')}\n'
-              '    ${appLocalizations.translate('instructions_step_1b')}\n'
-              '${appLocalizations.translate('instructions_step_2')}',
+          '${appLocalizations.translate('landscape_instructions_step_1')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_1a')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_2')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_2a')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_2b')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_2c')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_2d')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_3')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_3a')}\n'
+              '${appLocalizations.translate('landscape_instructions_step_3b')}\n\n'
+              '${appLocalizations.translate('portrait_instructions_step_1')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_1a')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_1b')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_1c')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_1d')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_2')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_2a')}\n'
+              '${appLocalizations.translate('portrait_instructions_step_2b')}',
         ),
         actions: [
           TextButton(
@@ -110,6 +124,7 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
     );
   }
+
 
   /// [6]
   /// Builds the list of airplanes displayed on the page.
