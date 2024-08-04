@@ -130,9 +130,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title:  Text(lookupTranslate(context, "welcome_to")),
+        title:  Text(appLocalizations.translate("welcome_to")),
         backgroundColor: Color(CTColor.Teal.colorValue),
       ),
       endDrawer: const LanguageDrawer(),
@@ -140,34 +141,34 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(70.0),
         children: [
           _buildButton(
-            title: lookupTranslate(context, "flights_list"),
+            title: appLocalizations.translate("flights_list"),
             imagePath: 'images/flights.jpg',
             //image credits: https://pikbest.com/backgrounds/airport-departure-board-arrival-and-information-at-in-3d_9626000.html
             context: context,
             routeName: '/flights',
           ),
           _buildButton(
-            title: lookupTranslate(context, "airplanes_list"),
+            title: appLocalizations.translate("airplanes_list"),
             imagePath: 'images/airplane.jpg',
             //image credits: https://wallpapercave.com/w/wp2478615
             context: context,
             routeName: '/airplanes',
           ),
           // _buildButton(
-          //   title: lookupTranslate(context, "airline_list"),
+          //   title: appLocalizations.translate("airline_list"),
           //   imagePath: 'images/airline.jpg',
           //   context: context,
           //   routeName: '/airlines',
           // ),
           _buildButton(
-            title: lookupTranslate(context, "customer_list"),
+            title: appLocalizations.translate("customer_list"),
             imagePath: 'images/Customers.jpg',
             //image credits: https://www.samsic.aero/check-boarding?origin=6&type=taxonomy_term
             context: context,
             routeName: '/customers',
           ),
           _buildButton(
-            title: lookupTranslate(context, "reservations_list"),
+            title: appLocalizations.translate("reservations_list"),
             imagePath: 'images/Reservation.jpeg',
             //image credits: https://pvtistes.net/en/air-transat-extra-23kg-luggage-allowance-canada/
             context: context,
