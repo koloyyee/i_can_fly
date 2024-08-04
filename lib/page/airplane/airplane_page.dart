@@ -3,7 +3,6 @@ import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/page/airplane/manage_airplane.dart';
 import 'package:i_can_fly/utils/theme_color.dart';
 import '../../common/common_actions_menu.dart';
-import '../../common/orientation_widget.dart';
 import '../../entity/airplane.dart';
 import '../../utils/app_localizations.dart';
 
@@ -112,9 +111,11 @@ class _AirplanePageState extends State<AirplanePage> {
             itemCount: airplanes.length,
             itemBuilder: (context, index) {
               final airplane = airplanes[index];
+              final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
               return GestureDetector(
                 onTap: () {
-                  if (MediaQuery.of(context).orientation == Orientation.landscape) {
+                  if (isLandscape) {
                     setState(() {
                       selectedAirplane = airplane;
                     });
@@ -130,7 +131,15 @@ class _AirplanePageState extends State<AirplanePage> {
                   child: ListTile(
                     leading: Icon(Icons.airplane_ticket, color: Color(CTColor.Teal.colorValue)), // Add icon here
                     title: Text(airplane.type),
-                    subtitle: Text('${AppLocalizations.of(context)!.translate('capacity')}: ${airplane.capacity}'),
+                    subtitle: Text('${appLocalizations.translate('capacity')}: ${airplane.capacity}'),
+                    trailing: isLandscape
+                        ? IconButton(
+                      icon: Icon(Icons.edit, color: Color(CTColor.Teal.colorValue)),
+                      onPressed: () {
+                        _navigateToManagePage(context, airplane);
+                      },
+                    )
+                        : null, // Hide pencil icon in portrait mode
                   ),
                 ),
               );
@@ -141,76 +150,93 @@ class _AirplanePageState extends State<AirplanePage> {
     );
   }
 
+  Widget DetailsPage() {
+    if (selectedAirplane == null) {
+      return const Center(child: Text("No airplane selected"));
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Type: ${selectedAirplane!.type}",
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            Text("Capacity: ${selectedAirplane!.capacity}"),
+            Text("Max Speed: ${selectedAirplane!.maxSpeed}"),
+            Text("Max Range: ${selectedAirplane!.maxRange}"),
+            const SizedBox(height: 20), // Space between details and button
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedAirplane = null; // Hide details page
+                  });
+                },
+                child: Text("OK"),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget responsiveLayout() {
+    var size = MediaQuery.of(context).size;
+    var width = size.width;
+    var isLandscape = width > MediaQuery.of(context).size.height;
+
+    if (isLandscape) {
+      return Row(
+        children: [
+          Expanded(
+            flex: selectedAirplane != null ? 3 : 1,
+            child: _buildAirplaneList(),
+          ),
+          if (selectedAirplane != null)
+            Expanded(
+              flex: 1,
+              child: DetailsPage(),
+            ),
+        ],
+      );
+    } else {
+      return _buildAirplaneList();
+    }
+  }
+
 
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
 
-    return OrientationWidget(
-      portraitChild: Scaffold(
-        appBar: AppBar(
-          title: Text(appLocalizations.translate('airplanes')),
-          backgroundColor: Color(CTColor.Teal.colorValue),
-          actions: [
-            CommonActionsMenu(
-              additionalItems: [
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () => _showInstructions(context),
-                    child: Text(appLocalizations.translate('instructions')),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        body: _buildAirplaneList(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _navigateToManagePage(context),
-          backgroundColor: Color(CTColor.LightTeal.colorValue),
-          child: const Icon(Icons.add),
-        ),
-      ),
-      landscapeChild: Scaffold(
-        appBar: AppBar(
-          title: Text(appLocalizations.translate('airplanes')),
-          backgroundColor: Color(CTColor.Teal.colorValue),
-          actions: [
-            CommonActionsMenu(
-              additionalItems: [
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () => _showInstructions(context),
-                    child: Text(appLocalizations.translate('instructions')),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        body: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: _buildAirplaneList(),
-            ),
-            if (selectedAirplane != null)
-              Expanded(
-                flex: 3,
-                child: ManageAirplanePage(
-                  airplane: selectedAirplane,
-                  isEditMode: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(appLocalizations.translate('airplanes')),
+        backgroundColor: Color(CTColor.Teal.colorValue),
+        actions: [
+          CommonActionsMenu(
+            additionalItems: [
+              PopupMenuItem(
+                child: TextButton(
+                  onPressed: () => _showInstructions(context),
+                  child: Text(appLocalizations.translate('instructions')),
                 ),
               ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _navigateToManagePage(context),
-          backgroundColor: Color(CTColor.LightTeal.colorValue),
-          child: const Icon(Icons.add),
-        ),
+            ],
+          ),
+        ],
+      ),
+      body: responsiveLayout(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _navigateToManagePage(context),
+        backgroundColor: Color(CTColor.LightTeal.colorValue),
+        child: const Icon(Icons.add),
       ),
     );
   }
+
 }
