@@ -32,10 +32,10 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     super.initState();
     fetchFlights();
   }
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   void fetchFlights() {
     AppDatabase.getInstance().then((db) {
@@ -59,7 +59,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   @override
   Widget build(BuildContext context) {
     DateFormat formatter = DateFormat('yy-MM-dd – kk:mm');
-    fetchFlights();
+    // fetchFlights();
     return flights.isEmpty
         ? Center(
             child: Column(
