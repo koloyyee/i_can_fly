@@ -26,6 +26,7 @@ class CommonActionsMenu extends StatelessWidget {
     EncryptedSharedPreferences esp = EncryptedSharedPreferences();
 
     return PopupMenuButton(itemBuilder: (BuildContext context) {
+      final appLocalizations = AppLocalizations.of(context)!;
       // Common menu items
       List<PopupMenuItem> items = [
         PopupMenuItem(
@@ -33,7 +34,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/");
             },
-            child: Text(AppLocalizations.of(context)?.translate("home")?? "Home"),
+            child: Text(appLocalizations.translate("home")),
           ),
         ),
         PopupMenuItem(
@@ -41,7 +42,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/add-flight");
             },
-            child: Text(lookupTranslate(context, "add_flight")),
+            child: Text(appLocalizations.translate("add_flight")),
           ),
         ),
         PopupMenuItem(
@@ -49,7 +50,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/airplanes");
             },
-            child: Text(lookupTranslate(context, "view_planes")),
+            child: Text(appLocalizations.translate("view_planes")),
           ),
         ),
         PopupMenuItem(
@@ -57,7 +58,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/customers");
             },
-            child: Text(lookupTranslate(context, "view_customers")),
+            child: Text(appLocalizations.translate("view_customers")),
           ),
         ),
         PopupMenuItem(
@@ -65,7 +66,7 @@ class CommonActionsMenu extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/reservations");
             },
-            child: Text(lookupTranslate(context, "view_reservations")),
+            child: Text(appLocalizations.translate("view_reservations")),
           ),
         ),
         ...additionalItems,
@@ -75,7 +76,7 @@ class CommonActionsMenu extends StatelessWidget {
               esp.clear();
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
-            child: Text(lookupTranslate(context, "logout")),
+            child: Text(appLocalizations.translate("logout")),
           ),
         ),
       ];
