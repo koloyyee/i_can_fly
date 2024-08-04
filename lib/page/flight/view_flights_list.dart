@@ -38,6 +38,9 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     super.dispose();
   }
 
+  Future<void> onRefresh() async {
+    fetchFlights();
+  }
   void fetchFlights() {
     AppDatabase.getInstance().then((db) {
       flightDao = db.flightDao;
@@ -76,7 +79,10 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
               ),
             ],
           ))
-        : OrientationWidget(
+        : 
+        RefreshIndicator(
+          onRefresh: onRefresh ,
+          child:  OrientationWidget(
             portraitChild: ListView(
 // 2.[x ] There must be a TextField along with a button that lets the user insert items into the ListView.
               children: [
@@ -110,6 +116,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
                   ),
               ],
             ),
+          )
           );
   }
 
@@ -242,6 +249,10 @@ class FlightDetails extends StatelessWidget {
           ListTile(
             title: Text(
                 "${lookupTranslate(context, "arrival_date")}: ${formatter.format(flight.arrivalDateTime)}"),
+          ),
+          ListTile(
+            title: Text(
+                "${lookupTranslate(context, "airplane_type")}: ${flight.airplaneType?? ''}"),
           ),
           ElevatedButton(
             onPressed: () {
