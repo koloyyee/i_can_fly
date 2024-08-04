@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/page/airplane/orientation_widget.dart';
 import 'package:i_can_fly/page/flight/edit_flight_page.dart';
 import 'package:i_can_fly/utils/helpers.dart';
 import 'package:intl/intl.dart';
+import '../../common/orientation_widget.dart';
 
 /// A StatefulWidget that represents the list of flights.
 /// Instance of [FlightDao] for accessing the flight table.
