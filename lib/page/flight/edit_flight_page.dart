@@ -217,6 +217,38 @@ class _EditFlightPageState extends State<EditFlightPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(lookupTranslate(context, "delete")),
+                                      content: Text(
+                                          "${lookupTranslate(context, "confirm_delete")} ${widget.flight.departureCity} ${lookupTranslate(context, "to")} ${widget.flight.arrivalCity}?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(lookupTranslate(context, "cancel")),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            flightDao
+                                                .deleteFlight(widget.flight);
+                                            flightDao
+                                                .findAllFlights()
+                                                .then((flights) {
+                                              setState(() {
+                                                widget.flights = flights;
+                                              });
+                                            });
+                                            Navigator.of(context).pop();
+                                            Navigator.pop(context, true);
+                                          },
+                                          child: Text(lookupTranslate(context, "delete")),
+                                        ),
+                          ElevatedButton(
                               onPressed: () {
                                 // Validate returns true if the form is valid, or false otherwise.
                                 if (_formKey.currentState!.validate()) {
@@ -271,38 +303,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                 }
                               },
                               child: Text(lookupTranslate(context, "update"))),
-                          ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(lookupTranslate(context, "delete")),
-                                      content: Text(
-                                          "${lookupTranslate(context, "confirm_delete")} ${widget.flight.departureCity} ${lookupTranslate(context, "to")} ${widget.flight.arrivalCity}?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(lookupTranslate(context, "cancel")),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            flightDao
-                                                .deleteFlight(widget.flight);
-                                            flightDao
-                                                .findAllFlights()
-                                                .then((flights) {
-                                              setState(() {
-                                                widget.flights = flights;
-                                              });
-                                            });
-                                            Navigator.of(context).pop();
-                                            Navigator.pop(context, true);
-                                          },
-                                          child: Text(lookupTranslate(context, "delete")),
-                                        ),
                                       ],
                                     );
                                   });
