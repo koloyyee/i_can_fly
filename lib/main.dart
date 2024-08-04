@@ -125,10 +125,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 
-
-
-
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -188,21 +184,21 @@ class HomePage extends StatelessWidget {
     required BuildContext context,
     required String routeName,
   }) {
-    const double imageHeight = 275.0; // Define height here
-    const double opacity = 0.50; // Set desired opacity (0.0 to 1.0)
+    const double imageHeight = 275.0; // Image height
+    const double opacity = 0.50; // Image opacity 0.0-1.0
 
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, routeName);
       },
       child: Container(
-        height: imageHeight, // Set the defined height
+        height: imageHeight,
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: Stack(
           fit: StackFit.expand,
           children: [
             Opacity(
-              opacity: opacity, // Adjust opacity here
+              opacity: opacity,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.cover,
@@ -212,10 +208,10 @@ class HomePage extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
-                  color: Color(CTColor.BlackTeal.colorValue), // Text color set to DarkTeal
-                  fontSize: 35, // Change font size here
+                  color: Color(CTColor.BlackTeal.colorValue),
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat', // Apply Montserrat font
+                  fontFamily: 'Montserrat',
                 ),
               ),
             ),

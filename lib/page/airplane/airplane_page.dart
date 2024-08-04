@@ -6,6 +6,12 @@ import '../../common/common_actions_menu.dart';
 import '../../entity/airplane.dart';
 import '../../utils/app_localizations.dart';
 
+/// Author: Kyla Pineda
+/// Date: August 4, 2024
+///
+/// This page shows a list of airplanes and allows users to view, edit, or delete airplane records.
+/// The layout adapts to both portrait and landscape orientations.
+
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});
 
@@ -23,6 +29,9 @@ class _AirplanePageState extends State<AirplanePage> {
     _loadAirplanes();
   }
 
+  /// [2]
+  /// Loads the list of airplanes from the database and updates the state.
+  /// Called when the state is initialized.
   Future<void> _loadAirplanes() async {
     final database = await AppDatabase.getInstance();
     final airplanes = await database.airplaneDao.findAllAirplanes();
@@ -31,6 +40,10 @@ class _AirplanePageState extends State<AirplanePage> {
     });
   }
 
+  /// [3]
+  /// Navigates to the ManageAirplanePage to either add or edit an airplane.
+  /// If an airplane is provided, it enters edit mode; otherwise, it enters add mode.
+  /// After returning from the ManageAirplanePage, it resets the selected airplane and reloads the list.
   void _navigateToManagePage(BuildContext context, [Airplane? airplane]) {
     Navigator.push(
       context,
@@ -45,10 +58,13 @@ class _AirplanePageState extends State<AirplanePage> {
       setState(() {
         selectedAirplane = null;
       });
-      _loadAirplanes(); // Refresh the list
+      _loadAirplanes();
     });
   }
 
+  /// [4]
+  /// Deletes the selected airplane and shows a SnackBar notification.
+  /// If the airplane is deleted successfully, it also refreshes the list and resets the selection in landscape mode.
   void _deleteAirplane(BuildContext context, Airplane airplane) async {
     final database = await AppDatabase.getInstance();
     await database.airplaneDao.deleteAirplane(airplane);
@@ -69,6 +85,9 @@ class _AirplanePageState extends State<AirplanePage> {
     });
   }
 
+  /// [5]
+  /// Shows an AlertDialog with instructions for using the interface.
+  /// The instructions are localized using AppLocalizations.
   void _showInstructions(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
 
@@ -92,7 +111,9 @@ class _AirplanePageState extends State<AirplanePage> {
     );
   }
 
-
+  /// [6]
+  /// Builds the list of airplanes displayed on the page.
+  /// Uses a FutureBuilder to asynchronously load and display the list.
   Widget _buildAirplaneList() {
     final appLocalizations = AppLocalizations.of(context)!;
 
@@ -127,9 +148,9 @@ class _AirplanePageState extends State<AirplanePage> {
                 child: Card(
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  color: Color(CTColor.LightTeal.colorValue), // Set card color here
+                  color: Color(CTColor.LightTeal.colorValue),
                   child: ListTile(
-                    leading: Icon(Icons.airplane_ticket, color: Color(CTColor.Teal.colorValue)), // Add icon here
+                    leading: Icon(Icons.airplane_ticket, color: Color(CTColor.Teal.colorValue)),
                     title: Text(airplane.type),
                     subtitle: Text('${appLocalizations.translate('capacity')}: ${airplane.capacity}'),
                     trailing: isLandscape
@@ -150,6 +171,9 @@ class _AirplanePageState extends State<AirplanePage> {
     );
   }
 
+  /// [7]
+  /// Builds the details page for the selected airplane.
+  /// If no airplane is selected, returns an empty container.
   Widget DetailsPage() {
     final appLocalizations = AppLocalizations.of(context)!;
     if (selectedAirplane == null) {
@@ -184,6 +208,9 @@ class _AirplanePageState extends State<AirplanePage> {
     }
   }
 
+  /// [8]
+  /// Builds the responsive layout for the page based on device orientation.
+  /// Shows the details page beside the list in landscape mode or as a full screen in portrait mode.
   Widget responsiveLayout() {
     var size = MediaQuery.of(context).size;
     var width = size.width;
@@ -207,8 +234,6 @@ class _AirplanePageState extends State<AirplanePage> {
       return _buildAirplaneList();
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -239,5 +264,4 @@ class _AirplanePageState extends State<AirplanePage> {
       ),
     );
   }
-
 }

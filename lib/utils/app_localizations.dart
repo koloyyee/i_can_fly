@@ -2,6 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Provides localization support for the application by loading and managing
+/// translated strings from JSON files.
+///
+/// This class handles the loading of localized strings based on the current locale,
+/// and provides a method to retrieve the translated text for a given key. It also
+/// includes a delegate class for managing the lifecycle of localization resources.
+///
+/// Example usage:
+/// ```
+/// AppLocalizations.of(context)!.translate('some_key');
+/// ```
+///
 class AppLocalizations {
   final Locale locale;
   late Map<String, String> _localizedStrings; // Initialize late
