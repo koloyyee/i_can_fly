@@ -1,10 +1,24 @@
 import 'package:floor/floor.dart';
+import 'package:i_can_fly/entity/customer.dart';
+import 'package:i_can_fly/entity/flight.dart';
 
 
 
 
 
-@Entity(tableName: "reservation")
+@Entity(tableName: "reservations",
+foreignKeys: [
+  ForeignKey(
+    childColumns: ['customerId'],
+    parentColumns: ['id'],
+    entity: Customer,
+  ),
+  ForeignKey(
+    childColumns: ['flightId'],
+    parentColumns: ['id'],
+    entity: Flight,
+  ),
+])
 class Reservation {
   @PrimaryKey(autoGenerate: true)
   final int? reservationId;

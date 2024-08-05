@@ -116,7 +116,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` TEXT NOT NULL, `address` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reservation` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `flightId` INTEGER NOT NULL, `departureCity` TEXT, `arrivalCity` TEXT, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, `customerName` TEXT, `reservationName` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `flightId` INTEGER NOT NULL, `departureCity` TEXT, `arrivalCity` TEXT, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, `customerName` TEXT, `reservationName` TEXT NOT NULL, FOREIGN KEY (`customerId`) REFERENCES `customers` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`flightId`) REFERENCES `flights` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -685,7 +685,7 @@ class _$ReservationDao extends ReservationDao {
   )   : _queryAdapter = QueryAdapter(database),
         _reservationInsertionAdapter = InsertionAdapter(
             database,
-            'reservation',
+            'reservations',
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
                   'customerId': item.customerId,
@@ -701,7 +701,7 @@ class _$ReservationDao extends ReservationDao {
                 }),
         _reservationUpdateAdapter = UpdateAdapter(
             database,
-            'reservation',
+            'reservations',
             ['reservationId'],
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
@@ -718,7 +718,7 @@ class _$ReservationDao extends ReservationDao {
                 }),
         _reservationDeletionAdapter = DeletionAdapter(
             database,
-            'reservation',
+            'reservations',
             ['reservationId'],
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
@@ -765,7 +765,8 @@ class _$ReservationDao extends ReservationDao {
 
   @override
   Future<Reservation?> findReservationById(int id) async {
-    return _queryAdapter.query('SELECT * FROM reservations WHERE id = ?1',
+    return _queryAdapter.query(
+        'SELECT * FROM reservations WHERE reservationId = ?1',
         mapper: (Map<String, Object?> row) => Reservation(
             reservationId: row['reservationId'] as int?,
             customerId: row['customerId'] as int,
@@ -782,9 +783,10 @@ class _$ReservationDao extends ReservationDao {
   }
 
   @override
-  Future<void> findDetailedReservationById(int id) async {
-    await _queryAdapter.queryNoReturn(
-        'SELECT        r.id,        c.name AS customerName,       f.departure_city,        f.arrival_city,        f.departure_datetime,        f.arrival_datetime     FROM reservations r     JOIN flights f ON r.flight_id = f.id     JOIN customers c ON r.customer_id = c.id     WHERE r.id = ?1',
+  Future<Reservation?> findDetailedReservationById(int id) async {
+    return _queryAdapter.query(
+        'select        r.reservationId,        c.name AS customerName,       f.departureCity,        f.arrivalCity,        f.departureDateTime,        f.arrivalDateTime       from reservations r       join flights f on r.flightId  = f.id        join customers c on r.customerId = c.id        where r.reservationId = ?1',
+        mapper: (Map<String, Object?> row) => Reservation(reservationId: row['reservationId'] as int?, customerId: row['customerId'] as int, flightId: row['flightId'] as int, departureCity: row['departureCity'] as String?, arrivalCity: row['arrivalCity'] as String?, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String), customerName: row['customerName'] as String?, reservationName: row['reservationName'] as String),
         arguments: [id]);
   }
 

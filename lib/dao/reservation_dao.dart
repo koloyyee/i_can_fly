@@ -1,14 +1,17 @@
 import 'package:floor/floor.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/reservation.dart';
 import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/entity/customer.dart';
+import 'package:i_can_fly/entity/reservation.dto.dart';
+import 'package:sqflite/sqflite.dart';
 
 @dao
 abstract class ReservationDao {
   @Query("SELECT * FROM reservations")
   Future<List<Reservation>> findAllReservations();
 
-  @Query("SELECT * FROM reservations WHERE id = :id")
+  @Query("SELECT * FROM reservations WHERE reservationId = :id")
   Future<Reservation?> findReservationById(int id);
 
   @Insert(onConflict: OnConflictStrategy.rollback)
@@ -21,17 +24,20 @@ abstract class ReservationDao {
   Future<void> deleteReservation(Reservation newReservation);
 
   @Query("""
-    SELECT 
-      r.id, 
+      select 
+      r.reservationId, 
       c.name AS customerName,
-      f.departure_city, 
-      f.arrival_city, 
-      f.departure_datetime, 
-      f.arrival_datetime
-    FROM reservations r
-    JOIN flights f ON r.flight_id = f.id
-    JOIN customers c ON r.customer_id = c.id
-    WHERE r.id = :id
+      f.departureCity, 
+      f.arrivalCity, 
+      f.departureDateTime, 
+      f.arrivalDateTime
+      from reservations r
+      join flights f on r.flightId  = f.id 
+      join customers c on r.customerId = c.id 
+      where r.reservationId = :id
   """)
-  Future<void> findDetailedReservationById(int id);
+  Future<Reservation?> findDetailedReservationById(int id) ;
+ 
 }
+
+

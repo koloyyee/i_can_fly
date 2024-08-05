@@ -61,6 +61,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     AppDatabase.getInstance().then((db) => print(db.database));
+
+  
     return DatabaseInitializer(
       builder: (database) {
         return MaterialApp(
