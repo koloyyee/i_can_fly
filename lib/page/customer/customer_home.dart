@@ -6,6 +6,7 @@ import 'package:i_can_fly/main.dart';
 import 'package:i_can_fly/page/customer/edit_customer_page.dart';
 import 'package:i_can_fly/page/reservation/reservation_list.dart';
 import 'package:i_can_fly/utils/app_localizations.dart';
+import 'package:i_can_fly/dao/reservation_dao.dart';
 
 // A StatefulWidget that represents the customer's home page.
 class CustomerHomePage extends StatefulWidget {
@@ -114,7 +115,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              ReservationListPage(flightDao: flightDao),
+                              ReservationListPage()
                         ),
                       );
                     },
@@ -169,7 +170,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              ReservationListPage(flightDao: flightDao),
+                              ReservationListPage(),
                         ),
                       );
                     },
@@ -208,7 +209,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        ReservationListPage(flightDao: flightDao),
+                        ReservationListPage(),
                   ),
                 );
               },

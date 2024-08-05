@@ -7,25 +7,19 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "reservation")
 class Reservation {
   @PrimaryKey(autoGenerate: true)
-
-  // final int? id;
-  // final String name;
-  // final String email;
-  // final String password;
-  // final String firstName;
-  // final String lastName;
-  // final int birthday;
-  // final String address;
-  // final int createdAt;
-
   final int? reservationId;
-  final String customerName;
-  final String departureCity;
-  final String destinationCity;
-  final DateTime departureTime;
 
+  final int customerId;
+  final int flightId;
 
-  final DateTime arivalTime;
+  // Optional: If you want to store these directly in the reservation for quicker access
+  // Not necessary if you only access them through joined queries
+  String? departureCity;
+  String? arrivalCity;
+  DateTime departureDateTime;
+  DateTime arrivalDateTime;
+  String? customerName; // Optionally store the customer's name directly if frequently accessed
+
 
   final String reservationName;
 
@@ -33,23 +27,15 @@ class Reservation {
 
   Reservation( {
 
-    // this.id,
-    // required this.name,
-    // required this.email,
-    // required this.password,
-    // required this.firstName,
-    // required this.lastName,
-    // required this.birthday,
-    // required this.address,
-    // required this.createdAt,
-
     this.reservationId,
-    required this.customerName,
-    required this.departureCity,
-    required this.destinationCity,
-    required this.departureTime,
+    required this.customerId,
+    required this.flightId,
+    this.departureCity,
+    this.arrivalCity,
+    required this.departureDateTime,
+    required this.arrivalDateTime,
+    this.customerName,
 
-    required this.arivalTime,
 
     required this.reservationName,
   });
