@@ -1,10 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/reservation.dart';
-import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/entity/customer.dart';
-import 'package:i_can_fly/entity/reservation.dto.dart';
-import 'package:sqflite/sqflite.dart';
 
 @dao
 abstract class ReservationDao {
