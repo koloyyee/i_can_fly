@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/dao/reservation_dao.dart';
+import 'package:i_can_fly/dao/customer_dao.dart';
+
+
 import 'package:i_can_fly/db/database.dart';
+
+
 import 'package:i_can_fly/entity/reservation.dart';
+import 'package:i_can_fly/entity/flight.dart';
+import 'package:i_can_fly/entity/customer.dart';
+
+
 import 'package:i_can_fly/page/reservation/add_reservation_page.dart';
 import 'package:i_can_fly/page/reservation/reservation_details_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,16 +20,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 class ReservationListPage extends StatefulWidget {
-  final FlightDao flightDao; // Add flightDao as a parameter
-
-  const ReservationListPage({super.key, required this.flightDao});
   @override
   _ReservationListPageState createState() => _ReservationListPageState();
 }
 
 class _ReservationListPageState extends State<ReservationListPage> {
-  
   late ReservationDao reservationDao;
+
   List<Reservation> reservationList = [];
 
   @override
@@ -31,11 +38,12 @@ class _ReservationListPageState extends State<ReservationListPage> {
   Future<void> _initializeDatabase() async {
     final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     reservationDao = database.reservationDao;
-    _fetchReservation();
+
+    _fetchReservations();
   }
 
-  Future<void> _fetchReservation() async {
-    final reservations = await reservationDao.findAllReservation();
+  Future<void> _fetchReservations() async {
+    final reservations = await reservationDao.findAllReservations();
     setState(() {
       reservationList = reservations;
     });
@@ -44,17 +52,17 @@ class _ReservationListPageState extends State<ReservationListPage> {
   void _navigateToAddReservationPage() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const AddReservationPage()),
+      MaterialPageRoute(builder: (context) => AddReservationPage()),
     );
 
     if (result != null && result) {
       // Fetch the updated list
-      _fetchReservation();
-      Fluttertoast.showToast(msg: 'New reservation added with success');
+      _fetchReservations();
+      Fluttertoast.showToast(msg: 'New reservation added successfully');
     }
   }
 
-  void _navigateToReservationDetailsPage(Reservation reservation) async {
+  void _navigateToEditReservationPage(Reservation reservation) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ReservationDetailsPage(reservation: reservation)),
@@ -62,7 +70,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
 
     if (result != null && result) {
       // Fetch the updated list
-      _fetchReservation();
+      _fetchReservations();
     }
   }
 
@@ -78,8 +86,8 @@ class _ReservationListPageState extends State<ReservationListPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              onPressed: _navigateToAddReservationPage,
               child: const Text("Add Reservation"),
+              onPressed: _navigateToAddReservationPage,
             ),
           ),
           Expanded(
@@ -90,8 +98,9 @@ class _ReservationListPageState extends State<ReservationListPage> {
               itemBuilder: (context, index) {
                 final reservation = reservationList[index];
                 return ListTile(
-                  title: Text(reservation.reservationName),
-                  onTap: () => _navigateToReservationDetailsPage(reservation),
+                  //title: Text(reservation.arrivalCity) // Assuming 'name' is part of your Reservation entity
+                  subtitle: Text('${reservation.departureCity} to ${reservation.arrivalCity}'), // Display more details here
+                  onTap: () => _navigateToEditReservationPage(reservation),
                 );
               },
             ),
@@ -101,4 +110,5 @@ class _ReservationListPageState extends State<ReservationListPage> {
     );
   }
 }
+
 
