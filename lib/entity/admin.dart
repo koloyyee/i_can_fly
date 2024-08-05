@@ -18,6 +18,7 @@ import 'package:floor/floor.dart';
 /// ```
 @Entity(tableName: "admins")
 class Admin{
+  /// The id of the admin.
   @PrimaryKey(autoGenerate: true)
   int? id;
   final String email;
