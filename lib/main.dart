@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:i_can_fly/common/language_drawer.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
+import 'package:i_can_fly/dao/reservation_dao.dart';
 import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/db/database_initializer.dart';
 import 'package:i_can_fly/entity/customer.dart';
+import 'package:i_can_fly/entity/reservation.dart';
 import 'package:i_can_fly/page/admin/admin_login.dart';
 import 'package:i_can_fly/page/admin/admin_reg.dart';
 import 'package:i_can_fly/page/airplane/airplane_page.dart';
@@ -59,6 +61,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     AppDatabase.getInstance().then((db) => print(db.database));
+
+  
     return DatabaseInitializer(
       builder: (database) {
         return MaterialApp(
@@ -100,10 +104,11 @@ class _MyAppState extends State<MyApp> {
               final customer = ModalRoute.of(context)?.settings.arguments as Customer?;
               return EditCustomerPage(customer: customer!);
             },
-            "/reservations": (context) {
-              final flightDao = ModalRoute.of(context)?.settings.arguments as FlightDao?;
-              return ReservationListPage(flightDao: flightDao!);
-            },
+            "/reservations": (context) => ReservationListPage()
+
+
+              //final reservationdao = ModalRoute.of(context)?.settings.arguments as ReservationDao;
+              //return ReservationListPage(reservationdao: reservationdao);
           },
           onGenerateRoute: (settings) {
             if (settings.name == "/edit-customer") {

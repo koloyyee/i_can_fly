@@ -7,7 +7,7 @@ import 'package:i_can_fly/utils/helpers.dart';
 /// This menu will be used in the app bar of the pages.
 /// The menu will have the following options:
 /// - Home
-/// - Add Flight
+/// - Views Flights
 /// - Views Planes
 /// - Views Customers
 /// - Views Reservations

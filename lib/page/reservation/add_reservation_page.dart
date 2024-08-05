@@ -18,8 +18,10 @@ class _AddReservationPageState extends State<AddReservationPage> {
 
   List<Customer> customers = [];
   List<Flight> flights = [];
+  List<Reservation> reservations =[];
   Customer? selectedCustomer;
   Flight? selectedFlight;
+  Reservation? selectedReservation;
 
   @override
   void initState() {
@@ -31,6 +33,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
     final db = await AppDatabase.getInstance();
     customers = await db.customerDao.findAllCustomers();
     flights = await db.flightDao.findAllFlights();
+    reservations = await db.reservationDao.findAllReservations();
     setState(() {});
   }
 
@@ -43,12 +46,14 @@ class _AddReservationPageState extends State<AddReservationPage> {
   void _addReservation() async {
     if (_formKey.currentState!.validate()) {
       Reservation newReservation = Reservation(
-        customerName: selectedCustomer!.name,
-        departureCity: selectedFlight!.departureCity,
-        destinationCity: selectedFlight!.arrivalCity,
-        departureTime: selectedFlight!.departureDateTime,
-        arivalTime: selectedFlight!.arrivalDateTime,
+        customerName: selectedReservation!.customerName!,
+        departureCity: selectedReservation!.departureCity,
+        arrivalCity: selectedReservation!.arrivalCity,
+        departureDateTime: selectedReservation!.departureDateTime,
+        arrivalDateTime: selectedReservation!.arrivalDateTime,
         reservationName: _reservationNameController.text,
+        customerId: selectedReservation!.customerId!,
+        flightId: selectedReservation!.flightId!,
       );
 
       final db = await AppDatabase.getInstance();
@@ -70,34 +75,34 @@ class _AddReservationPageState extends State<AddReservationPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            DropdownButtonFormField<Customer>(
-              value: selectedCustomer,
-              onChanged: (Customer? newValue) {
+            DropdownButtonFormField<Reservation>(
+              value: selectedReservation,
+              onChanged: (Reservation? newValue) {
                 setState(() {
-                  selectedCustomer = newValue;
+                  selectedReservation = newValue;
                 });
               },
-              items: customers.map<DropdownMenuItem<Customer>>((Customer customer) {
-                return DropdownMenuItem<Customer>(
-                  value: customer,
-                  child: Text(customer.name),
+              items: reservations.map<DropdownMenuItem<Reservation>>((Reservation reservation) {
+                return DropdownMenuItem<Reservation>(
+                  value: reservation,
+                  child: Text("${reservation.customerName}"),
                 );
               }).toList(),
               validator: (value) => value == null ? 'Please select a customer' : null,
               decoration: const InputDecoration(labelText: 'Select Customer'),
             ),
             const SizedBox(height: 20),
-            DropdownButtonFormField<Flight>(
-              value: selectedFlight,
-              onChanged: (Flight? newValue) {
+            DropdownButtonFormField<Reservation>(
+              value: selectedReservation,
+              onChanged: (Reservation? newValue) {
                 setState(() {
-                  selectedFlight = newValue;
+                  selectedReservation = newValue;
                 });
               },
-              items: flights.map<DropdownMenuItem<Flight>>((Flight flight) {
-                return DropdownMenuItem<Flight>(
-                  value: flight,
-                  child: Text("${flight.departureCity} to ${flight.arrivalCity}"),
+              items: reservations.map<DropdownMenuItem<Reservation>>((Reservation reservation) {
+                return DropdownMenuItem<Reservation>(
+                  value: reservation,
+                  child: Text("${reservation.departureCity} to ${reservation.arrivalCity}"),
                 );
               }).toList(),
               validator: (value) => value == null ? 'Please select a flight' : null,

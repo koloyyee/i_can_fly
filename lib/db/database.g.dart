@@ -116,7 +116,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` TEXT NOT NULL, `address` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reservation` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerName` TEXT NOT NULL, `departureCity` TEXT NOT NULL, `destinationCity` TEXT NOT NULL, `departureTime` TEXT NOT NULL, `arivalTime` TEXT NOT NULL, `reservationName` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `flightId` INTEGER NOT NULL, `departureCity` TEXT, `arrivalCity` TEXT, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, `customerName` TEXT, `reservationName` TEXT NOT NULL, FOREIGN KEY (`customerId`) REFERENCES `customers` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`flightId`) REFERENCES `flights` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -685,43 +685,52 @@ class _$ReservationDao extends ReservationDao {
   )   : _queryAdapter = QueryAdapter(database),
         _reservationInsertionAdapter = InsertionAdapter(
             database,
-            'reservation',
+            'reservations',
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
-                  'customerName': item.customerName,
+                  'customerId': item.customerId,
+                  'flightId': item.flightId,
                   'departureCity': item.departureCity,
-                  'destinationCity': item.destinationCity,
-                  'departureTime':
-                      _dateTimeConverter.encode(item.departureTime),
-                  'arivalTime': _dateTimeConverter.encode(item.arivalTime),
+                  'arrivalCity': item.arrivalCity,
+                  'departureDateTime':
+                      _dateTimeConverter.encode(item.departureDateTime),
+                  'arrivalDateTime':
+                      _dateTimeConverter.encode(item.arrivalDateTime),
+                  'customerName': item.customerName,
                   'reservationName': item.reservationName
                 }),
         _reservationUpdateAdapter = UpdateAdapter(
             database,
-            'reservation',
+            'reservations',
             ['reservationId'],
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
-                  'customerName': item.customerName,
+                  'customerId': item.customerId,
+                  'flightId': item.flightId,
                   'departureCity': item.departureCity,
-                  'destinationCity': item.destinationCity,
-                  'departureTime':
-                      _dateTimeConverter.encode(item.departureTime),
-                  'arivalTime': _dateTimeConverter.encode(item.arivalTime),
+                  'arrivalCity': item.arrivalCity,
+                  'departureDateTime':
+                      _dateTimeConverter.encode(item.departureDateTime),
+                  'arrivalDateTime':
+                      _dateTimeConverter.encode(item.arrivalDateTime),
+                  'customerName': item.customerName,
                   'reservationName': item.reservationName
                 }),
         _reservationDeletionAdapter = DeletionAdapter(
             database,
-            'reservation',
+            'reservations',
             ['reservationId'],
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
-                  'customerName': item.customerName,
+                  'customerId': item.customerId,
+                  'flightId': item.flightId,
                   'departureCity': item.departureCity,
-                  'destinationCity': item.destinationCity,
-                  'departureTime':
-                      _dateTimeConverter.encode(item.departureTime),
-                  'arivalTime': _dateTimeConverter.encode(item.arivalTime),
+                  'arrivalCity': item.arrivalCity,
+                  'departureDateTime':
+                      _dateTimeConverter.encode(item.departureDateTime),
+                  'arrivalDateTime':
+                      _dateTimeConverter.encode(item.arrivalDateTime),
+                  'customerName': item.customerName,
                   'reservationName': item.reservationName
                 });
 
@@ -738,31 +747,46 @@ class _$ReservationDao extends ReservationDao {
   final DeletionAdapter<Reservation> _reservationDeletionAdapter;
 
   @override
-  Future<List<Reservation>> findAllReservation() async {
-    return _queryAdapter.queryList('SELECT * FROM customers',
+  Future<List<Reservation>> findAllReservations() async {
+    return _queryAdapter.queryList('SELECT * FROM reservations',
         mapper: (Map<String, Object?> row) => Reservation(
             reservationId: row['reservationId'] as int?,
-            customerName: row['customerName'] as String,
-            departureCity: row['departureCity'] as String,
-            destinationCity: row['destinationCity'] as String,
-            departureTime:
-                _dateTimeConverter.decode(row['departureTime'] as String),
-            arivalTime: _dateTimeConverter.decode(row['arivalTime'] as String),
+            customerId: row['customerId'] as int,
+            flightId: row['flightId'] as int,
+            departureCity: row['departureCity'] as String?,
+            arrivalCity: row['arrivalCity'] as String?,
+            departureDateTime:
+                _dateTimeConverter.decode(row['departureDateTime'] as String),
+            arrivalDateTime:
+                _dateTimeConverter.decode(row['arrivalDateTime'] as String),
+            customerName: row['customerName'] as String?,
             reservationName: row['reservationName'] as String));
   }
 
   @override
   Future<Reservation?> findReservationById(int id) async {
-    return _queryAdapter.query('SELECT * FROM customers WHERE id = ?1',
+    return _queryAdapter.query(
+        'SELECT * FROM reservations WHERE reservationId = ?1',
         mapper: (Map<String, Object?> row) => Reservation(
             reservationId: row['reservationId'] as int?,
-            customerName: row['customerName'] as String,
-            departureCity: row['departureCity'] as String,
-            destinationCity: row['destinationCity'] as String,
-            departureTime:
-                _dateTimeConverter.decode(row['departureTime'] as String),
-            arivalTime: _dateTimeConverter.decode(row['arivalTime'] as String),
+            customerId: row['customerId'] as int,
+            flightId: row['flightId'] as int,
+            departureCity: row['departureCity'] as String?,
+            arrivalCity: row['arrivalCity'] as String?,
+            departureDateTime:
+                _dateTimeConverter.decode(row['departureDateTime'] as String),
+            arrivalDateTime:
+                _dateTimeConverter.decode(row['arrivalDateTime'] as String),
+            customerName: row['customerName'] as String?,
             reservationName: row['reservationName'] as String),
+        arguments: [id]);
+  }
+
+  @override
+  Future<Reservation?> findDetailedReservationById(int id) async {
+    return _queryAdapter.query(
+        'select        r.reservationId,        c.name AS customerName,       f.departureCity,        f.arrivalCity,        f.departureDateTime,        f.arrivalDateTime       from reservations r       join flights f on r.flightId  = f.id        join customers c on r.customerId = c.id        where r.reservationId = ?1',
+        mapper: (Map<String, Object?> row) => Reservation(reservationId: row['reservationId'] as int?, customerId: row['customerId'] as int, flightId: row['flightId'] as int, departureCity: row['departureCity'] as String?, arrivalCity: row['arrivalCity'] as String?, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String), customerName: row['customerName'] as String?, reservationName: row['reservationName'] as String),
         arguments: [id]);
   }
 

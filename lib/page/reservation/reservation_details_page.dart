@@ -22,12 +22,12 @@ class ReservationDetailsPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text('Departure City: ${reservation.departureCity}', style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 8),
-            Text('Arrival City: ${reservation.destinationCity}', style: const TextStyle(fontSize: 16)),
+            Text('Arrival City: ${reservation.arrivalCity}', style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 8),
-            Text('Departure Date and Time: ${reservation.departureTime}', style: const TextStyle(fontSize: 16)),
+            Text('Departure Date and Time: ${reservation.departureDateTime}', style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 8),
 
-            Text('Arrival Date and Time: ${reservation.arivalTime}', style: const TextStyle(fontSize: 16)),
+            Text('Arrival Date and Time: ${reservation.arrivalDateTime}', style: const TextStyle(fontSize: 16)),
 
             const SizedBox(height: 8),
             Text('Reservation Name: ${reservation.reservationName}', style: const TextStyle(fontSize: 16)),
