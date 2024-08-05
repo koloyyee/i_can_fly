@@ -1,6 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:i_can_fly/entity/admin.dart';
 
+
 @dao
 abstract class AdminDao {
   @Query("select * from admins ")

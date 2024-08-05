@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,10 +25,12 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   Future<bool> load() async {
-    String jsonString = await rootBundle.loadString('assets/translations/${locale.languageCode}.json');
+    String jsonString = await rootBundle
+        .loadString('assets/translations/${locale.languageCode}.json');
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
     _localizedStrings = jsonMap.map((key, value) {
@@ -40,9 +43,24 @@ class AppLocalizations {
   String translate(String key) {
     return _localizedStrings[key] ?? '** $key not found';
   }
+
+  String translateFallback(context, String key) {
+    return _localizedStrings[key] == null ? key.contains("_") ?  _snakeToCapitalize(key) : _capitalizedWord(key): _localizedStrings[key]!;
+  }
+  String _snakeToCapitalize(String snake_case) {
+    return snake_case.split("_").map((word) {
+      if (word.isEmpty) return word;
+      return _capitalizedWord(word);
+    }).join(" ");
+  }
+
+ String _capitalizedWord(String word) {
+    return word[0].toUpperCase() + word.substring(1);
+  }
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -60,4 +78,3 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
-

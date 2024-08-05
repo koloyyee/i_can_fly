@@ -14,11 +14,12 @@ class AddReservationPage extends StatefulWidget {
 
 class _AddReservationPageState extends State<AddReservationPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _reservationNameController = TextEditingController();
+  final TextEditingController _reservationNameController =
+      TextEditingController();
 
   List<Customer> customers = [];
   List<Flight> flights = [];
-  List<Reservation> reservations =[];
+  List<Reservation> reservations = [];
   Customer? selectedCustomer;
   Flight? selectedFlight;
   Reservation? selectedReservation;
@@ -30,11 +31,15 @@ class _AddReservationPageState extends State<AddReservationPage> {
   }
 
   Future<void> _loadData() async {
-    final db = await AppDatabase.getInstance();
-    customers = await db.customerDao.findAllCustomers();
-    flights = await db.flightDao.findAllFlights();
-    reservations = await db.reservationDao.findAllReservations();
-    setState(() {});
+    AppDatabase.getInstance().then((db) {
+        db.customerDao
+            .findAllCustomers()
+            .then((customer) => setState(() => customers.addAll(customer)));
+        db.flightDao.findAllFlights().then((flight) => setState(() => flights.addAll(flight)));
+        db.reservationDao
+            .findAllReservations()
+            .then((reserv) => setState(() => reservations.addAll(reserv) ));
+    });
   }
 
   @override
@@ -82,13 +87,15 @@ class _AddReservationPageState extends State<AddReservationPage> {
                   selectedReservation = newValue;
                 });
               },
-              items: reservations.map<DropdownMenuItem<Reservation>>((Reservation reservation) {
+              items: reservations.map<DropdownMenuItem<Reservation>>(
+                  (Reservation reservation) {
                 return DropdownMenuItem<Reservation>(
                   value: reservation,
                   child: Text("${reservation.customerName}"),
                 );
               }).toList(),
-              validator: (value) => value == null ? 'Please select a customer' : null,
+              validator: (value) =>
+                  value == null ? 'Please select a customer' : null,
               decoration: const InputDecoration(labelText: 'Select Customer'),
             ),
             const SizedBox(height: 20),
@@ -99,13 +106,16 @@ class _AddReservationPageState extends State<AddReservationPage> {
                   selectedReservation = newValue;
                 });
               },
-              items: reservations.map<DropdownMenuItem<Reservation>>((Reservation reservation) {
+              items: reservations.map<DropdownMenuItem<Reservation>>(
+                  (Reservation reservation) {
                 return DropdownMenuItem<Reservation>(
                   value: reservation,
-                  child: Text("${reservation.departureCity} to ${reservation.arrivalCity}"),
+                  child: Text(
+                      "${reservation.departureCity} to ${reservation.arrivalCity}"),
                 );
               }).toList(),
-              validator: (value) => value == null ? 'Please select a flight' : null,
+              validator: (value) =>
+                  value == null ? 'Please select a flight' : null,
               decoration: const InputDecoration(labelText: 'Select Flight'),
             ),
             const SizedBox(height: 20),
