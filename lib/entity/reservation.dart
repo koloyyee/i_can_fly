@@ -23,8 +23,8 @@ class Reservation {
   @PrimaryKey(autoGenerate: true)
   final int? reservationId;
 
-  final int customerId;
-  final int flightId;
+  int customerId;
+  int flightId;
 
   // Optional: If you want to store these directly in the reservation for quicker access
   // Not necessary if you only access them through joined queries

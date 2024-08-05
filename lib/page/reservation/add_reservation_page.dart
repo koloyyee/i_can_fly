@@ -34,7 +34,11 @@ class _AddReservationPageState extends State<AddReservationPage> {
     AppDatabase.getInstance().then((db) {
         db.customerDao
             .findAllCustomers()
-            .then((customer) => setState(() => customers.addAll(customer)));
+            .then((customer) => setState(() {
+              print(customer.last.name);
+              customers.clear();
+              customers.addAll(customer);
+            } ));
         db.flightDao.findAllFlights().then((flight) => setState(() => flights.addAll(flight)));
         db.reservationDao
             .findAllReservations()
@@ -80,18 +84,21 @@ class _AddReservationPageState extends State<AddReservationPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            DropdownButtonFormField<Reservation>(
-              value: selectedReservation,
-              onChanged: (Reservation? newValue) {
+            DropdownButtonFormField<Customer>(
+              // value: selectedReservation,
+              onChanged: (Customer? newValue) {
                 setState(() {
-                  selectedReservation = newValue;
+                  selectedReservation?.customerName = newValue!.name;
+                  selectedReservation?.customerId= newValue!.id!;
+                  print(selectedReservation?.customerName);
+                  print(selectedReservation?.customerId);
                 });
               },
-              items: reservations.map<DropdownMenuItem<Reservation>>(
-                  (Reservation reservation) {
-                return DropdownMenuItem<Reservation>(
-                  value: reservation,
-                  child: Text("${reservation.customerName}"),
+              items: customers.map<DropdownMenuItem<Customer>>(
+                  (Customer customer) {
+                return DropdownMenuItem<Customer>(
+                  value: customer,
+                  child: Text("${customer.name}"),
                 );
               }).toList(),
               validator: (value) =>

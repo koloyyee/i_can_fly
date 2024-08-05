@@ -88,8 +88,9 @@ class _EditFlightPageState extends State<EditFlightPage> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: arrivalTime ?? TimeOfDay.now(),
-      errorInvalidText:
-          arrivalTime != null ? null : lookupTranslate(context, "please_select_a_valid_time"),
+      errorInvalidText: arrivalTime != null
+          ? null
+          : lookupTranslate(context, "please_select_a_valid_time"),
     );
     if (picked != null) {
       setState(() {
@@ -129,191 +130,242 @@ class _EditFlightPageState extends State<EditFlightPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text( lookupTranslate(context,"update_the_flight" )
-          ,
-          style: const TextStyle(color: Colors.white),
+        appBar: AppBar(
+          title: Text(
+            lookupTranslate(context, "update_the_flight"),
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color(CTColor.Teal.colorValue),
         ),
-        backgroundColor: Color(CTColor.Teal.colorValue),
-      ),
-      body: Form(
-          key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Image.asset(
-                        "images/gliding_kitty.png",
-                        width: 120,
-                        height: 120,
-                      ),
-                      TextFormField(
-                        controller: departureCityController,
-                        decoration: InputDecoration(
-                          labelText: lookupTranslate(context, "departure_city"),
-                        ),
-                        // initialValue: widget.flight.departureCity,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return lookupTranslate(context, "please_enter_a_valid_city");
-                          }
-                          return null;
-                        },
-                      ),
-                      OutlinedButton(
-                          onPressed: () => _selectDepartureDate(context),
-                          child: Text(departureDate == null
-                              ? lookupTranslate(context, "select_date")
-                              : "${lookupTranslate(context, "departure_date")}: ${DateFormat.yMd().format(departureDate!)}")),
-                      OutlinedButton(
-                        onPressed: () => _selectDepartureTime(context),
-                        child: Text(departureTime == null
-                            ? lookupTranslate(context, "select_departure_time")
-                            : "${lookupTranslate(context, "departure_time")}: ${departureTime!.format(context)}"),
-                      ),
-                      TextFormField(
-                        controller: arrivalCityController,
-                        decoration: InputDecoration(
-                          labelText: lookupTranslate(context, "arrival_city"),
-                        ),
-
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return lookupTranslate(context, "please_enter_a_valid_city");
-                          }
-                          return null;
-                        },
-                      ),
-                      OutlinedButton(
-                          onPressed: () => _selectArrivalDate(context),
-                          child: Text(arrivalDate == null
-                              ? lookupTranslate(context, "select_arrival_date")
-                              : "${lookupTranslate(context, "arrival_date")}: ${DateFormat.yMd().format(arrivalDate!)}")),
-                      OutlinedButton(
-                        onPressed: () => _selectArrivalTime(context),
-                        child: Text(arrivalTime == null
-                            ? lookupTranslate(context, "select_arrival_time")
-                            : "${lookupTranslate(context, "arrival_time")}: ${arrivalTime!.format(context)}"),
-                      ),
-                      DropdownButtonFormField(
-                          hint: Text(lookupTranslate(context, "select_airplane_type")),
-                          value: airplaneType ?? airplaneTypes.first,
-                          validator: (value) => value == null
-                              ? "Please select a valid airplane type"
-                              : null,
-                          items: airplaneTypes
-                              .map((e) =>
-                                  DropdownMenuItem(value: e, child: Text(e)))
-                              .toList(),
-                          onChanged: (value) =>
-                              airplaneType = value.toString()),
-                    ],
-                  ),
-                  Expanded(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(lookupTranslate(context, "delete")),
-                                      content: Text(
-                                          "${lookupTranslate(context, "confirm_delete")} ${widget.flight.departureCity} ${lookupTranslate(context, "to")} ${widget.flight.arrivalCity}?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(lookupTranslate(context, "cancel")),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            flightDao
-                                                .deleteFlight(widget.flight);
-                                            flightDao
-                                                .findAllFlights()
-                                                .then((flights) {
-                                              setState(() {
-                                                widget.flights = flights;
-                                              });
-                                            });
-                                            Navigator.of(context).pop();
-                                            Navigator.pop(context, true);
-                                          },
-                                          child: Text(lookupTranslate(context, "delete")),
-                                        ),
-                          ElevatedButton(
-                              onPressed: () {
-                                // Validate returns true if the form is valid, or false otherwise.
-                                if (_formKey.currentState!.validate()) {
-                                  // If the form is valid, display a snackbar. In the real world,
-                                  // you'd often call a server or save the information in a database.
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        duration: const Duration(seconds: 1),
-                                        content: Text(lookupTranslate(context, "processing_data"))),
-                                  );
-
-                                  setState(() {
-                                    if (departureTime != null &&
-                                        arrivalTime != null) {
-                                      DateTime deptTime = DateTime(
-                                          departureDate!.year,
-                                          departureDate!.month,
-                                          departureDate!.day,
-                                          departureTime!.hour,
-                                          departureTime!.minute);
-                                      DateTime arrTime = DateTime(
-                                          arrivalDate!.year,
-                                          arrivalDate!.month,
-                                          arrivalDate!.day,
-                                          arrivalTime!.hour,
-                                          arrivalTime!.minute);
-
-                                      flightDao
-                                          .updateFlight(Flight(
-                                              id: widget.flight.id,
-                                              airplaneType: airplaneType,
-                                              departureCity:
-                                                  departureCityController.text,
-                                              arrivalCity:
-                                                  arrivalCityController.text,
-                                              departureDateTime: deptTime,
-                                              arrivalDateTime: arrTime))
-                                          .then((value) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            duration: const Duration(seconds: 2),
-                                              content:
-                                                  Text("${lookupTranslate(context, "update")}!")),
-                                        ).closed.then((reason) {
-                                          Navigator.pushNamed(context, "/flights");
-                                          // Navigator.pop(context, true);
-                                        });
-                                      });
-                                    }
-                                  });
+        body: SingleChildScrollView(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height * 1.8,
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Image.asset(
+                              "images/gliding_kitty.png",
+                              width: 120,
+                              height: 120,
+                            ),
+                            TextFormField(
+                              controller: departureCityController,
+                              decoration: InputDecoration(
+                                labelText:
+                                    lookupTranslate(context, "departure_city"),
+                              ),
+                              // initialValue: widget.flight.departureCity,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return lookupTranslate(
+                                      context, "please_enter_a_valid_city");
                                 }
+                                return null;
                               },
-                              child: Text(lookupTranslate(context, "update"))),
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: Text(lookupTranslate(context, "delete")),
-                          ),
-                        ]),
+                            ),
+                            OutlinedButton(
+                                onPressed: () => _selectDepartureDate(context),
+                                child: Text(departureDate == null
+                                    ? lookupTranslate(context, "select_date")
+                                    : "${lookupTranslate(context, "departure_date")}: ${DateFormat.yMd().format(departureDate!)}")),
+                            OutlinedButton(
+                              onPressed: () => _selectDepartureTime(context),
+                              child: Text(departureTime == null
+                                  ? lookupTranslate(
+                                      context, "select_departure_time")
+                                  : "${lookupTranslate(context, "departure_time")}: ${departureTime!.format(context)}"),
+                            ),
+                            TextFormField(
+                              controller: arrivalCityController,
+                              decoration: InputDecoration(
+                                labelText:
+                                    lookupTranslate(context, "arrival_city"),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return lookupTranslate(
+                                      context, "please_enter_a_valid_city");
+                                }
+                                return null;
+                              },
+                            ),
+                            OutlinedButton(
+                                onPressed: () => _selectArrivalDate(context),
+                                child: Text(arrivalDate == null
+                                    ? lookupTranslate(
+                                        context, "select_arrival_date")
+                                    : "${lookupTranslate(context, "arrival_date")}: ${DateFormat.yMd().format(arrivalDate!)}")),
+                            OutlinedButton(
+                              onPressed: () => _selectArrivalTime(context),
+                              child: Text(arrivalTime == null
+                                  ? lookupTranslate(
+                                      context, "select_arrival_time")
+                                  : "${lookupTranslate(context, "arrival_time")}: ${arrivalTime!.format(context)}"),
+                            ),
+                            DropdownButtonFormField(
+                                hint: Text(lookupTranslate(
+                                    context, "select_airplane_type")),
+                                value: airplaneType == null? null:  airplaneTypes.first ,
+                                validator: (value) => value == null
+                                    ? "Please select a valid airplane type"
+                                    : null,
+                                items: airplaneTypes
+                                    .map((e) => DropdownMenuItem(
+                                        value: e, child: Text(e)))
+                                    .toList(),
+                                onChanged: (value) =>
+                                    airplaneType = value.toString()),
+                          ],
+                        ),
+                        Expanded(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(lookupTranslate(
+                                                context, "delete")),
+                                            content: Text(
+                                                "${lookupTranslate(context, "confirm_delete")} ${widget.flight.departureCity} ${lookupTranslate(context, "to")} ${widget.flight.arrivalCity}?"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(lookupTranslate(
+                                                    context, "cancel")),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  flightDao.deleteFlight(
+                                                      widget.flight);
+                                                  flightDao
+                                                      .findAllFlights()
+                                                      .then((flights) {
+                                                    setState(() {
+                                                      widget.flights = flights;
+                                                    });
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                  Navigator.pop(context, true);
+                                                },
+                                                child: Text(lookupTranslate(
+                                                    context, "delete")),
+                                              ),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    // Validate returns true if the form is valid, or false otherwise.
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      // If the form is valid, display a snackbar. In the real world,
+                                                      // you'd often call a server or save the information in a database.
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 1),
+                                                            content: Text(
+                                                                lookupTranslate(
+                                                                    context,
+                                                                    "processing_data"))),
+                                                      );
+
+                                                      setState(() {
+                                                        if (departureTime !=
+                                                                null &&
+                                                            arrivalTime !=
+                                                                null) {
+                                                          DateTime deptTime =
+                                                              DateTime(
+                                                                  departureDate!
+                                                                      .year,
+                                                                  departureDate!
+                                                                      .month,
+                                                                  departureDate!
+                                                                      .day,
+                                                                  departureTime!
+                                                                      .hour,
+                                                                  departureTime!
+                                                                      .minute);
+                                                          DateTime arrTime =
+                                                              DateTime(
+                                                                  arrivalDate!
+                                                                      .year,
+                                                                  arrivalDate!
+                                                                      .month,
+                                                                  arrivalDate!
+                                                                      .day,
+                                                                  arrivalTime!
+                                                                      .hour,
+                                                                  arrivalTime!
+                                                                      .minute);
+
+                                                          flightDao
+                                                              .updateFlight(Flight(
+                                                                  id: widget
+                                                                      .flight
+                                                                      .id,
+                                                                  airplaneType:
+                                                                      airplaneType,
+                                                                  departureCity:
+                                                                      departureCityController
+                                                                          .text,
+                                                                  arrivalCity:
+                                                                      arrivalCityController
+                                                                          .text,
+                                                                  departureDateTime:
+                                                                      deptTime,
+                                                                  arrivalDateTime:
+                                                                      arrTime))
+                                                              .then((value) {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                  SnackBar(
+                                                                      duration: const Duration(
+                                                                          seconds:
+                                                                              2),
+                                                                      content: Text(
+                                                                          "${lookupTranslate(context, "update")}!")),
+                                                                )
+                                                                .closed
+                                                                .then((reason) {
+                                                              Navigator.pushNamed(
+                                                                  context,
+                                                                  "/flights");
+                                                              // Navigator.pop(context, true);
+                                                            });
+                                                          });
+                                                        }
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Text(lookupTranslate(
+                                                      context, "update"))),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                  child:
+                                      Text(lookupTranslate(context, "delete")),
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ));
+                ))));
   }
 }

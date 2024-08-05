@@ -41,6 +41,7 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   Future<void> onRefresh() async {
     fetchFlights();
   }
+
   void fetchFlights() {
     AppDatabase.getInstance().then((db) {
       flightDao = db.flightDao;
@@ -79,45 +80,43 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
               ),
             ],
           ))
-        : 
-        RefreshIndicator(
-          onRefresh: onRefresh ,
-          child:  OrientationWidget(
-            portraitChild: ListView(
+        : RefreshIndicator(
+            onRefresh: onRefresh,
+            child: OrientationWidget(
+              portraitChild: ListView(
 // 2.[x ] There must be a TextField along with a button that lets the user insert items into the ListView.
-              children: [
-                Image.asset(
-                  "images/gliding_kitty.png",
-                  width: 120,
-                  height: 120,
-                ),
-                for (var flight in flights)
-                  flightDetailGesture(context, flight, formatter)
-              ],
-            ),
-            landscapeChild: Row(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: flights.length,
-                    itemBuilder: (context, index) {
-                      final flight = flights[index];
-                      return flightDetailGesture(context, flight, formatter);
-                    },
+                children: [
+                  Image.asset(
+                    "images/gliding_kitty.png",
+                    width: 120,
+                    height: 120,
                   ),
-                ),
-                if (selectedFlight != null)
+                  for (var flight in flights)
+                    flightDetailGesture(context, flight, formatter)
+                ],
+              ),
+              landscapeChild: Row(
+                children: [
                   Expanded(
-                    child: FlightDetails(
-                      flight: selectedFlight!,
-                      formatter: formatter,
-                      flights: flights,
+                    child: ListView.builder(
+                      itemCount: flights.length,
+                      itemBuilder: (context, index) {
+                        final flight = flights[index];
+                        return flightDetailGesture(context, flight, formatter);
+                      },
                     ),
                   ),
-              ],
-            ),
-          )
-          );
+                  if (selectedFlight != null)
+                    Expanded(
+                      child: FlightDetails(
+                        flight: selectedFlight!,
+                        formatter: formatter,
+                        flights: flights,
+                      ),
+                    ),
+                ],
+              ),
+            ));
   }
 
   GestureDetector flightDetailGesture(
@@ -230,7 +229,8 @@ class FlightDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return SingleChildScrollView(
+        child: SizedBox(
       height: 500,
       child: Column(
         children: [
@@ -252,7 +252,7 @@ class FlightDetails extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-                "${lookupTranslate(context, "airplane_type")}: ${flight.airplaneType?? ''}"),
+                "${lookupTranslate(context, "airplane_type")}: ${flight.airplaneType ?? ''}"),
           ),
           ElevatedButton(
             onPressed: () {
@@ -270,7 +270,7 @@ class FlightDetails extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 }
 
