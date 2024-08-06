@@ -9,8 +9,7 @@ import 'package:i_can_fly/db/database.dart';
 
 
 import 'package:i_can_fly/entity/reservation.dart';
-import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/entity/customer.dart';
+
 
 
 import 'package:i_can_fly/page/reservation/add_reservation_page.dart';

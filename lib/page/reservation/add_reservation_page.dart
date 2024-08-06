@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:i_can_fly/dao/reservation_dao.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/entity/reservation.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class AddReservationPage extends StatefulWidget {
-  const AddReservationPage({super.key});
-
   @override
   _AddReservationPageState createState() => _AddReservationPageState();
 }
@@ -15,13 +15,14 @@ class AddReservationPage extends StatefulWidget {
 class _AddReservationPageState extends State<AddReservationPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _reservationNameController = TextEditingController();
+  late ReservationDao reservationDao;
 
   List<Customer> customers = [];
   List<Flight> flights = [];
-  List<Reservation> reservations =[];
   Customer? selectedCustomer;
   Flight? selectedFlight;
-  Reservation? selectedReservation;
+  DateTime? departureDate;
+  DateTime? arrivalDate;
 
   @override
   void initState() {
@@ -31,9 +32,9 @@ class _AddReservationPageState extends State<AddReservationPage> {
 
   Future<void> _loadData() async {
     final db = await AppDatabase.getInstance();
+    reservationDao = db.reservationDao;
     customers = await db.customerDao.findAllCustomers();
     flights = await db.flightDao.findAllFlights();
-    reservations = await db.reservationDao.findAllReservations();
     setState(() {});
   }
 
@@ -45,19 +46,29 @@ class _AddReservationPageState extends State<AddReservationPage> {
 
   void _addReservation() async {
     if (_formKey.currentState!.validate()) {
+      if (selectedCustomer == null || selectedFlight == null) {
+        Fluttertoast.showToast(
+            msg: "Please ensure both a customer and a flight are selected.",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
       Reservation newReservation = Reservation(
-        customerName: selectedReservation!.customerName!,
-        departureCity: selectedReservation!.departureCity,
-        arrivalCity: selectedReservation!.arrivalCity,
-        departureDateTime: selectedReservation!.departureDateTime,
-        arrivalDateTime: selectedReservation!.arrivalDateTime,
+        customerId: selectedCustomer!.id,
+        flightId: selectedFlight!.id,
+        customerName: selectedCustomer!.name,
+        departureCity: selectedFlight!.departureCity,
+        arrivalCity: selectedFlight!.arrivalCity,
+        departureDateTime: selectedFlight!.departureDateTime,
+        arrivalDateTime: selectedFlight!.arrivalDateTime,
         reservationName: _reservationNameController.text,
-        customerId: selectedReservation!.customerId!,
-        flightId: selectedReservation!.flightId!,
       );
 
-      final db = await AppDatabase.getInstance();
-      await db.reservationDao.createReservation(newReservation);
+      await reservationDao.createReservation(newReservation);
       Fluttertoast.showToast(msg: 'Reservation added successfully');
       Navigator.pop(context, true);
     }
@@ -67,7 +78,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Reservation"),
+        title: Text("Add Reservation"),
         backgroundColor: Colors.teal,
       ),
       body: Form(
@@ -75,43 +86,43 @@ class _AddReservationPageState extends State<AddReservationPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            DropdownButtonFormField<Reservation>(
-              value: selectedReservation,
-              onChanged: (Reservation? newValue) {
+            DropdownButtonFormField<Customer>(
+              value: selectedCustomer,
+              onChanged: (Customer? newValue) {
                 setState(() {
-                  selectedReservation = newValue;
+                  selectedCustomer = newValue;
                 });
               },
-              items: reservations.map<DropdownMenuItem<Reservation>>((Reservation reservation) {
-                return DropdownMenuItem<Reservation>(
-                  value: reservation,
-                  child: Text("${reservation.customerName}"),
+              items: customers.map<DropdownMenuItem<Customer>>((Customer customer) {
+                return DropdownMenuItem<Customer>(
+                  value: customer,
+                  child: Text(customer.name),
                 );
               }).toList(),
               validator: (value) => value == null ? 'Please select a customer' : null,
-              decoration: const InputDecoration(labelText: 'Select Customer'),
+              decoration: InputDecoration(labelText: 'Select Customer'),
             ),
-            const SizedBox(height: 20),
-            DropdownButtonFormField<Reservation>(
-              value: selectedReservation,
-              onChanged: (Reservation? newValue) {
+            SizedBox(height: 20),
+            DropdownButtonFormField<Flight>(
+              value: selectedFlight,
+              onChanged: (Flight? newValue) {
                 setState(() {
-                  selectedReservation = newValue;
+                  selectedFlight = newValue;
                 });
               },
-              items: reservations.map<DropdownMenuItem<Reservation>>((Reservation reservation) {
-                return DropdownMenuItem<Reservation>(
-                  value: reservation,
-                  child: Text("${reservation.departureCity} to ${reservation.arrivalCity}"),
+              items: flights.map<DropdownMenuItem<Flight>>((Flight flight) {
+                return DropdownMenuItem<Flight>(
+                  value: flight,
+                  child: Text("${flight.departureCity} to ${flight.arrivalCity}"),
                 );
               }).toList(),
               validator: (value) => value == null ? 'Please select a flight' : null,
-              decoration: const InputDecoration(labelText: 'Select Flight'),
+              decoration: InputDecoration(labelText: 'Select Flight'),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             TextFormField(
               controller: _reservationNameController,
-              decoration: const InputDecoration(labelText: 'Reservation Name'),
+              decoration: InputDecoration(labelText: 'Reservation Name'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a reservation name';
@@ -119,10 +130,10 @@ class _AddReservationPageState extends State<AddReservationPage> {
                 return null;
               },
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _addReservation,
-              child: const Text('Add Reservation'),
+              child: Text('Add Reservation'),
             ),
           ],
         ),
