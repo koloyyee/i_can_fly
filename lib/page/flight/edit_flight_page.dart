@@ -71,6 +71,10 @@ class _EditFlightPageState extends State<EditFlightPage> {
     super.dispose();
   }
 
+  DateTime _formatDT({required DateTime date, required TimeOfDay time}) {
+    return DateTime(date.year, date.month, date.day, departureTime!.hour,
+        departureTime!.minute);
+  }
   Future<void> _selectDepartureTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -360,4 +364,5 @@ class _EditFlightPageState extends State<EditFlightPage> {
                   ),
                 ))));
   }
+
 }

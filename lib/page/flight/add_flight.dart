@@ -38,7 +38,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
   String airplaneType = "";
 
   List<String> _airplaneTypes = [];
-
+  
   @override
   void initState() {
     super.initState();
@@ -48,7 +48,8 @@ class _AddFlightPageState extends State<AddFlightPage> {
 
     AppDatabase.getInstance().then((db) {
       flightDao = db.flightDao;
-      flightDao.findAllAirplaneTypes().then((types) => setState(()=> _airplaneTypes = types));
+      flightDao.findAllAirplaneTypes()
+      .then((types) => setState(()=> _airplaneTypes = types));
     });
   }
 

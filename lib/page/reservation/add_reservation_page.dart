@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:i_can_fly/dao/reservation_dao.dart';
+import 'package:i_can_fly/db/database.dart';
 import 'package:i_can_fly/entity/flight.dart';
 import 'package:i_can_fly/entity/customer.dart';
 import 'package:i_can_fly/entity/reservation.dart';
-import 'package:i_can_fly/db/database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class AddReservationPage extends StatefulWidget {
-  const AddReservationPage({super.key});
-
   @override
   _AddReservationPageState createState() => _AddReservationPageState();
 }
 
 class _AddReservationPageState extends State<AddReservationPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _reservationNameController =
-      TextEditingController();
+  final TextEditingController _reservationNameController = TextEditingController();
+  late ReservationDao reservationDao;
 
   List<Customer> customers = [];
   List<Flight> flights = [];
-  List<Reservation> reservations = [];
   Customer? selectedCustomer;
   Flight? selectedFlight;
-  Reservation? selectedReservation;
+  DateTime? departureDate;
+  DateTime? arrivalDate;
 
   @override
   void initState() {
@@ -31,19 +31,11 @@ class _AddReservationPageState extends State<AddReservationPage> {
   }
 
   Future<void> _loadData() async {
-    AppDatabase.getInstance().then((db) {
-        db.customerDao
-            .findAllCustomers()
-            .then((customer) => setState(() {
-              print(customer.last.name);
-              customers.clear();
-              customers.addAll(customer);
-            } ));
-        db.flightDao.findAllFlights().then((flight) => setState(() => flights.addAll(flight)));
-        db.reservationDao
-            .findAllReservations()
-            .then((reserv) => setState(() => reservations.addAll(reserv) ));
-    });
+    final db = await AppDatabase.getInstance();
+    reservationDao = db.reservationDao;
+    customers = await db.customerDao.findAllCustomers();
+    flights = await db.flightDao.findAllFlights();
+    setState(() {});
   }
 
   @override
@@ -54,19 +46,29 @@ class _AddReservationPageState extends State<AddReservationPage> {
 
   void _addReservation() async {
     if (_formKey.currentState!.validate()) {
+      if (selectedCustomer == null || selectedFlight == null) {
+        Fluttertoast.showToast(
+            msg: "Please ensure both a customer and a flight are selected.",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
       Reservation newReservation = Reservation(
-        customerName: selectedReservation!.customerName!,
-        departureCity: selectedReservation!.departureCity,
-        arrivalCity: selectedReservation!.arrivalCity,
-        departureDateTime: selectedReservation!.departureDateTime,
-        arrivalDateTime: selectedReservation!.arrivalDateTime,
+        customerId: selectedCustomer!.id,
+        flightId: selectedFlight!.id,
+        customerName: selectedCustomer!.name,
+        departureCity: selectedFlight!.departureCity,
+        arrivalCity: selectedFlight!.arrivalCity,
+        departureDateTime: selectedFlight!.departureDateTime,
+        arrivalDateTime: selectedFlight!.arrivalDateTime,
         reservationName: _reservationNameController.text,
-        customerId: selectedReservation!.customerId!,
-        flightId: selectedReservation!.flightId!,
       );
 
-      final db = await AppDatabase.getInstance();
-      await db.reservationDao.createReservation(newReservation);
+      await reservationDao.createReservation(newReservation);
       Fluttertoast.showToast(msg: 'Reservation added successfully');
       Navigator.pop(context, true);
     }
@@ -76,7 +78,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Reservation"),
+        title: Text("Add Reservation"),
         backgroundColor: Colors.teal,
       ),
       body: Form(
@@ -84,62 +86,78 @@ class _AddReservationPageState extends State<AddReservationPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            DropdownButtonFormField<Customer>(
-              // value: selectedReservation,
-              onChanged: (Customer? newValue) {
-                setState(() {
-                  selectedReservation?.customerName = newValue!.name;
-                  selectedReservation?.customerId= newValue!.id!;
-                  print(selectedReservation?.customerName);
-                  print(selectedReservation?.customerId);
-                });
-              },
-              items: customers.map<DropdownMenuItem<Customer>>(
-                  (Customer customer) {
-                return DropdownMenuItem<Customer>(
-                  value: customer,
-                  child: Text("${customer.name}"),
-                );
-              }).toList(),
-              validator: (value) =>
-                  value == null ? 'Please select a customer' : null,
-              decoration: const InputDecoration(labelText: 'Select Customer'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: DropdownButtonFormField<Customer>(
+                value: selectedCustomer,
+                onChanged: (Customer? newValue) {
+                  setState(() {
+                    selectedCustomer = newValue;
+                  });
+                },
+                items: customers.map<DropdownMenuItem<Customer>>((Customer customer) {
+                  return DropdownMenuItem<Customer>(
+                    value: customer,
+                    child: Text(customer.name),
+                  );
+                }).toList(),
+                validator: (value) => value == null ? 'Please select a customer' : null,
+                decoration: InputDecoration(
+                  labelText: 'Select Customer',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            DropdownButtonFormField<Reservation>(
-              value: selectedReservation,
-              onChanged: (Reservation? newValue) {
-                setState(() {
-                  selectedReservation = newValue;
-                });
-              },
-              items: reservations.map<DropdownMenuItem<Reservation>>(
-                  (Reservation reservation) {
-                return DropdownMenuItem<Reservation>(
-                  value: reservation,
-                  child: Text(
-                      "${reservation.departureCity} to ${reservation.arrivalCity}"),
-                );
-              }).toList(),
-              validator: (value) =>
-                  value == null ? 'Please select a flight' : null,
-              decoration: const InputDecoration(labelText: 'Select Flight'),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: DropdownButtonFormField<Flight>(
+                value: selectedFlight,
+                onChanged: (Flight? newValue) {
+                  setState(() {
+                    selectedFlight = newValue;
+                  });
+                },
+                items: flights.map<DropdownMenuItem<Flight>>((Flight flight) {
+                  return DropdownMenuItem<Flight>(
+                    value: flight,
+                    child: Text("${flight.departureCity} to ${flight.arrivalCity}"),
+                  );
+                }).toList(),
+                validator: (value) => value == null ? 'Please select a flight' : null,
+                decoration: InputDecoration(
+                  labelText: 'Select Flight',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _reservationNameController,
-              decoration: const InputDecoration(labelText: 'Reservation Name'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a reservation name';
-                }
-                return null;
-              },
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextFormField(
+                controller: _reservationNameController,
+                decoration: InputDecoration(
+                  labelText: 'Reservation Name',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a reservation name';
+                  }
+                  return null;
+                },
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _addReservation,
-              child: const Text('Add Reservation'),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton(
+                onPressed: _addReservation,
+                child: Text('Add Reservation'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+                ),
+              ),
             ),
           ],
         ),
