@@ -49,17 +49,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
     }).join(" ");
   }
 
-  // lookup(BuildContext context, String translateKey) {
-  //   var translate = AppLocalizations.of(context)?.translate(translateKey);
-  //   return switch (translateKey) {
-  //     "admin_login" => translate ?? "Admin Login",
-  //     "password" => translate ?? "Password",
-  //     "email" => translate ?? "Email",
-  //     "please_enter_password" => translate ?? "",
-  //     "" => translateKey,
-  //     _ => throw UnimplementedError(),
-  //   };
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +139,15 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     Navigator.pushNamed(context, "/admin-register");
                   },
                   child: Text(lookupTranslate(context, "Register")),
+                ),
+                const SizedBox(height: 20),
+                OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                    esp.clear();
+                    });
+                  },
+                  child: Text(lookupTranslate(context, "Clear")),
                 ),
               ],
             ),

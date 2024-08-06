@@ -141,7 +141,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
       });
     }
   }
-
   void deleteFlight(BuildContext context, Flight flight) {
     flightDao.deleteFlight(flight).then((result) {
       if (result > 0) {
@@ -164,6 +163,7 @@ class _EditFlightPageState extends State<EditFlightPage> {
     });
     Navigator.of(context).pop();
   }
+
 
   @override
   Widget build(BuildContext context) {
