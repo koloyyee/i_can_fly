@@ -70,6 +70,10 @@ class _EditFlightPageState extends State<EditFlightPage> {
     super.dispose();
   }
 
+  DateTime _formatDT({required DateTime date, required TimeOfDay time}) {
+    return DateTime(date.year, date.month, date.day, departureTime!.hour,
+        departureTime!.minute);
+  }
   Future<void> _selectDepartureTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -211,7 +215,9 @@ class _EditFlightPageState extends State<EditFlightPage> {
                             DropdownButtonFormField(
                                 hint: Text(lookupTranslate(
                                     context, "select_airplane_type")),
-                                value: airplaneType == null? null:  airplaneTypes.first ,
+                                value: airplaneType == null
+                                    ? null
+                                    : airplaneTypes.first,
                                 validator: (value) => value == null
                                     ? "Please select a valid airplane type"
                                     : null,
@@ -287,30 +293,16 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                                                 null &&
                                                             arrivalTime !=
                                                                 null) {
-                                                          DateTime deptTime =
-                                                              DateTime(
-                                                                  departureDate!
-                                                                      .year,
-                                                                  departureDate!
-                                                                      .month,
-                                                                  departureDate!
-                                                                      .day,
-                                                                  departureTime!
-                                                                      .hour,
-                                                                  departureTime!
-                                                                      .minute);
-                                                          DateTime arrTime =
-                                                              DateTime(
-                                                                  arrivalDate!
-                                                                      .year,
-                                                                  arrivalDate!
-                                                                      .month,
-                                                                  arrivalDate!
-                                                                      .day,
-                                                                  arrivalTime!
-                                                                      .hour,
-                                                                  arrivalTime!
-                                                                      .minute);
+                                                          DateTime deptTime = _formatDT(
+                                                              date:
+                                                                  departureDate!,
+                                                              time:
+                                                                  departureTime!);
+                                                          DateTime arrTime = _formatDT(
+                                                              date:
+                                                                  arrivalDate!,
+                                                              time:
+                                                                  arrivalTime!);
 
                                                           flightDao
                                                               .updateFlight(Flight(
@@ -368,4 +360,5 @@ class _EditFlightPageState extends State<EditFlightPage> {
                   ),
                 ))));
   }
+
 }

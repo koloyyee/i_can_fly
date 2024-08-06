@@ -88,10 +88,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
               // value: selectedReservation,
               onChanged: (Customer? newValue) {
                 setState(() {
-                  selectedReservation?.customerName = newValue!.name;
-                  selectedReservation?.customerId= newValue!.id!;
-                  print(selectedReservation?.customerName);
-                  print(selectedReservation?.customerId);
+                  selectedCustomer = newValue;
                 });
               },
               items: customers.map<DropdownMenuItem<Customer>>(
@@ -106,19 +103,19 @@ class _AddReservationPageState extends State<AddReservationPage> {
               decoration: const InputDecoration(labelText: 'Select Customer'),
             ),
             const SizedBox(height: 20),
-            DropdownButtonFormField<Reservation>(
-              value: selectedReservation,
-              onChanged: (Reservation? newValue) {
+            DropdownButtonFormField<Flight>(
+              value: selectedFlight,
+              onChanged: (Flight? newValue) {
                 setState(() {
-                  selectedReservation = newValue;
+                  selectedFlight = newValue;
                 });
               },
-              items: reservations.map<DropdownMenuItem<Reservation>>(
-                  (Reservation reservation) {
-                return DropdownMenuItem<Reservation>(
-                  value: reservation,
+              items: flights.map<DropdownMenuItem<Flight>>(
+                  (Flight flight) {
+                return DropdownMenuItem<Flight>(
+                  value: flight,
                   child: Text(
-                      "${reservation.departureCity} to ${reservation.arrivalCity}"),
+                      "${flight.departureCity} to ${flight.arrivalCity}"),
                 );
               }).toList(),
               validator: (value) =>
