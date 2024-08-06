@@ -86,54 +86,78 @@ class _AddReservationPageState extends State<AddReservationPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            DropdownButtonFormField<Customer>(
-              value: selectedCustomer,
-              onChanged: (Customer? newValue) {
-                setState(() {
-                  selectedCustomer = newValue;
-                });
-              },
-              items: customers.map<DropdownMenuItem<Customer>>((Customer customer) {
-                return DropdownMenuItem<Customer>(
-                  value: customer,
-                  child: Text(customer.name),
-                );
-              }).toList(),
-              validator: (value) => value == null ? 'Please select a customer' : null,
-              decoration: InputDecoration(labelText: 'Select Customer'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: DropdownButtonFormField<Customer>(
+                value: selectedCustomer,
+                onChanged: (Customer? newValue) {
+                  setState(() {
+                    selectedCustomer = newValue;
+                  });
+                },
+                items: customers.map<DropdownMenuItem<Customer>>((Customer customer) {
+                  return DropdownMenuItem<Customer>(
+                    value: customer,
+                    child: Text(customer.name),
+                  );
+                }).toList(),
+                validator: (value) => value == null ? 'Please select a customer' : null,
+                decoration: InputDecoration(
+                  labelText: 'Select Customer',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                ),
+              ),
             ),
             SizedBox(height: 20),
-            DropdownButtonFormField<Flight>(
-              value: selectedFlight,
-              onChanged: (Flight? newValue) {
-                setState(() {
-                  selectedFlight = newValue;
-                });
-              },
-              items: flights.map<DropdownMenuItem<Flight>>((Flight flight) {
-                return DropdownMenuItem<Flight>(
-                  value: flight,
-                  child: Text("${flight.departureCity} to ${flight.arrivalCity}"),
-                );
-              }).toList(),
-              validator: (value) => value == null ? 'Please select a flight' : null,
-              decoration: InputDecoration(labelText: 'Select Flight'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: DropdownButtonFormField<Flight>(
+                value: selectedFlight,
+                onChanged: (Flight? newValue) {
+                  setState(() {
+                    selectedFlight = newValue;
+                  });
+                },
+                items: flights.map<DropdownMenuItem<Flight>>((Flight flight) {
+                  return DropdownMenuItem<Flight>(
+                    value: flight,
+                    child: Text("${flight.departureCity} to ${flight.arrivalCity}"),
+                  );
+                }).toList(),
+                validator: (value) => value == null ? 'Please select a flight' : null,
+                decoration: InputDecoration(
+                  labelText: 'Select Flight',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                ),
+              ),
             ),
             SizedBox(height: 20),
-            TextFormField(
-              controller: _reservationNameController,
-              decoration: InputDecoration(labelText: 'Reservation Name'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a reservation name';
-                }
-                return null;
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextFormField(
+                controller: _reservationNameController,
+                decoration: InputDecoration(
+                  labelText: 'Reservation Name',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a reservation name';
+                  }
+                  return null;
+                },
+              ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _addReservation,
-              child: Text('Add Reservation'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton(
+                onPressed: _addReservation,
+                child: Text('Add Reservation'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+                ),
+              ),
             ),
           ],
         ),
