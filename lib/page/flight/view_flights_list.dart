@@ -51,8 +51,16 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     });
   }
 
-  void deleteFlight(BuildContext context, Flight flight) async {
-    await flightDao.deleteFlight(flight);
+  void deleteFlight(BuildContext context, Flight flight) {
+    flightDao.deleteFlight(flight).catchError((error) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red[50],
+          content: Text("Failed to delete flight: ${flight.airplaneType} from ${flight.departureCity} to ${flight.arrivalCity} is in use.", style: TextStyle(color: Colors.red[900])),
+        ),
+      );
+    });
     flightDao.findAllFlights().then((flights) {
       setState(() {
         this.flights = flights;
@@ -296,6 +304,7 @@ class DeleteAlertDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
+            
             deleteFlight(context, flight);
           },
           child: const Text("Delete"),
