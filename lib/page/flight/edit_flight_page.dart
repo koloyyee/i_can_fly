@@ -24,18 +24,27 @@ class EditFlightPage extends StatefulWidget {
 }
 
 class _EditFlightPageState extends State<EditFlightPage> {
+  /// Instance of [FlightDao] for accessing the flight table.
   late FlightDao flightDao;
-
+  
+  /// A [TextEditingController] for the departure city.
   TextEditingController departureCityController = TextEditingController();
+  /// A [TextEditingController] for the arrival city.
   late DateTime? departureDate;
+  /// A [TextEditingController] for the departure time.
   late TimeOfDay? departureTime;
-
+  
+  /// A [TextEditingController] for the arrival city.
   TextEditingController arrivalCityController = TextEditingController();
+  /// A [TextEditingController] for the arrival date.
   late DateTime? arrivalDate;
+  /// A [TextEditingController] for the arrival time.
   late TimeOfDay? arrivalTime;
 
+  /// A [TextEditingController] for the airplane type.
   String? airplaneType;
-
+  
+  /// A list of airplane types.
   List<String> airplaneTypes = [];
 
   @override
@@ -76,6 +85,7 @@ class _EditFlightPageState extends State<EditFlightPage> {
     return DateTime(date.year, date.month, date.day, departureTime!.hour,
         departureTime!.minute);
   }
+
   Future<void> _selectDepartureTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -287,16 +297,21 @@ class _EditFlightPageState extends State<EditFlightPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ElevatedButton(
-                                  style: ButtonStyle( backgroundColor: WidgetStatePropertyAll(Colors.red[100]) ),
+                                  style: ButtonStyle(
+                                      backgroundColor: WidgetStatePropertyAll(
+                                          Colors.red[100])),
                                   onPressed: () {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
+                                          /// 7. Each person’s project must have an ActionBar with ActionItems that displays an AlertDialog with instructions for how to use the interface.
                                           return AlertDialog(
                                             title: Text(lookupTranslate(
                                                 context, "delete")),
                                             content: Text(
                                                 "${lookupTranslate(context, "confirm_delete")} ${widget.flight.departureCity} ${lookupTranslate(context, "to")} ${widget.flight.arrivalCity}?"),
+
+                                            /// 7. Each person’s project must have an ActionBar with ActionItems that displays an AlertDialog with instructions for how to use the interface.
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
@@ -391,5 +406,4 @@ class _EditFlightPageState extends State<EditFlightPage> {
                   ),
                 ))));
   }
-
 }

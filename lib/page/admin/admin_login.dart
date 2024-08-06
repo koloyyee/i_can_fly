@@ -8,6 +8,7 @@ import 'package:i_can_fly/utils/helpers.dart';
 // create DartDoc comments
 /// A StatefulWidget that represents the admin login page.
 /// Instance of [EncryptedSharedPreferences] for securely storing and retrieving data.
+/// 6. Each activity must use EncryptedSharedPreferences to save something about what was typed in the EditText for use the next time the application is launched.
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({super.key});
 

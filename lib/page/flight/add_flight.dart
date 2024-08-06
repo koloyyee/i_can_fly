@@ -62,6 +62,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
     super.dispose();
   }
 
+  /// Select the departure time for the flight.
   Future<void> _selectDepartureTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -77,6 +78,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
     }
   }
 
+  /// Select the arrival time for the flight.
   Future<void> _selectArrivalTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -91,6 +93,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
     }
   }
 
+  /// Select the departure date for the flight.
   Future<void> _selectDepartureDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -105,6 +108,7 @@ class _AddFlightPageState extends State<AddFlightPage> {
     }
   }
 
+  /// Select the arrival date for the flight.
   Future<void> _selectArrivalDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,

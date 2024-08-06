@@ -22,9 +22,12 @@ class ViewFlightsList extends StatefulWidget {
 }
 
 class _ViewFlightsListState extends State<ViewFlightsList> {
+  /// A list of [Flight] objects to store the flights.
   List<Flight> flights = [];
 
+  /// Instance of [FlightDao] for accessing the flight table.
   late FlightDao flightDao;
+  /// The selected flight to show the details.
   Flight? selectedFlight;
 
   @override
@@ -37,11 +40,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
   void dispose() {
     super.dispose();
   }
-
+  /// Refresh the list of flights.
   Future<void> onRefresh() async {
     fetchFlights();
   }
-
+  /// Fetch the flights from the database.
   void fetchFlights() {
     AppDatabase.getInstance().then((db) {
       flightDao = db.flightDao;
@@ -51,9 +54,11 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
     });
   }
 
+  /// Delete a flight from the database.
   void deleteFlight(BuildContext context, Flight flight) {
     flightDao.deleteFlight(flight).catchError((error) {
 
+/// 5. Each activity must have at least 1 Snackbar, and 1 AlertDialog to show some kind of notification.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red[50],
@@ -90,9 +95,12 @@ class _ViewFlightsListState extends State<ViewFlightsList> {
           ))
         : RefreshIndicator(
             onRefresh: onRefresh,
+
+/// 4. Selecting items from the ListView should show details about the item that was selected. On a phone would use the whole screen to show the details but on a Tablet or Desktop screen, it would show the details beside the ListView.
             child: OrientationWidget(
+
+/// 1.[x] You must have a ListView that lists items that were inserted by the user.
               portraitChild: ListView(
-// 2.[x ] There must be a TextField along with a button that lets the user insert items into the ListView.
                 children: [
                   Image.asset(
                     "images/gliding_kitty.png",
