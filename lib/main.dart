@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
             },
             "/flights": (context) => const FlightsPage(),
             "/admin-login": (context) => const AdminLoginPage(),
-            // "/admin-register": (context) => const AdminRegisterPage(),
+            "/admin-register": (context) => const AdminRegisterPage(),
             "/add-flight": (context) => const AddFlightPage(),
             "/customer-login": (context) => CustomerLoginPage(database: database),
             "/customer-register": (context) => const CustomerRegisterPage(),

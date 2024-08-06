@@ -145,6 +145,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   onPressed: () {
                     setState(() {
                     esp.clear();
+                      _emailController.text = "";
+                      _passwordController.text= "";
                     });
                   },
                   child: Text(lookupTranslate(context, "Clear")),
