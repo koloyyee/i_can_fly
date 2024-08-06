@@ -1,4 +1,5 @@
 import 'package:floor/floor.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
@@ -155,6 +156,29 @@ class _EditFlightPageState extends State<EditFlightPage> {
     Navigator.of(context).pop();
   }
 
+  void deleteFlight(BuildContext context, Flight flight) {
+    flightDao.deleteFlight(flight).then((result) {
+      if (result > 0) {
+        flightDao.findAllFlights().then((flights) {
+          setState(() {
+            widget.flights = flights;
+          });
+        });
+        Navigator.pop(context, true);
+      }
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red[50],
+          content: Text(
+              "Failed to delete flight: ${flight.airplaneType} from ${flight.departureCity} to ${flight.arrivalCity} is in use.",
+              style: TextStyle(color: Colors.red[900])),
+        ),
+      );
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,6 +191,9 @@ class _EditFlightPageState extends State<EditFlightPage> {
         ),
         body: SingleChildScrollView(
             child: SizedBox(
+                height: MediaQuery.of(context).size.width > 600
+                    ? MediaQuery.of(context).size.height * 1.8
+                    : MediaQuery.of(context).size.height * 0.8,
                 height: MediaQuery.of(context).size.width > 600
                     ? MediaQuery.of(context).size.height * 1.8
                     : MediaQuery.of(context).size.height * 0.8,
