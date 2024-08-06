@@ -98,7 +98,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
                 final reservation = reservationList[index];
                 return ListTile(
                   //title: Text(reservation.arrivalCity) // Assuming 'name' is part of your Reservation entity
-                  subtitle: Text('${reservation.departureCity} to ${reservation.arrivalCity}'), // Display more details here
+                  subtitle: Text('${reservation.reservationName} for ${reservation.customerName}'), // Display more details here
                   onTap: () => _navigateToEditReservationPage(reservation),
                 );
               },
