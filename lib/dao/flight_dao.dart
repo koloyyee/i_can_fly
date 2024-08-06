@@ -15,6 +15,7 @@ import 'package:i_can_fly/entity/flight.dart';
 /// [updateFlight]: Updates an existing flight record in the database.
 /// [deleteFlight]: Deletes a flight record from the database based on the provided `Flight` object.
 /// 
+/// 3. You must use a database to store items that were inserted into the ListView to repopulate the list when the application is restarted.
 @dao
 abstract class FlightDao {
   /// Select all flights from the database

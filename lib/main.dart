@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
               return CustomerHomePage(customer: customer!);
             },
             "/flights": (context) => const FlightsPage(),
-            // "/admin-login": (context) => const AdminLoginPage(),
+            "/admin-login": (context) => const AdminLoginPage(),
             // "/admin-register": (context) => const AdminRegisterPage(),
             "/add-flight": (context) => const AddFlightPage(),
             "/customer-login": (context) => CustomerLoginPage(database: database),
@@ -147,7 +147,8 @@ class HomePage extends StatelessWidget {
             imagePath: 'images/flights.jpg',
             //image credits: https://pikbest.com/backgrounds/airport-departure-board-arrival-and-information-at-in-3d_9626000.html
             context: context,
-            routeName: '/flights',
+            // routeName: '/flights',
+            routeName: '/admin-login',
           ),
           _buildButton(
             title: appLocalizations.translate("airplanes_list"),
