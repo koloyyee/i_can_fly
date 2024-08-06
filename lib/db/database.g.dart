@@ -116,7 +116,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` TEXT NOT NULL, `address` TEXT NOT NULL, `createdAt` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `flightId` INTEGER NOT NULL, `departureCity` TEXT, `arrivalCity` TEXT, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, `customerName` TEXT, `reservationName` TEXT NOT NULL, FOREIGN KEY (`customerId`) REFERENCES `customers` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`flightId`) REFERENCES `flights` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER, `flightId` INTEGER, `departureCity` TEXT, `arrivalCity` TEXT, `departureDateTime` TEXT NOT NULL, `arrivalDateTime` TEXT NOT NULL, `customerName` TEXT, `reservationName` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -751,8 +751,8 @@ class _$ReservationDao extends ReservationDao {
     return _queryAdapter.queryList('SELECT * FROM reservations',
         mapper: (Map<String, Object?> row) => Reservation(
             reservationId: row['reservationId'] as int?,
-            customerId: row['customerId'] as int,
-            flightId: row['flightId'] as int,
+            customerId: row['customerId'] as int?,
+            flightId: row['flightId'] as int?,
             departureCity: row['departureCity'] as String?,
             arrivalCity: row['arrivalCity'] as String?,
             departureDateTime:
@@ -769,8 +769,8 @@ class _$ReservationDao extends ReservationDao {
         'SELECT * FROM reservations WHERE reservationId = ?1',
         mapper: (Map<String, Object?> row) => Reservation(
             reservationId: row['reservationId'] as int?,
-            customerId: row['customerId'] as int,
-            flightId: row['flightId'] as int,
+            customerId: row['customerId'] as int?,
+            flightId: row['flightId'] as int?,
             departureCity: row['departureCity'] as String?,
             arrivalCity: row['arrivalCity'] as String?,
             departureDateTime:
@@ -786,7 +786,7 @@ class _$ReservationDao extends ReservationDao {
   Future<Reservation?> findDetailedReservationById(int id) async {
     return _queryAdapter.query(
         'select        r.reservationId,        c.name AS customerName,       f.departureCity,        f.arrivalCity,        f.departureDateTime,        f.arrivalDateTime       from reservations r       join flights f on r.flightId  = f.id        join customers c on r.customerId = c.id        where r.reservationId = ?1',
-        mapper: (Map<String, Object?> row) => Reservation(reservationId: row['reservationId'] as int?, customerId: row['customerId'] as int, flightId: row['flightId'] as int, departureCity: row['departureCity'] as String?, arrivalCity: row['arrivalCity'] as String?, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String), customerName: row['customerName'] as String?, reservationName: row['reservationName'] as String),
+        mapper: (Map<String, Object?> row) => Reservation(reservationId: row['reservationId'] as int?, customerId: row['customerId'] as int?, flightId: row['flightId'] as int?, departureCity: row['departureCity'] as String?, arrivalCity: row['arrivalCity'] as String?, departureDateTime: _dateTimeConverter.decode(row['departureDateTime'] as String), arrivalDateTime: _dateTimeConverter.decode(row['arrivalDateTime'] as String), customerName: row['customerName'] as String?, reservationName: row['reservationName'] as String),
         arguments: [id]);
   }
 

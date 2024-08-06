@@ -9,8 +9,7 @@ import 'package:i_can_fly/db/database.dart';
 
 
 import 'package:i_can_fly/entity/reservation.dart';
-import 'package:i_can_fly/entity/flight.dart';
-import 'package:i_can_fly/entity/customer.dart';
+
 
 
 import 'package:i_can_fly/page/reservation/add_reservation_page.dart';
@@ -99,7 +98,7 @@ class _ReservationListPageState extends State<ReservationListPage> {
                 final reservation = reservationList[index];
                 return ListTile(
                   //title: Text(reservation.arrivalCity) // Assuming 'name' is part of your Reservation entity
-                  subtitle: Text('${reservation.departureCity} to ${reservation.arrivalCity}'), // Display more details here
+                  subtitle: Text('${reservation.reservationName} for ${reservation.customerName}'), // Display more details here
                   onTap: () => _navigateToEditReservationPage(reservation),
                 );
               },
