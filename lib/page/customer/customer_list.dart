@@ -5,6 +5,7 @@ import 'package:i_can_fly/page/customer/add_customer_page.dart';
 import 'package:i_can_fly/utils/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../../db/database.dart';
+import 'edit_customer_page.dart';
 
 class CustomerListPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -87,11 +88,18 @@ class CustomerListPage extends StatelessWidget {
                 final birthdayDateTime = customer.birthday;
                 final createdAtDateTime = customer.createdAt;
                 return ListTile(
-                  title: Text(customer.name),
+                  title: GestureDetector(
+                    onLongPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditCustomerPage(customer: customer),
+                        ),
+                      );
+                    },
+                    child: Text(customer.name),
+                  ),
                   subtitle: Text(DateFormat('yyyy-MM-dd').format(birthdayDateTime)),
-                  onTap: () {
-                    // Handle tap for viewing or editing the customer
-                  },
                 );
               },
             );
