@@ -1,4 +1,5 @@
 import 'package:floor/floor.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/dao/flight_dao.dart';
 import 'package:i_can_fly/db/database.dart';
@@ -164,7 +165,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
     Navigator.of(context).pop();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,6 +177,9 @@ class _EditFlightPageState extends State<EditFlightPage> {
         ),
         body: SingleChildScrollView(
             child: SizedBox(
+                height: MediaQuery.of(context).size.width > 600
+                    ? MediaQuery.of(context).size.height * 1.8
+                    : MediaQuery.of(context).size.height * 0.8,
                 height: MediaQuery.of(context).size.width > 600
                     ? MediaQuery.of(context).size.height * 1.8
                     : MediaQuery.of(context).size.height * 0.8,
@@ -321,21 +324,21 @@ class _EditFlightPageState extends State<EditFlightPage> {
                                                   context, "processing_data"))),
                                         );
 
-                                        setState(() {
-                                          if (departureTime != null &&
-                                              arrivalTime != null) {
-                                            DateTime deptTime = DateTime(
-                                                departureDate!.year,
-                                                departureDate!.month,
-                                                departureDate!.day,
-                                                departureTime!.hour,
-                                                departureTime!.minute);
-                                            DateTime arrTime = DateTime(
-                                                arrivalDate!.year,
-                                                arrivalDate!.month,
-                                                arrivalDate!.day,
-                                                arrivalTime!.hour,
-                                                arrivalTime!.minute);
+                                                      setState(() {
+                                                        if (departureTime !=
+                                                                null &&
+                                                            arrivalTime !=
+                                                                null) {
+                                                          DateTime deptTime = _formatDT(
+                                                              date:
+                                                                  departureDate!,
+                                                              time:
+                                                                  departureTime!);
+                                                          DateTime arrTime = _formatDT(
+                                                              date:
+                                                                  arrivalDate!,
+                                                              time:
+                                                                  arrivalTime!);
 
                                             flightDao
                                                 .updateFlight(Flight(
