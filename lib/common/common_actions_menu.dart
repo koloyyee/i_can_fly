@@ -1,7 +1,6 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/utils/app_localizations.dart';
-import 'package:i_can_fly/utils/helpers.dart';
 
 /// A common actions menu that can be used in the app.
 /// This menu will be used in the app bar of the pages.
@@ -40,7 +39,7 @@ class CommonActionsMenu extends StatelessWidget {
         PopupMenuItem(
           child: TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/flight");
+              Navigator.pushNamed(context, "/flights");
             },
             child: Text(appLocalizations.translate("flights_list")),
           ),
