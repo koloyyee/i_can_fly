@@ -180,9 +180,6 @@ class _EditFlightPageState extends State<EditFlightPage> {
                 height: MediaQuery.of(context).size.width > 600
                     ? MediaQuery.of(context).size.height * 1.8
                     : MediaQuery.of(context).size.height * 0.8,
-                height: MediaQuery.of(context).size.width > 600
-                    ? MediaQuery.of(context).size.height * 1.8
-                    : MediaQuery.of(context).size.height * 0.8,
                 child: Form(
                   key: _formKey,
                   child: Padding(
