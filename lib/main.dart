@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
     return DatabaseInitializer(
       builder: (database) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Welcome!',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(

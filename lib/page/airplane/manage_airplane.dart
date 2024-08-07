@@ -1,14 +1,17 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:i_can_fly/db/database.dart';
 import '../../entity/airplane.dart';
 import '../../utils/app_localizations.dart';
 
-/// Author: Kyla Pineda
-/// Date: August 4, 2024
+/// This page allows users to manage Airplane Information
 ///
 /// This page allows users to manage (add or edit) airplane details.
 /// It includes text fields for entering airplane attributes and buttons to save, delete, or cancel.
 /// If editing an existing airplane, the page will pre-fill the fields with the airplane's data.
+///
+/// Author: Kyla Pineda
+/// Date: August 4, 2024
 
 class ManageAirplanePage extends StatefulWidget {
   final Airplane? airplane;
@@ -37,10 +40,12 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     _capacityController = TextEditingController(text: widget.airplane?.capacity.toString() ?? '');
     _maxSpeedController = TextEditingController(text: widget.airplane?.maxSpeed.toString() ?? '');
     _maxRangeController = TextEditingController(text: widget.airplane?.maxRange.toString() ?? '');
+    _loadFromPreferences();
   }
 
   @override
   void dispose() {
+    _saveToPreferences();
     _typeController.dispose();
     _capacityController.dispose();
     _maxSpeedController.dispose();
@@ -48,7 +53,29 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     super.dispose();
   }
 
-  /// [2]
+  /// Saves the current airplane type to encrypted shared preferences.
+  ///
+  /// This method uses the `EncryptedSharedPreferences` to securely store
+  /// the value of the airplane type entered in the `_typeController` text field.
+  /// The value is stored with the key 'airplane_type' asynchronously.
+  void _saveToPreferences() async {
+    final prefs = EncryptedSharedPreferences();
+    await prefs.setString('airplane_type', _typeController.text);
+  }
+
+  /// Loads the airplane type from encrypted shared preferences and updates the text field.
+  ///
+  /// This method retrieves the value of 'airplane_type' from the `EncryptedSharedPreferences`.
+  /// If a value is found, it updates the `_typeController` text field with the retrieved value.
+  /// The value is loaded and set asynchronously.
+  void _loadFromPreferences() async {
+    final prefs = EncryptedSharedPreferences();
+    final airplaneType = await prefs.getString('airplane_type');
+      setState(() {
+        _typeController.text = airplaneType;
+      });
+  }
+
   /// Saves the airplane details to the database.
   /// Shows a SnackBar notification on success or failure.
   /// If editing an existing airplane, updates it; otherwise, creates a new record.
@@ -95,7 +122,6 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     }
   }
 
-  /// [3]
   /// Deletes the current airplane and shows a confirmation dialog.
   /// If the user confirms, the airplane is deleted, and the user is navigated back to the airplane page.
   void _delete() async {
@@ -138,7 +164,6 @@ class _ManageAirplanePageState extends State<ManageAirplanePage> {
     }
   }
 
-  /// [4]
   /// Builds the UI for managing airplane details.
   /// Displays text fields for airplane attributes and buttons for save, delete (if editing), and cancel.
   @override
