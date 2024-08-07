@@ -6,11 +6,14 @@ import '../../common/common_actions_menu.dart';
 import '../../entity/airplane.dart';
 import '../../utils/app_localizations.dart';
 
-/// Author: Kyla Pineda
-/// Date: August 4, 2024
+
+///A class that lists the types of Airplanes
 ///
 /// This page shows a list of airplanes and allows users to view, edit, or delete airplane records.
 /// The layout adapts to both portrait and landscape orientations.
+///
+/// Author: Kyla Pineda
+/// Date: August 4, 2024
 
 class AirplanePage extends StatefulWidget {
   const AirplanePage({super.key});
@@ -29,7 +32,8 @@ class _AirplanePageState extends State<AirplanePage> {
     _loadAirplanes();
   }
 
-  /// [2]
+  /// Gets airplanes from the database
+  ///
   /// Loads the list of airplanes from the database and updates the state.
   /// Called when the state is initialized.
   Future<void> _loadAirplanes() async {
@@ -40,7 +44,6 @@ class _AirplanePageState extends State<AirplanePage> {
     });
   }
 
-  /// [3]
   /// Navigates to the ManageAirplanePage to either add or edit an airplane.
   /// If an airplane is provided, it enters edit mode; otherwise, it enters add mode.
   /// After returning from the ManageAirplanePage, it resets the selected airplane and reloads the list.
@@ -62,7 +65,6 @@ class _AirplanePageState extends State<AirplanePage> {
     });
   }
 
-  /// [4]
   /// Deletes the selected airplane and shows a SnackBar notification.
   /// If the airplane is deleted successfully, it also refreshes the list and resets the selection in landscape mode.
   void _deleteAirplane(BuildContext context, Airplane airplane) async {
@@ -85,7 +87,6 @@ class _AirplanePageState extends State<AirplanePage> {
     });
   }
 
-  /// [5]
   /// Shows an AlertDialog with instructions for using the interface.
   /// The instructions are localized using AppLocalizations.
   void _showInstructions(BuildContext context) {
@@ -125,10 +126,9 @@ class _AirplanePageState extends State<AirplanePage> {
     );
   }
 
-
-  /// [6]
   /// Builds the list of airplanes displayed on the page.
   /// Uses a FutureBuilder to asynchronously load and display the list.
+  /// 1. Uses a ListView that lists items that were inserted by the user
   Widget _buildAirplaneList() {
     final appLocalizations = AppLocalizations.of(context)!;
 
@@ -186,7 +186,6 @@ class _AirplanePageState extends State<AirplanePage> {
     );
   }
 
-  /// [7]
   /// Builds the details page for the selected airplane.
   /// If no airplane is selected, returns an empty container.
   Widget DetailsPage() {
@@ -223,7 +222,6 @@ class _AirplanePageState extends State<AirplanePage> {
     }
   }
 
-  /// [8]
   /// Builds the responsive layout for the page based on device orientation.
   /// Shows the details page beside the list in landscape mode or as a full screen in portrait mode.
   Widget responsiveLayout() {
